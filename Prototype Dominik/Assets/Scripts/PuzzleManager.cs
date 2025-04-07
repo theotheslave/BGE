@@ -13,6 +13,7 @@ public class PuzzleManager : MonoBehaviour
             var card = slot.GetPlacedCard();
             if (card != null && slot.IsCorrect())
             {
+                Debug.Log($"Checking card {card.formulaID} in slot {slot.slotID}. Expected slot: {card.correctSlotID}");
                 if ((actionType == ActionType.Attack && card.cardType == CardType.Attack) ||
                     (actionType == ActionType.Defend && card.cardType == CardType.Defense))
                 {

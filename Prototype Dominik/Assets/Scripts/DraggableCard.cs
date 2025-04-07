@@ -9,6 +9,7 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        
         var layout = GetComponent<LayoutElement>();
         if (layout != null)
         {
@@ -17,7 +18,7 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         originalParent = transform.parent;
         originalLocalPosition = GetComponent<RectTransform>().localPosition;
-
+        Debug.Log($"{gameObject.name} started drag from {originalParent.name}");
         // ✅ Fix: move to DragLayer instead of root
         Transform dragLayer = GameObject.Find("DragLayer")?.transform;
         if (dragLayer != null)

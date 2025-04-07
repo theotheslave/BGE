@@ -27,6 +27,7 @@ public class FormulaSlot : MonoBehaviour
 
     public void ClearSlot()
     {
+        
         placedCard = null;
 
         if (placedCardObject != null)
@@ -36,7 +37,7 @@ public class FormulaSlot : MonoBehaviour
             {
                 placedCardObject.transform.SetParent(dragData.originalParent, false);
                 placedCardObject.GetComponent<RectTransform>().localPosition = dragData.originalLocalPosition;
-
+                Debug.Log($"{gameObject.name} returned to  {placedCardObject.transform.parent.name}");
                 placedCardObject.SetActive(true);
 
                 // ✅ Update the drag reference AFTER returning to hand

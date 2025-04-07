@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CA(isothermal) ANSWER_0: -4148587431012102205
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

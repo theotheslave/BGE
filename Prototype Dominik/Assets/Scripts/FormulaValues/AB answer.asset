@@ -16,4 +16,4 @@ MonoBehaviour:
   formulaSprite: {fileID: 5961296261454440684, guid: 5fced1d2decf27e4db7151ea8d22b943, type: 3}
   correctSlotID: AB
   value: 10
-  cardType: 0
+  cardType: 2

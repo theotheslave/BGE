@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c249538e56ef694ba9070a4a4438639, type: 3}
   m_Name: AB first part
   m_EditorClassIdentifier: 
-  formulaID: 
-  formulaSprite: {fileID: 0}
-  correctSlotID: 
-  value: 0
-  cardType: 0
+  formulaID: AB1
+  formulaSprite: {fileID: -1477527105103998658, guid: 4b387727dd98bcf41a2c5dc564146f1c, type: 3}
+  correctSlotID: AB1
+  value: 10
+  cardType: 2

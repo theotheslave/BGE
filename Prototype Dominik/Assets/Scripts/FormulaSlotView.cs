@@ -13,6 +13,7 @@ public class FormulaSlotView : MonoBehaviour, IDropHandler
 
         FormulaCardView cardView = droppedCard.GetComponent<FormulaCardView>();
         if (cardView == null || cardView.cardData == null) return;
+        Debug.Log($"Dropped card {cardView.cardData.formulaID} into slot {slotLogic.slotID}");
 
         // Snap the card into the placedCards container instead
         droppedCard.transform.SetParent(placedCardsContainer, false);
