@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class IsobaricMinigame : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class IsobaricMinigame : MonoBehaviour
     public Slider heatSlider;
     public Button toggleGraphButton;
     public GameObject graphPanel;
-    public Text debugText;
+    public TextMeshProUGUI debugText;
 
     [Header("Piston Visual")]
     public Transform piston;
@@ -22,10 +23,12 @@ public class IsobaricMinigame : MonoBehaviour
     public float pressure = 101325f;
     public float R = 8.314f; 
     public float molarMass = 0.02897f;
-    public float containerVolume = 0.03f; 
+    public float containerVolume = 0.03f;
 
     [Header("Gas State")]
     public float initialMoles = 1f;
+    private float Vmin;
+    private float Vmax;
     private float currentMoles;
     private float currentTemp;
     private float targetTemp;
@@ -41,7 +44,9 @@ public class IsobaricMinigame : MonoBehaviour
     private void Start()
     {
         currentMoles = initialMoles;
-        currentTemp = 273f; 
+        currentTemp = 273f;
+        Vmin = (initialMoles * R * 273f) / pressure;
+        Vmax = (initialMoles * R * 800f) / pressure;
         toggleGraphButton.onClick.AddListener(() => {
             graphPanel.SetActive(!graphPanel.activeSelf);
         });
@@ -50,9 +55,7 @@ public class IsobaricMinigame : MonoBehaviour
     void Update()
     {
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
-
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
-
         volume = (currentMoles * R * currentTemp) / pressure;
 
         if (volume > containerVolume)
@@ -71,7 +74,8 @@ public class IsobaricMinigame : MonoBehaviour
             graphVisualizer.Clear();
         }
 
-        float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, Mathf.Clamp01(volume / containerVolume));
+        float normVolume = Mathf.InverseLerp(Vmin, Vmax, volume);
+        float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
 
         if (graphPanel.activeSelf)
