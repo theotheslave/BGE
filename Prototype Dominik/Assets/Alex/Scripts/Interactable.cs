@@ -1,35 +1,41 @@
 using UnityEngine;
-using UnityEngine.UI;
 
+[RequireComponent(typeof(Collider))] // required for OnMouseEnter/Exit
 public class Interactable : MonoBehaviour
 {
     public bool isCharacter = false;
+    public string[] dialogueLines;
+
     private Outline outline;
 
     void Start()
     {
         if (!isCharacter)
         {
-            outline = gameObject.AddComponent<Outline>();
-            outline.enabled = false;
+            outline = GetComponent<Outline>();
+            if (outline != null) outline.enabled = false;
         }
     }
 
     void OnMouseEnter()
     {
-        if (!isCharacter) outline.enabled = true;
+        if (!isCharacter && outline != null)
+            outline.enabled = true;
     }
 
     void OnMouseExit()
     {
-        if (!isCharacter) outline.enabled = false;
+        if (!isCharacter && outline != null)
+            outline.enabled = false;
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
-        UnityEngine.Object.FindFirstObjectByType<DialogueManager>().StartDialogue(dialogueLines);
-    }
+        DialogueManager manager = DialogueManager.Instance;
 
-    [TextArea(2, 10)]
-    public string[] dialogueLines;
+        if (manager.IsDialoguePlaying() && manager.CurrentSpeakerIs(this))
+            return;
+
+        manager.StartDialogue(dialogueLines, this);
+    }
 }
