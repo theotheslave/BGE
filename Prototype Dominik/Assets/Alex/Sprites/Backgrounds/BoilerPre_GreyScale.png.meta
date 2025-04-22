@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BoilerPre_GreyScale_0: 5544680496820488527
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -52,7 +52,7 @@ public class IsobaricMinigame : MonoBehaviour
         Vmin = (initialMoles * R * 273f) / pressure;
         Vmax = (initialMoles * R * 800f) / pressure;
 
-        graphPanel.SetActive(false); // turn graph off by default
+        graphPanel.SetActive(false);
 
         toggleGraphButton.onClick.AddListener(() =>
         {
@@ -145,18 +145,14 @@ public class IsobaricMinigame : MonoBehaviour
             yield return null;
         }
 
-        // --- 4. Refill gas
         debugText.text += "Refilling gas...\n";
         currentMoles = initialMoles;
 
-        // Optional: reset temperature slightly if you want
-        // currentTemp = 273f;
         targetTemp = 273f;
         heatSlider.value = 0;
 
         yield return new WaitForSeconds(0.5f);
 
-        // --- 5. Resume control
         heatSlider.interactable = true;
         isCycling = false;
         graphVisualizer.Clear();

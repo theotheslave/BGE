@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))] // required for OnMouseEnter/Exit
+[RequireComponent(typeof(Collider))]
 public class Interactable : MonoBehaviour
 {
     public bool isCharacter = false;

@@ -4,27 +4,50 @@ using UnityEngine.Rendering.Universal;
 
 public class BlurController : MonoBehaviour
 {
-    public static BlurController Instance;
-    public Volume postProcessingVolume;
+    public static BlurController Instance { get; private set; }
+
+    private Volume volume;
     private DepthOfField dof;
 
-    void Awake()
+    private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
-        postProcessingVolume.profile.TryGet(out dof);
     }
 
-    public void EnableBlur()
+    void Start()
     {
-        if (dof == null) return;
-        dof.active = true;
-        dof.mode.value = DepthOfFieldMode.Gaussian;
-        dof.gaussianStart.value = 0f;
-        dof.gaussianEnd.value = 5f;
+        volume = GetComponent<Volume>();
+
+        if (volume != null && volume.profile.TryGet(out dof))
+        {
+            dof.active = false;
+        }
+        else
+        {
+            Debug.LogWarning("Depth of Field not found in Volume Profile!");
+        }
+    }
+
+    public void EnableBlur(float start = 0f, float end = 5f)
+    {
+        if (dof != null)
+        {
+            dof.gaussianStart.value = start;
+            dof.gaussianEnd.value = end;
+            dof.active = true;
+        }
     }
 
     public void DisableBlur()
     {
-        if (dof != null) dof.active = false;
+        if (dof != null)
+        {
+            dof.active = false;
+        }
     }
 }
