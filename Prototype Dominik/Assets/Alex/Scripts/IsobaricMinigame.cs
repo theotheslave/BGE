@@ -26,7 +26,7 @@ public class IsobaricMinigame : MonoBehaviour
     public float R = 8.314f;
     public float molarMass = 0.02897f;
     public float containerVolume = 0.065f;
-
+    public Spawner moleculeSpawner;
     [Header("Gas State")]
     public float initialMoles = 1f;
     private float Vmin;
@@ -47,8 +47,10 @@ public class IsobaricMinigame : MonoBehaviour
 
     private void Start()
     {
+      
         currentMoles = initialMoles;
         currentTemp = 273f;
+        moleculeSpawner.SpawnMolecules(currentTemp);
         Vmin = (initialMoles * R * 273f) / pressure;
         Vmax = (initialMoles * R * 800f) / pressure;
 
@@ -62,11 +64,14 @@ public class IsobaricMinigame : MonoBehaviour
 
     void Update()
     {
+
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
         volume = (currentMoles * R * currentTemp) / pressure;
 
         string log = "";
+        moleculeSpawner.ApplyTemperature(currentTemp);
+        moleculeSpawner.currentTemperature = currentTemp;
 
         if (!isCycling && volume >= containerVolume - 0.0001f)
         {
@@ -97,6 +102,7 @@ public class IsobaricMinigame : MonoBehaviour
                 graphSampleTimer = 0f;
             }
         }
+        moleculeSpawner.currentTemperature = currentTemp;
     }
     IEnumerator RunCycle()
     {
