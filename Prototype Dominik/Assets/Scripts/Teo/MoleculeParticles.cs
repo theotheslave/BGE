@@ -22,7 +22,7 @@ public class MoleculeParticle : MonoBehaviour
       
         if (Random.value < 0.2f)
         {
-            Vector2 randomNudge = Random.insideUnitCircle.normalized * 0.3f;
+            Vector2 randomNudge = Random.insideUnitCircle.normalized * 0.5f;
             rb.linearVelocity += randomNudge;
         }
     }
