@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
@@ -24,9 +24,11 @@ public class IsobaricMinigame : MonoBehaviour
     [Header("Gas Constants")]
     public float pressure = 101325f;
     public float R = 8.314f;
-    public float molarMass = 0.02897f;
     public float containerVolume = 0.065f;
+
+    [Header("References")]
     public Spawner moleculeSpawner;
+
     [Header("Gas State")]
     public float initialMoles = 1f;
     private float Vmin;
@@ -37,7 +39,6 @@ public class IsobaricMinigame : MonoBehaviour
     private float volume;
 
     [Header("Escape & Refill")]
-    public float escapeRate = 0.1f;
     public float refillThresholdFraction = 0.7f;
     private bool isCycling = false;
     private Coroutine cycleCoroutine;
@@ -47,15 +48,15 @@ public class IsobaricMinigame : MonoBehaviour
 
     private void Start()
     {
-      
         currentMoles = initialMoles;
         currentTemp = 273f;
-        moleculeSpawner.SpawnMolecules(currentTemp);
+
         Vmin = (initialMoles * R * 273f) / pressure;
         Vmax = (initialMoles * R * 800f) / pressure;
 
-        graphPanel.SetActive(false);
+        moleculeSpawner.SpawnMolecules(currentTemp);
 
+        graphPanel.SetActive(false);
         toggleGraphButton.onClick.AddListener(() =>
         {
             graphPanel.SetActive(!graphPanel.activeSelf);
@@ -64,35 +65,57 @@ public class IsobaricMinigame : MonoBehaviour
 
     void Update()
     {
-
+        // Step 1: Heat
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
+
+        // Step 2: Molecule count from spawner (not spatial tracking)
+        int activeMolecules = moleculeSpawner.GetActiveMoleculeCount();
+        float fraction = moleculeSpawner.startMoleculeCount > 0 ?
+                         (float)activeMolecules / moleculeSpawner.startMoleculeCount : 0f;
+        currentMoles = initialMoles * fraction;
+
+        if (currentMoles < 0.0001f)
+            currentMoles = 0.01f; // fallback to avoid piston freeze
+
+        // Step 3: Volume from ideal gas law
         volume = (currentMoles * R * currentTemp) / pressure;
 
-        string log = "";
-        moleculeSpawner.ApplyTemperature(currentTemp);
-        moleculeSpawner.currentTemperature = currentTemp;
+        // Step 4: Auto refill if piston down and under-filled
+        bool pistonDown = volume < containerVolume * 0.95f;
+        int totalSpawned = moleculeSpawner.TotalSpawnedCount();
+        int maxAllowed = moleculeSpawner.startMoleculeCount;
 
+        if (pistonDown && !isCycling && currentMoles < initialMoles && totalSpawned < maxAllowed)
+        {
+            int missing = Mathf.Clamp(maxAllowed - activeMolecules, 0, maxAllowed - totalSpawned);
+            if (missing > 0)
+            {
+                moleculeSpawner.AddNewMolecules(missing, currentTemp);
+            }
+        }
+
+        // Step 5: Trigger escape cycle
         if (!isCycling && volume >= containerVolume - 0.0001f)
         {
             cycleCoroutine = StartCoroutine(RunCycle());
         }
 
-        if (currentMoles < initialMoles * refillThresholdFraction)
-        {
-            currentMoles = initialMoles;
-            log += "Auto-refill\n";
-            graphVisualizer.Clear();
-        }
-
+        // Step 6: Piston movement
         float normVolume = Mathf.InverseLerp(Vmin, Vmax, volume);
         float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
 
-        log += $"T: {currentTemp:F1} K\nTarget T: {targetTemp:F1} K\n" +
-               $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\nSlider: {heatSlider.value:F2}";
+        // Step 7: UI Debug Info
+        string log = $"T: {currentTemp:F1} K\n" +
+                     $"Target T: {targetTemp:F1} K\n" +
+                     $"V: {(volume * 1000f):F2} L\n" +
+                     $"n (moles): {currentMoles:F2}\n" +
+                     $"Molecule Count: {activeMolecules}\n" +
+                     $"Slider: {heatSlider.value:F2}";
         debugText.text = log;
 
+        // Step 8: Graphing
         if (graphPanel.activeSelf)
         {
             graphSampleTimer += Time.deltaTime;
@@ -102,8 +125,12 @@ public class IsobaricMinigame : MonoBehaviour
                 graphSampleTimer = 0f;
             }
         }
+
+        // Step 9: Apply temperature to molecules
+        moleculeSpawner.ApplyTemperature(currentTemp);
         moleculeSpawner.currentTemperature = currentTemp;
     }
+
     IEnumerator RunCycle()
     {
         isCycling = true;
@@ -131,7 +158,6 @@ public class IsobaricMinigame : MonoBehaviour
         float coolingElapsed = 0f;
         float startTemp = currentTemp;
         float endTemp = 273f;
-        float refillVolumeThreshold = (initialMoles * R * endTemp) / pressure * 1.05f; // 5% tolerance
 
         while (coolingElapsed < coolingDuration)
         {
@@ -143,17 +169,8 @@ public class IsobaricMinigame : MonoBehaviour
 
         currentTemp = endTemp;
 
-        while (true)
-        {
-            float currentVolume = (currentMoles * R * currentTemp) / pressure;
-            if (currentVolume <= refillVolumeThreshold)
-                break;
-            yield return null;
-        }
-
         debugText.text += "Refilling gas...\n";
         currentMoles = initialMoles;
-
         targetTemp = 273f;
         heatSlider.value = 0;
 
@@ -163,5 +180,4 @@ public class IsobaricMinigame : MonoBehaviour
         isCycling = false;
         graphVisualizer.Clear();
     }
-
 }
