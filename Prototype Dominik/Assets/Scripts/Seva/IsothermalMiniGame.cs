@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 
-public class IsobaricMinigame : MonoBehaviour
+public class IsothermalMinigame : MonoBehaviour
 {
     [Header("Graph")]
     public GraphVisualize graphVisualizer;
@@ -47,7 +47,7 @@ public class IsobaricMinigame : MonoBehaviour
 
     private void Start()
     {
-      
+
         currentMoles = initialMoles;
         currentTemp = 273f;
         moleculeSpawner.SpawnMolecules(currentTemp);
@@ -89,8 +89,7 @@ public class IsobaricMinigame : MonoBehaviour
         float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
 
-        log += $"P: {(1/currentTemp)*1000:F1} kPa\nTarget P: {(1/targetTemp)*1000:F1}kPa\n" +
-               $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\nSlider: {heatSlider.value:F2}";
+        log += $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\nSlider: {heatSlider.value:F2}";
         debugText.text = log;
 
         if (graphPanel.activeSelf)

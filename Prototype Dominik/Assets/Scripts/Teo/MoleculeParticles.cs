@@ -20,9 +20,9 @@ public class MoleculeParticle : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
       
-        if (Random.value < 0.2f)
+        if (Random.value < 1f)
         {
-            Vector2 randomNudge = Random.insideUnitCircle.normalized * 0.3f;
+            Vector2 randomNudge = Random.insideUnitCircle.normalized * 1f;
             rb.linearVelocity += randomNudge;
         }
     }
