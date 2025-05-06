@@ -171,6 +171,32 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -759,7 +785,33 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Machine-Recovered1_0: -86050167847900067
+      Machine-Recovered1_1: -3988069905512709328
+      Machine-Recovered1_10: -5866830751605894709
+      Machine-Recovered1_11: -1252252764138168667
+      Machine-Recovered1_12: -4914698705161953859
+      Machine-Recovered1_13: -3484953876458989917
+      Machine-Recovered1_14: -370539487345119871
+      Machine-Recovered1_15: -2337017213679786292
+      Machine-Recovered1_16: 6437023383137914733
+      Machine-Recovered1_17: -5128971678095917969
+      Machine-Recovered1_18: 7089355358375541441
+      Machine-Recovered1_19: 200660707915580775
+      Machine-Recovered1_2: 7101834786884433541
+      Machine-Recovered1_20: 3416089065279396851
+      Machine-Recovered1_21: -518873510567403174
+      Machine-Recovered1_22: -5348748195135078645
+      Machine-Recovered1_23: -159468709466204053
+      Machine-Recovered1_24: 8266260572738856362
+      Machine-Recovered1_25: 2404004661698411043
+      Machine-Recovered1_3: 6941438072474224762
+      Machine-Recovered1_4: 1793637233317442971
+      Machine-Recovered1_5: 9206680249431374127
+      Machine-Recovered1_6: 6015477577226725581
+      Machine-Recovered1_7: -7021868057699042283
+      Machine-Recovered1_8: 5154820993978784989
+      Machine-Recovered1_9: 4387713541154726326
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
