@@ -2655,7 +2655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a24f0cc2983c248a702647db9d7cbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Boiler Room
 --- !u!212 &1147607751
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3189,6 +3188,7 @@ MonoBehaviour:
   toggleGraphButton: {fileID: 223280506}
   graphPanel: {fileID: 402011687}
   debugText: {fileID: 491299511}
+  winText: {fileID: 0}
   piston: {fileID: 304225918}
   pistonMinY: -1.3
   pistonMaxY: 2.3
@@ -3199,6 +3199,7 @@ MonoBehaviour:
   initialMoles: 1
   refillThresholdFraction: 0.7
   heatTransferRate: 1
+  cyclesToWin: 3
 --- !u!4 &2014805495
 Transform:
   m_ObjectHideFlags: 0
