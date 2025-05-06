@@ -50,7 +50,7 @@ public class IsobaricMinigame : MonoBehaviour
     [Header("Win Condition")]
     [SerializeField] private int cyclesToWin = 3;
     private int completedCycles = 0;
-    private bool hasWon = false;
+    private bool hasCompleted = false;
 
     private void Start()
     {
@@ -188,9 +188,9 @@ public class IsobaricMinigame : MonoBehaviour
         isCycling = false;
         graphVisualizer.Clear();
 
-        if (!hasWon && completedCycles + 1 >= cyclesToWin)
+        if (!hasCompleted && completedCycles + 1 >= cyclesToWin)
         {
-            hasWon = true;
+            hasCompleted = true;
             winText.gameObject.SetActive(true);
             winText.text = "Completed!";
 
@@ -206,7 +206,7 @@ public class IsobaricMinigame : MonoBehaviour
     {
         while (true)
         {
-            float targetHeat = Random.Range(0.4f, 1.0f);
+            float targetHeat = Random.Range(0.5f, 1.0f);
             heatSlider.value = targetHeat;
 
             yield return StartCoroutine(RunCycle());
