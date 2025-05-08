@@ -5,15 +5,15 @@ using TMPro;
 
 public class IsothermalMinigame : MonoBehaviour
 {
-    [Header("Graph")]
-    public GraphVisualize graphVisualizer;
-    public float graphSampleInterval = 0.2f;
-    private float graphSampleTimer = 0f;
+//    [Header("Graph")]
+//    public GraphVisualize graphVisualizer;
+//    public float graphSampleInterval = 0.2f;
+//    private float graphSampleTimer = 0f;
 
     [Header("UI")]
     public Slider heatSlider;
-    public Button toggleGraphButton;
-    public GameObject graphPanel;
+//    public Button toggleGraphButton;
+//    public GameObject graphPanel;
     public TextMeshProUGUI debugText;
 
     [Header("Piston Visual")]
@@ -34,7 +34,7 @@ public class IsothermalMinigame : MonoBehaviour
     private float currentMoles;
     private float currentTemp;
     private float targetTemp;
-    private float volume;
+    public float volume = 0f;
 
     [Header("Escape & Refill")]
     public float escapeRate = 0.1f;
@@ -54,12 +54,10 @@ public class IsothermalMinigame : MonoBehaviour
         Vmin = (initialMoles * R * 273f) / pressure;
         Vmax = (initialMoles * R * 800f) / pressure;
 
-        graphPanel.SetActive(false);
-
-        toggleGraphButton.onClick.AddListener(() =>
-        {
-            graphPanel.SetActive(!graphPanel.activeSelf);
-        });
+//        toggleGraphButton.onClick.AddListener(() =>
+//        {
+//            graphPanel.SetActive(!graphPanel.activeSelf);
+ //       });
     }
 
     void Update()
@@ -82,7 +80,7 @@ public class IsothermalMinigame : MonoBehaviour
         {
             currentMoles = initialMoles;
             log += "Auto-refill\n";
-            graphVisualizer.Clear();
+ //           graphVisualizer.Clear();
         }
 
         float normVolume = Mathf.InverseLerp(Vmin, Vmax, volume);
@@ -92,15 +90,15 @@ public class IsothermalMinigame : MonoBehaviour
         log += $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\nSlider: {heatSlider.value:F2}";
         debugText.text = log;
 
-        if (graphPanel.activeSelf)
-        {
-            graphSampleTimer += Time.deltaTime;
-            if (graphSampleTimer >= graphSampleInterval)
-            {
-                graphVisualizer.AddPoint(currentTemp, volume);
-                graphSampleTimer = 0f;
-            }
-        }
+  //      if (graphPanel.activeSelf)
+        //{
+        //    graphSampleTimer += Time.deltaTime;
+        //    if (graphSampleTimer >= graphSampleInterval)
+        //    {
+        //        graphVisualizer.AddPoint(currentTemp, volume);
+        //        graphSampleTimer = 0f;
+        //    }
+        //}
         moleculeSpawner.currentTemperature = currentTemp;
     }
     IEnumerator RunIsothermalCycle()
@@ -160,7 +158,7 @@ public class IsothermalMinigame : MonoBehaviour
 
         heatSlider.interactable = true;
         isCycling = false;
-        graphVisualizer.Clear();
+//        graphVisualizer.Clear();
     }
 
 }
