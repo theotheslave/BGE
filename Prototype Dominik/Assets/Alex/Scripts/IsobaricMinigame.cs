@@ -15,6 +15,7 @@ public class IsobaricMinigame : MonoBehaviour
     public Button toggleGraphButton;
     public GameObject graphPanel;
     public TextMeshProUGUI debugText;
+    [SerializeField] private TextMeshProUGUI winText;
 
     [Header("Piston Visual")]
     public Transform piston;
@@ -46,8 +47,15 @@ public class IsobaricMinigame : MonoBehaviour
     [Header("Heat Transfer")]
     public float heatTransferRate = 1f;
 
+    [Header("Win Condition")]
+    [SerializeField] private int cyclesToWin = 3;
+    private int completedCycles = 0;
+    private bool hasCompleted = false;
+
     private void Start()
     {
+        winText.gameObject.SetActive(false);
+
         currentMoles = initialMoles;
         currentTemp = 273f;
 
@@ -179,5 +187,31 @@ public class IsobaricMinigame : MonoBehaviour
         heatSlider.interactable = true;
         isCycling = false;
         graphVisualizer.Clear();
+
+        if (!hasCompleted && completedCycles + 1 >= cyclesToWin)
+        {
+            hasCompleted = true;
+            winText.gameObject.SetActive(true);
+            winText.text = "Completed!";
+
+            heatSlider.interactable = false;
+            toggleGraphButton.interactable = false;
+
+
+            StartCoroutine(AutoCycleLoop());
+        }
+        completedCycles++;
+    }
+
+    IEnumerator AutoCycleLoop()
+    {
+        while (true)
+        {
+            float targetHeat = Random.Range(0.5f, 1.0f);
+            heatSlider.value = targetHeat;
+
+            yield return StartCoroutine(RunCycle());
+            yield return new WaitForSeconds(1f);
+        }
     }
 }
