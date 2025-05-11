@@ -1,13 +1,14 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [Header("General UI")]
     public GameObject formulaWindowPanel;
     public GameObject learnedFormulasPanel;
-    public Text feedbackText;
+    public TextMeshProUGUI feedbackText;
 
     void Awake()
     {
@@ -26,9 +27,14 @@ public class UIManager : MonoBehaviour
         learnedFormulasPanel?.SetActive(false);
     }
 
-    public void ToggleFormulaWindow() => formulaWindowPanel?.SetActive(!formulaWindowPanel.activeSelf);
-    public void CloseFormulaWindow() => formulaWindowPanel?.SetActive(false);
-    public void ToggleLearnedFormulasPanel() => learnedFormulasPanel?.SetActive(!learnedFormulasPanel.activeSelf);
+    public void TogglePanel(GameObject panel)
+    {
+        if (panel != null)
+        {
+            bool isActive = panel.activeSelf;
+            panel.SetActive(!isActive);
+        }
+    }
 
     public void ShowPuzzleFeedback(string message)
     {
@@ -37,6 +43,18 @@ public class UIManager : MonoBehaviour
         {
             feedbackText.text = message;
             feedbackText.gameObject.SetActive(true);
+        }
+    }
+
+    public void HandlePuzzleSolved(string formulaID)
+    {
+        FormulaUnlockManager.Instance.UnlockFormula(formulaID);
+        ShowPuzzleFeedback($"Unlocked: {formulaID}");
+
+        if (learnedFormulasPanel != null && learnedFormulasPanel.activeSelf)
+        {
+            var ui = learnedFormulasPanel.GetComponent<LearnedFormulasUI>();
+            ui?.RefreshList();
         }
     }
 }

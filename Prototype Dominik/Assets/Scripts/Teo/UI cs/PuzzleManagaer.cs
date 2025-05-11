@@ -37,7 +37,7 @@ public class FormulaPuzzleController : MonoBehaviour
         {
             uiManager?.ShowPuzzleFeedback("Formula Correct!");
             onPuzzleSolved?.Invoke();
-            uiManager?.CloseFormulaWindow();
+            UIManager.Instance?.TogglePanel(UIManager.Instance.formulaWindowPanel);
         }
         else
         {

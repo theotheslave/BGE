@@ -2043,6 +2043,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI manager
       objectReference: {fileID: 0}
+    - target: {fileID: 4897464671250297730, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5531034530521317024, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
       propertyPath: formulaWindowPanel
       value: 
