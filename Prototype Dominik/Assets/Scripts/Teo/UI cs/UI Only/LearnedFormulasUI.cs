@@ -10,38 +10,36 @@ public class LearnedFormulasUI : MonoBehaviour
 
     public void RefreshList()
     {
-        if (formulaEntryPrefab == null || contentParent == null)
-        {
-            Debug.LogError("LearnedFormulasUI: prefab or content is missing.");
-            return;
-        }
+        Debug.Log("Refreshing learned formulas list...");
 
         foreach (Transform child in contentParent)
             Destroy(child.gameObject);
 
-        foreach (string formulaID in FormulaUnlockManager.Instance.GetUnlockedFormulas().OrderBy(id => id))
-        {
-            GameObject entry = Instantiate(formulaEntryPrefab, contentParent);
+        var unlocked = FormulaUnlockManager.Instance.GetUnlockedFormulas().ToList();
+        Debug.Log("Unlocked: " + string.Join(", ", unlocked));
 
+        foreach (string formulaID in unlocked)
+        {
+            Debug.Log($"Trying to load FormulaCard: {formulaID}");
+
+            FormulaCard card = Resources.Load<FormulaCard>($"FormulaCards/{formulaID}");
+            if (card == null)
+            {
+                Debug.LogError($"[LOAD FAIL] FormulaCard not found at FormulaCards/{formulaID}");
+                continue;
+            }
+
+            GameObject entry = Instantiate(formulaEntryPrefab, contentParent);
             var view = entry.GetComponent<FormulaCardView>();
-            if (view != null)
+            if (view == null)
             {
-                FormulaCard card = Resources.Load<FormulaCard>($"FormulaCards/{formulaID}");
-                if (card != null)
-                {
-                    view.cardData = card;
-                    entry.GetComponent<Image>().sprite = card.formulaSprite;
-                    entry.name = $"Card_{card.formulaID}";
-                }
-                else
-                {
-                    Debug.LogWarning($"Could not load FormulaCard for ID: {formulaID}");
-                }
+                Debug.LogError("[VIEW FAIL] FormulaCardView component missing on prefab.");
+                continue;
             }
-            else
-            {
-                Debug.LogWarning("Prefab is missing FormulaCardView component.");
-            }
+
+            view.cardData = card;
+            entry.GetComponent<Image>().sprite = card.formulaSprite;
+            entry.name = $"Card_{card.formulaID}";
         }
     }
 }

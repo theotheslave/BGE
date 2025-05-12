@@ -30,8 +30,8 @@ public class Spawner : MonoBehaviour
         {
 
             Vector2 spawnPos = new Vector2(
-                Random.Range(containerArea.position.x - containerArea.localScale.x / 2f + 0.2f,
-                             containerArea.position.x + containerArea.localScale.x / 2f - 0.2f),
+                Random.Range(containerArea.position.x - containerArea.localScale.x / 4f + 0.2f,
+                             containerArea.position.x + containerArea.localScale.x / 4f - 0.2f),
                 pistonMinY - 0.3f // inside chamber
             );
 
@@ -119,7 +119,7 @@ public class Spawner : MonoBehaviour
         if (count > 0)
         {
             float avgSpeed = totalSpeed / count;
-            Debug.Log($"[Molecule Debug] Average Speed: {avgSpeed:F2}");
+           // Debug.Log($"[Molecule Debug] Average Speed: {avgSpeed:F2}");
         }
     }
 }

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510f424193d02014a9dca50b3746a50a, type: 3}
-  m_Name: Puzzle A
+  m_Name: Puzzle_A
   m_EditorClassIdentifier: 
   formulaID: Puzzle_A
-  correctSlotID: A
+  correctSlotID: 1
   formulaSprite: {fileID: 5961296261454440684, guid: 5fced1d2decf27e4db7151ea8d22b943, type: 3}
-  description: Your Mom
+  description: AAAAAA

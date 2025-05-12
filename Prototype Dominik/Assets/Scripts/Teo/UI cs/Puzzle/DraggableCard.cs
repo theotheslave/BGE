@@ -1,11 +1,12 @@
+﻿using UnityEngine.EventSystems;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     private Transform originalParent;
+    private Canvas dragCanvas;
 
     void Awake()
     {
@@ -16,7 +17,18 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalParent = transform.parent;
-        transform.SetParent(transform.root, true);
+
+        // 🔍 Find or assign the drag canvas (e.g., DragLayer)
+        GameObject dragLayer = GameObject.Find("DragLayer");
+        if (dragLayer != null)
+        {
+            transform.SetParent(dragLayer.transform, true);
+        }
+        else
+        {
+            Debug.LogWarning("DragLayer canvas not found!");
+        }
+
         canvasGroup.blocksRaycasts = false;
     }
 
@@ -28,6 +40,6 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
-        transform.SetParent(originalParent);
+        transform.SetParent(originalParent, false);
     }
 }
