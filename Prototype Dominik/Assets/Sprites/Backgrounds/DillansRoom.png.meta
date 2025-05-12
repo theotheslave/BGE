@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 1dc8f210d3793574da2156db96178731
+guid: 9e79fffefa1fae04e995de954f26e43b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6620059069299223125
-    second: thermodynamic_pocesses68384847717686146721112411231_0
-  - first:
-      213: 1915034918343661331
-    second: thermodynamic_pocesses68384847717686146721112411231_1
-  - first:
-      213: -6544407645663986331
-    second: thermodynamic_pocesses68384847717686146721112411231_2
+      213: -7089476179452486764
+    second: DillansRoom_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -119,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: thermodynamic_pocesses68384847717686146721112411231_0
+      name: DillansRoom_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 262
-        width: 28
-        height: 26
+        x: 0
+        y: 0
+        width: 1920
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,52 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ba5115ed953d024a0800000000000000
-      internalID: -6620059069299223125
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: thermodynamic_pocesses68384847717686146721112411231_1
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 44
-        width: 251
-        height: 237
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 317d758ac12939a10800000000000000
-      internalID: 1915034918343661331
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: thermodynamic_pocesses68384847717686146721112411231_2
-      rect:
-        serializedVersion: 2
-        x: 273
-        y: 22
-        width: 28
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 56df8d68be79d25a0800000000000000
-      internalID: -6544407645663986331
+      spriteID: 49b1428f9fe1d9d90800000000000000
+      internalID: -7089476179452486764
       vertices: []
       indices: 
       edges: []
@@ -198,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      thermodynamic_pocesses68384847717686146721112411231_0: -6620059069299223125
-      thermodynamic_pocesses68384847717686146721112411231_1: 1915034918343661331
-      thermodynamic_pocesses68384847717686146721112411231_2: -6544407645663986331
+      DillansRoom_0: -7089476179452486764
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
