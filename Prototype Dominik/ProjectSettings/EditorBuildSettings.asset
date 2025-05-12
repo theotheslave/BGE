@@ -11,30 +11,42 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Seva.unity
     guid: e3d34f6151f05214b83d05dda59527a3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Alex/Scenes/Gate 3/Boiler Room.unity
     guid: da01cd364e410804a99a9a814e26d1b2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Alex/Scenes/Gate 3/MainQuest Room.unity
     guid: f1c792e6b2c07574c995ac9887370314
-  - enabled: 1
+  - enabled: 0
     path: Assets/Alex/Scenes/prototype supercharger.unity
     guid: 13c40cd3cb4988244afaa55e126bae3e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Alex/Scenes/prototype dialogue.unity
     guid: a82a267ae965c4a4aa84e4c8ba06dee4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Boiler.unity
     guid: 69c633b4b0425b144b1c9285bfc929ad
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scripts/Teo/UI cs/Scenes For testing/Testing scene.unity
     guid: fb74688757af21c4c9f6d93521b02571
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scripts/Teo/UI cs/Scenes For testing/Testing scene 1.unity
     guid: 36bcab18023673341bb6f745cd1fe775
+  - enabled: 1
+    path: Assets/Scenes/Final Scenes/1. Dillan/1.Dillan's room.unity
+    guid: 664a583ec8d9ac4468edc51db1ea2236
+  - enabled: 1
+    path: Assets/Alex/Scenes/prototype PVT Machine.unity
+    guid: 06ac987c18b7d51469fa2de30bb7c2f4
+  - enabled: 0
+    path: Assets/Scenes/Final Scenes/1. Dillan/2. PVT Machine.unity
+    guid: 60dae2015aa3b974a8836b90e9e6fa86
+  - enabled: 1
+    path: Assets/Scenes/Final Scenes/2. Isochoric/3. Isochoric room.unity
+    guid: c8184466e620d9641b3cfee2316bd3a6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
