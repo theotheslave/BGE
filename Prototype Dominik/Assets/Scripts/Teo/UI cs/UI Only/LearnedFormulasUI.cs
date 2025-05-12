@@ -1,10 +1,11 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using System.Linq;
 
 public class LearnedFormulasUI : MonoBehaviour
 {
-    public GameObject formulaEntryPrefab; // Prefab with TMP label inside
+    public GameObject formulaEntryPrefab; // Prefab must have FormulaCardView, DraggableCard, Image
     public Transform contentParent;       // ScrollView Content object
 
     public void RefreshList()
@@ -22,17 +23,24 @@ public class LearnedFormulasUI : MonoBehaviour
         {
             GameObject entry = Instantiate(formulaEntryPrefab, contentParent);
 
-            var label = entry.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null)
-                label.text = formulaID;
-            else
-                Debug.LogWarning("Prefab is missing TMP label.");
-
-            var button = entry.GetComponent<UnityEngine.UI.Button>();
-            if (button != null)
+            var view = entry.GetComponent<FormulaCardView>();
+            if (view != null)
             {
-                string idCopy = formulaID;
-                button.onClick.AddListener(() => UIManager.Instance?.ShowFormulaDetails(idCopy));
+                FormulaCard card = Resources.Load<FormulaCard>($"FormulaCards/{formulaID}");
+                if (card != null)
+                {
+                    view.cardData = card;
+                    entry.GetComponent<Image>().sprite = card.formulaSprite;
+                    entry.name = $"Card_{card.formulaID}";
+                }
+                else
+                {
+                    Debug.LogWarning($"Could not load FormulaCard for ID: {formulaID}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Prefab is missing FormulaCardView component.");
             }
         }
     }

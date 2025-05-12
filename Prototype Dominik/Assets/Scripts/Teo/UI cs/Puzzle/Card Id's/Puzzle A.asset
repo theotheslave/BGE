@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510f424193d02014a9dca50b3746a50a, type: 3}
   m_Name: Puzzle A
   m_EditorClassIdentifier: 
-  formulaID: 
-  correctSlotID: 
-  formulaSprite: {fileID: 0}
-  description: 
+  formulaID: Puzzle_A
+  correctSlotID: A
+  formulaSprite: {fileID: 5961296261454440684, guid: 5fced1d2decf27e4db7151ea8d22b943, type: 3}
+  description: Your Mom
