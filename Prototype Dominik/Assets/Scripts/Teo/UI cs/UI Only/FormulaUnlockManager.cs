@@ -24,4 +24,6 @@ public class FormulaUnlockManager : MonoBehaviour
             Debug.Log("Unlocked formula: " + formulaID);
         }
     }
+
+    public IEnumerable<string> GetUnlockedFormulas() => unlockedFormulas;
 }

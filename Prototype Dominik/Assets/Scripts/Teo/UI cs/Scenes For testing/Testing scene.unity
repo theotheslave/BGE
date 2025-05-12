@@ -712,7 +712,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1224116572}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ToggleLearnedFormulasPanel
         m_Mode: 1
@@ -775,7 +775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugFormulaID: Puzzle_Debug
-  learnedUI: {fileID: 1224116576}
+  learnedUI: {fileID: 0}
 --- !u!224 &932805995 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1602707942036554075, guid: 8d26b34488cce8645b98da19f22e6536, type: 3}
@@ -1007,37 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testFormulaID: Meow
-  learnedFormulasUI: {fileID: 1224116576}
---- !u!1 &1224116571 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4897464671250297730, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
-  m_PrefabInstance: {fileID: 46609465948516033}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1224116572 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5531034530521317024, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
-  m_PrefabInstance: {fileID: 46609465948516033}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224116571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 507912bbbee167c4da107304468fd3ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1224116576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224116571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d89cab2048591644b18c5af070962e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  formulaEntryPrefab: {fileID: 6048267499364161008, guid: 8d26b34488cce8645b98da19f22e6536, type: 3}
-  contentParent: {fileID: 1532011246}
+  learnedFormulasUI: {fileID: 0}
 --- !u!1 &1374454332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2055,13 +2025,12 @@ PrefabInstance:
       propertyPath: learnedFormulasPanel
       value: 
       objectReference: {fileID: 1374454332}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5531034530521317024, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
+    - {fileID: 8028424303945864628, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4897464671250297730, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1224116576}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaea3989d09c3b749841fb03481d026c, type: 3}
 --- !u!1001 &4187866053511836801
 PrefabInstance:

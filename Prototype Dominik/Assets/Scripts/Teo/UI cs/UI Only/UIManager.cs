@@ -1,9 +1,16 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
+
+    [Header("Formula Detail View")]
+    public Image formulaImage;
+    public TextMeshProUGUI formulaNameText;
+    public TextMeshProUGUI formulaDescriptionText;
 
     [Header("General UI")]
     public GameObject formulaWindowPanel;
@@ -57,4 +64,21 @@ public class UIManager : MonoBehaviour
             ui?.RefreshList();
         }
     }
+
+    public void ShowFormulaDetails(string formulaID)
+    {
+        FormulaCard card = Resources.Load<FormulaCard>($"FormulaCards/{formulaID}");
+        if (card != null)
+        {
+            if (formulaWindowPanel != null) formulaWindowPanel.SetActive(true);
+            if (formulaImage != null) formulaImage.sprite = card.formulaSprite;
+            if (formulaNameText != null) formulaNameText.text = card.formulaID;
+            if (formulaDescriptionText != null) formulaDescriptionText.text = card.description;
+        }
+        else
+        {
+            Debug.LogWarning($"FormulaCard with ID '{formulaID}' not found in Resources/FormulaCards/");
+        }
+    }
+        
 }
