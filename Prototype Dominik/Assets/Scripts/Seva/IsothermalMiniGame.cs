@@ -5,10 +5,16 @@ using TMPro;
 
 public class IsothermalMinigame : MonoBehaviour
 {
-//    [Header("Graph")]
-//    public GraphVisualize graphVisualizer;
-//    public float graphSampleInterval = 0.2f;
-//    private float graphSampleTimer = 0f;
+    public float winVolume = 43f;   // целевая температура
+    public float winTolerance = 2f;     // «рядом» = ±5 K
+    private bool hasWon = false;  // чтобы победа сработала один раз
+    public float winHoldTime = 5f;     // сколько секунд нужно удерживать
+    private float winTimer = 0f;     // счётчик времени в диапазоне
+
+    //    [Header("Graph")]
+    //    public GraphVisualize graphVisualizer;
+    //    public float graphSampleInterval = 0.2f;
+    //    private float graphSampleTimer = 0f;
 
     [Header("UI")]
     public Slider heatSlider;
@@ -73,7 +79,7 @@ public class IsothermalMinigame : MonoBehaviour
 
         if (!isCycling && volume >= containerVolume - 0.0001f)
         {
-            cycleCoroutine = StartCoroutine(RunIsothermalCycle());
+//            cycleCoroutine = StartCoroutine(RunIsothermalCycle());
         }
 
         if (currentMoles < initialMoles * refillThresholdFraction)
@@ -87,7 +93,7 @@ public class IsothermalMinigame : MonoBehaviour
         float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
 
-        log += $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\nSlider: {heatSlider.value:F2}";
+        log += $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\n";
         debugText.text = log;
 
   //      if (graphPanel.activeSelf)
@@ -100,65 +106,84 @@ public class IsothermalMinigame : MonoBehaviour
         //    }
         //}
         moleculeSpawner.currentTemperature = currentTemp;
+
+        bool inRange = Mathf.Abs(volume*1000f - winVolume) <= winTolerance;
+
+        if (inRange && !hasWon)
+        {
+            winTimer += Time.deltaTime;
+
+            if (winTimer >= winHoldTime)
+            {
+                hasWon = true;
+                debugText.text +=
+                    $"/n<color=#32CD32>GOOD JOB!\nContinue to the next machine </color>";
+                heatSlider.interactable = false;   // или любая другая реакция
+                // TODO: триггер анимации / сцены / звука и т.д.
+            }
+        }
+        else
+        {
+            winTimer = 0f;       // сброс, если вышли из диапазона
+        }
     }
-    IEnumerator RunIsothermalCycle()
-    {
-        isCycling = true;
-        heatSlider.interactable = false;
+    //    IEnumerator RunIsothermalCycle()
+    //    {
+    //        isCycling = true;
+    //        heatSlider.interactable = false;
 
-        debugText.text = "Gas escaping...\n";
+    //        debugText.text = "Gas escaping...\n";
 
-        float escapeDuration = 1.5f;
-        float elapsed = 0f;
-        float startMoles = currentMoles;
-        float targetMoles = initialMoles * refillThresholdFraction;
+    //        float escapeDuration = 1.5f;
+    //        float elapsed = 0f;
+    //        float startMoles = currentMoles;
+    //        float targetMoles = initialMoles * refillThresholdFraction;
 
-        while (elapsed < escapeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / escapeDuration;
-            currentMoles = Mathf.Lerp(startMoles, targetMoles, t);
-            yield return null;
-        }
+    //        while (elapsed < escapeDuration)
+    //        {
+    //            elapsed += Time.deltaTime;
+    //            float t = elapsed / escapeDuration;
+    //            currentMoles = Mathf.Lerp(startMoles, targetMoles, t);
+    //            yield return null;
+    //        }
 
-        currentMoles = targetMoles;
-        debugText.text += "Cooling down...\n";
+    //        currentMoles = targetMoles;
+    //        debugText.text += "Cooling down...\n";
 
-        float coolingDuration = 2f;
-        float coolingElapsed = 0f;
-        float startTemp = currentTemp;
-        float endTemp = 273f;
-        float refillVolumeThreshold = (initialMoles * R * endTemp) / pressure * 1.05f; // 5% tolerance
+    //        float coolingDuration = 2f;
+    //        float coolingElapsed = 0f;
+    //        float startTemp = currentTemp;
+    //        float endTemp = 273f;
+    //        float refillVolumeThreshold = (initialMoles * R * endTemp) / pressure * 1.05f; // 5% tolerance
 
-        while (coolingElapsed < coolingDuration)
-        {
-            coolingElapsed += Time.deltaTime;
-            float t = coolingElapsed / coolingDuration;
-            currentTemp = Mathf.Lerp(startTemp, endTemp, t);
-            yield return null;
-        }
+    //        while (coolingElapsed < coolingDuration)
+    //        {
+    //            coolingElapsed += Time.deltaTime;
+    //            float t = coolingElapsed / coolingDuration;
+    //            currentTemp = Mathf.Lerp(startTemp, endTemp, t);
+    //            yield return null;
+    //        }
 
-        currentTemp = endTemp;
+    //        currentTemp = endTemp;
 
-        while (true)
-        {
-            float currentVolume = (currentMoles * R * currentTemp) / pressure;
-            if (currentVolume <= refillVolumeThreshold)
-                break;
-            yield return null;
-        }
+    //        while (true)
+    //        {
+    //            float currentVolume = (currentMoles * R * currentTemp) / pressure;
+    //            if (currentVolume <= refillVolumeThreshold)
+    //                break;
+    //            yield return null;
+    //        }
 
-        debugText.text += "Refilling gas...\n";
-        currentMoles = initialMoles;
+    //        debugText.text += "Refilling gas...\n";
+    //        currentMoles = initialMoles;
 
-        targetTemp = 273f;
-        heatSlider.value = 0;
+    //        targetTemp = 273f;
+    //        heatSlider.value = 0;
 
-        yield return new WaitForSeconds(0.5f);
+    //        yield return new WaitForSeconds(0.5f);
 
-        heatSlider.interactable = true;
-        isCycling = false;
-//        graphVisualizer.Clear();
-    }
-
+    //        heatSlider.interactable = true;
+    //        isCycling = false;
+    ////        graphVisualizer.Clear();
+    //    }
 }
