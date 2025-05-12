@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: cf3c8b8ff5b7352489c22bde26e8a81b
+guid: fcd4db1fe95a5674c819db7180018d97
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6368234134944835431
-    second: goggles-steampunk-vintage-color-icon-illustration-vector12312_0
+      213: -4263210217661341244
+    second: Screenshot 2025-05-12 125456_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: goggles-steampunk-vintage-color-icon-illustration-vector12312_0
+      name: Screenshot 2025-05-12 125456_0
       rect:
         serializedVersion: 2
-        x: 85
-        y: 84
-        width: 811
-        height: 811
+        x: 0
+        y: 0
+        width: 194
+        height: 92
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 998981c6bcc7f97a0800000000000000
-      internalID: -6368234134944835431
+      spriteID: 4c1ea7df4e806d4c0800000000000000
+      internalID: -4263210217661341244
       vertices: []
       indices: 
       edges: []
@@ -147,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      goggles-steampunk-vintage-color-icon-illustration-vector12312_0: -6368234134944835431
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: cf3c8b8ff5b7352489c22bde26e8a81b
+guid: 2dae17e448695d349bbab5e3e3b96777
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6368234134944835431
-    second: goggles-steampunk-vintage-color-icon-illustration-vector12312_0
+      213: -2593736099713133239
+    second: Second121_0
+  - first:
+      213: -3574674841830057319
+    second: Second121_1
+  - first:
+      213: 3280934355864628333
+    second: Second121_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +102,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: goggles-steampunk-vintage-color-icon-illustration-vector12312_0
+      name: Second121_0
       rect:
         serializedVersion: 2
-        x: 85
-        y: 84
-        width: 811
-        height: 811
+        x: 15
+        y: 262
+        width: 28
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 998981c6bcc7f97a0800000000000000
-      internalID: -6368234134944835431
+      spriteID: 945dd7f62c2310cd0800000000000000
+      internalID: -2593736099713133239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Second121_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 44
+        width: 251
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99a9139bb24346ec0800000000000000
+      internalID: -3574674841830057319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Second121_2
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 24
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6cafacd968388d20800000000000000
+      internalID: 3280934355864628333
       vertices: []
       indices: 
       edges: []
@@ -147,8 +184,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      goggles-steampunk-vintage-color-icon-illustration-vector12312_0: -6368234134944835431
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
