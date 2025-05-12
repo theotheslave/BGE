@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 53e9e24f2681c6248af342b8eb43f80b
+guid: 2dae17e448695d349bbab5e3e3b96777
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8859716438883322039
-    second: Second124142_0
+      213: -2593736099713133239
+    second: Second121_0
   - first:
-      213: -4736020522230071822
-    second: Second124142_1
+      213: -3574674841830057319
+    second: Second121_1
   - first:
-      213: 4600609471332479076
-    second: Second124142_2
+      213: 3280934355864628333
+    second: Second121_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -106,55 +106,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Second124142_0
+      name: Second121_0
       rect:
         serializedVersion: 2
-        x: 16
+        x: 15
         y: 262
-        width: 27
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 947bba1f6d6fb0580800000000000000
-      internalID: -8859716438883322039
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Second124142_1
-      rect:
-        serializedVersion: 2
-        x: 39
-        y: 44
-        width: 250
-        height: 237
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2fd34837d66464eb0800000000000000
-      internalID: -4736020522230071822
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Second124142_2
-      rect:
-        serializedVersion: 2
-        x: 274
-        y: 24
         width: 28
         height: 26
       alignment: 0
@@ -165,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 460f11960f5a8df30800000000000000
-      internalID: 4600609471332479076
+      spriteID: 945dd7f62c2310cd0800000000000000
+      internalID: -2593736099713133239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Second121_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 44
+        width: 251
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99a9139bb24346ec0800000000000000
+      internalID: -3574674841830057319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Second121_2
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 24
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6cafacd968388d20800000000000000
+      internalID: 3280934355864628333
       vertices: []
       indices: 
       edges: []
