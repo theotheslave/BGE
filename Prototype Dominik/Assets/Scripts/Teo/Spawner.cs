@@ -28,6 +28,7 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
+
             Vector2 spawnPos = new Vector2(
                 Random.Range(containerArea.position.x - containerArea.localScale.x / 2f + 0.2f,
                              containerArea.position.x + containerArea.localScale.x / 2f - 0.2f),

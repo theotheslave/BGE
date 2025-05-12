@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4eba8a6a74c76843ba054c1aed1b677, type: 3}
-  m_Name: Puzzle_C
+  m_Script: {fileID: 11500000, guid: 510f424193d02014a9dca50b3746a50a, type: 3}
+  m_Name: Puzzle A
   m_EditorClassIdentifier: 
-  formulaID: 
-  formulaSprite: {fileID: 0}
-  value: 0
-  cardType: 0
+  formulaID: Puzzle_A
+  correctSlotID: A
+  formulaSprite: {fileID: 5961296261454440684, guid: 5fced1d2decf27e4db7151ea8d22b943, type: 3}
+  description: Your Mom
