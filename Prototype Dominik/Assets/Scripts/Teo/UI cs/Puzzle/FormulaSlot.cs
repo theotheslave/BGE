@@ -17,6 +17,16 @@ public class FormulaSlot : MonoBehaviour
 
     public void ClearSlot()
     {
+        if (placedCard != null)
+        {
+            var cardObj = GetComponentInChildren<FormulaCardView>()?.gameObject;
+            var draggable = cardObj?.GetComponent<DraggableCard>();
+            if (draggable != null)
+            {
+                draggable.ReturnToOrigin();
+            }
+        }
+
         placedCard = null;
     }
 }
