@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
@@ -58,10 +57,15 @@ public class UIManager : MonoBehaviour
         FormulaUnlockManager.Instance.UnlockFormula(formulaID);
         ShowPuzzleFeedback($"Unlocked: {formulaID}");
 
-        if (learnedFormulasPanel != null && learnedFormulasPanel.activeSelf)
+        var ui = learnedFormulasPanel?.GetComponent<LearnedFormulasUI>();
+        if (ui != null)
         {
-            var ui = learnedFormulasPanel.GetComponent<LearnedFormulasUI>();
-            ui?.RefreshList();
+            Debug.Log("Refreshing learned list after unlock...");
+            ui.RefreshList();
+        }
+        else
+        {
+            Debug.LogWarning("LearnedFormulasUI not found on panel!");
         }
     }
 
@@ -80,5 +84,4 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"FormulaCard with ID '{formulaID}' not found in Resources/FormulaCards/");
         }
     }
-        
 }
