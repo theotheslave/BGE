@@ -1,36 +1,45 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;  // 🔄 Add this line for the Slider component
 using System.Collections.Generic;
+using System.Diagnostics;
 
-public class SpriteOnCurve : MonoBehaviour
+public class SpriteOnCurveIsochoric : MonoBehaviour
 {
-    [Range(0.02240041f, 0.06462584f)]
-    public float rawInput = 0.02240041f; // Real-world input value (e.g., volume)
+    [Range(0f, 1f)]
+    public float rawInputIsochoric = 0f; // Real-world input value (e.g., volume)
 
-    public List<Transform> controlPoints;  // Points defining the curve
+    public List<Transform> IsochoricControlPoints;  // Points defining the curve
 
-    private IsothermalMinigame miniGame;
+    private Slider slider;
 
     // Define the input range
-    private const float minInput = 0.02240041f;
-    private const float maxInput = 0.06462584f;
+    private const float minInput = 0f;
+    private const float maxInput = 1f;
 
     void Start()
     {
-        miniGame = GameObject.Find("PuzzleManager").GetComponent<IsothermalMinigame>();
+        // ✅ Find the Slider (make sure it's active in the scene)
+        slider = GameObject.Find("Slider").GetComponent<Slider>();
+
+        // 🔄 Optional: Add a warning if the slider is not found
+        if (slider == null)
+        {
+        }
     }
 
     void Update()
     {
-        if (miniGame != null)
+        // 🛠️ Make sure slider is found before using it
+        if (slider != null)
         {
-            rawInput = miniGame.volume;
+            rawInputIsochoric = slider.value;
         }
 
-        float progress = Mathf.InverseLerp(minInput, maxInput, rawInput); // maps rawInput to 0�1
+        float progress = Mathf.InverseLerp(minInput, maxInput, rawInputIsochoric); // maps rawInputIsochoric to 0-1
 
-        if (controlPoints.Count >= 2)
+        if (IsochoricControlPoints.Count >= 2)
         {
-            transform.position = CalculateBezierPoint(progress, controlPoints);
+            transform.position = CalculateBezierPoint(progress, IsochoricControlPoints);
         }
     }
 

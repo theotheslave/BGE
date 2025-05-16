@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e1b50391d8ed04a856cb846c7bf556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: prototype PVT Machine
+  sceneToLoad: 2. PVT Machine
 --- !u!65 &384398916
 BoxCollider:
   m_ObjectHideFlags: 0

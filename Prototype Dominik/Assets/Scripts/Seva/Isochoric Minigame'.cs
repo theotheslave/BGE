@@ -3,11 +3,11 @@ using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 
-public class IsothermalMinigame : MonoBehaviour
+public class IsochoricMinigame : MonoBehaviour
 {
     [Header("Win Condition")]
-    public float winTemperature = 43f;   // целевая Т
-    public float winTolerance = 2f;     // допуск ±
+    public float winTemperature = 405f;   // целевая Т
+    public float winTolerance = 5f;     // допуск ±
     public float winHoldTime = 5f;     // сколько секунд нужно удерживать
     private float winTimer = 0f;     // счётчик времени в диапазоне
     private bool hasWon = false;  // победа уже засчитана?
@@ -80,7 +80,7 @@ public class IsothermalMinigame : MonoBehaviour
 
         if (!isCycling && volume >= containerVolume - 0.0001f)
         {
-            //          cycleCoroutine = StartCoroutine(RunIsothermalCycle());
+  //          cycleCoroutine = StartCoroutine(RunIsothermalCycle());
         }
 
         if (currentMoles < initialMoles * refillThresholdFraction)
@@ -96,7 +96,7 @@ public class IsothermalMinigame : MonoBehaviour
 
         if (hasWon == false)
         {
-            log += $"V: {(volume * 1000f):F2} L\nn: {currentMoles:F2}\n";
+            log += $"T: {(currentTemp):F2} K\nn: {currentMoles:F2}\n";
             debugText.text = log;
         }
 
@@ -111,7 +111,7 @@ public class IsothermalMinigame : MonoBehaviour
         //}
         moleculeSpawner.currentTemperature = currentTemp;
 
-        bool inRange = Mathf.Abs(volume*1000f - winTemperature) <= winTolerance;
+        bool inRange = Mathf.Abs(currentTemp - winTemperature) <= winTolerance;
 
         if (inRange && !hasWon)
         {

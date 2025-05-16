@@ -35,18 +35,31 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scripts/Teo/UI cs/Scenes For testing/Testing scene 1.unity
     guid: 36bcab18023673341bb6f745cd1fe775
+  - enabled: 0
+    path: Assets/Alex/Scenes/prototype PVT Machine.unity
+    guid: 06ac987c18b7d51469fa2de30bb7c2f4
   - enabled: 1
     path: Assets/Scenes/Final Scenes/1. Dillan/1.Dillan's room.unity
     guid: 664a583ec8d9ac4468edc51db1ea2236
   - enabled: 1
-    path: Assets/Alex/Scenes/prototype PVT Machine.unity
-    guid: 06ac987c18b7d51469fa2de30bb7c2f4
-  - enabled: 0
     path: Assets/Scenes/Final Scenes/1. Dillan/2. PVT Machine.unity
-    guid: 60dae2015aa3b974a8836b90e9e6fa86
+    guid: 698227fa7452bed4ca8588d8a7e9e8b3
   - enabled: 1
     path: Assets/Scenes/Final Scenes/2. Isochoric/3. Isochoric room.unity
     guid: c8184466e620d9641b3cfee2316bd3a6
+  - enabled: 1
+    path: Assets/Scenes/Final Scenes/2. Isochoric/4. Isochoric Minigame.unity
+    guid: 34ccecd8843e6ad40a3cf675e73b6dd3
+  - enabled: 1
+    path: Assets/Scenes/Final Scenes/3. Isothermal+Isocbaric/5. Isothermal+Isobaric
+      room.unity
+    guid: 2adeb05a05f86d6479102c6e4c084c67
+  - enabled: 1
+    path: Assets/Scenes/Final Scenes/3. Isothermal+Isocbaric/6. Isobaric Minigame.unity
+    guid: 8519777d17752a24d8cce6c4cbee8657
+  - enabled: 1
+    path: Assets/Scenes/Final Scenes/3. Isothermal+Isocbaric/7. Isothermal Minigame.unity
+    guid: 73eb517b405c18a45a3e2eb9fdcb843e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

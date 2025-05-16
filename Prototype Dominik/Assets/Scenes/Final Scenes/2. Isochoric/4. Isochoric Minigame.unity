@@ -4086,8 +4086,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1147607752}
   - component: {fileID: 1147607751}
-  - component: {fileID: 1147607750}
   - component: {fileID: 1147607749}
+  - component: {fileID: 1147607753}
   m_Layer: 0
   m_Name: Button_Exit
   m_TagString: Untagged
@@ -4141,18 +4141,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.18, y: 4.51}
   m_EdgeRadius: 0
---- !u!114 &1147607750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147607748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a24f0cc2983c248a702647db9d7cbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &1147607751
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4223,6 +4211,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1147607753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147607748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e1b50391d8ed04a856cb846c7bf556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: 3. Isochoric room
 --- !u!1 &1152078452
 GameObject:
   m_ObjectHideFlags: 0

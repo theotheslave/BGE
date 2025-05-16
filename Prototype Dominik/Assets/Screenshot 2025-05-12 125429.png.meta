@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: cf3c8b8ff5b7352489c22bde26e8a81b
+guid: bc4397de058cebe4b8abfaf1c9b2e365
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6368234134944835431
-    second: goggles-steampunk-vintage-color-icon-illustration-vector12312_0
+      213: 712922955958482732
+    second: Screenshot 2025-05-12 125429_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: goggles-steampunk-vintage-color-icon-illustration-vector12312_0
+      name: Screenshot 2025-05-12 125429_0
       rect:
         serializedVersion: 2
-        x: 85
-        y: 84
-        width: 811
-        height: 811
+        x: 0
+        y: 0
+        width: 140
+        height: 97
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 998981c6bcc7f97a0800000000000000
-      internalID: -6368234134944835431
+      spriteID: c277026b6afc4e900800000000000000
+      internalID: 712922955958482732
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      goggles-steampunk-vintage-color-icon-illustration-vector12312_0: -6368234134944835431
+      Screenshot 2025-05-12 125429_0: 712922955958482732
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
