@@ -53,11 +53,9 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(string[] lines, Interactable speaker)
     {
-        // If the same speaker is already talking, do nothing (Update will handle the click)
         if (IsDialoguePlaying() && CurrentSpeakerIs(speaker))
             return;
 
-        // Otherwise, start new dialogue
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
 
         currentSpeaker = speaker;
@@ -74,7 +72,7 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator EnableInputAfterDelay()
     {
-        yield return null; // wait one frame
+        yield return null;
         inputEnabled = true;
         justOpened = false;
     }
