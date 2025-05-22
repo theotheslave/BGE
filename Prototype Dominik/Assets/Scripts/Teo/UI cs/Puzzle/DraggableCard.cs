@@ -1,41 +1,48 @@
-﻿using UnityEngine.EventSystems;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DraggableCard : MonoBehaviour,
+                              IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [Header("Assign the (invisible) Drag Layer here")]
+    [SerializeField] private Transform dragLayer;     // set in Inspector!
+
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     private Transform originalParent;
-    private Vector3 originalPosition;
+    private Vector2 originalAnchoredPos;
     private LayoutElement layoutElement;
+
     void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();
-
         layoutElement = GetComponent<LayoutElement>();
+
+        // One-time fallback lookup
+        if (dragLayer == null)
+        {
+            var obj = GameObject.Find("DragLayer");
+            if (obj) dragLayer = obj.transform;
+            else Debug.LogWarning("[DraggableCard] DragLayer missing - please assign!");
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalParent = transform.parent;
-        originalPosition = rectTransform.anchoredPosition;
+        originalAnchoredPos = rectTransform.anchoredPosition;
 
-        if (layoutElement != null)
-            layoutElement.ignoreLayout = true;
+        if (layoutElement) layoutElement.ignoreLayout = true;
 
-        var dragLayer = GameObject.Find("DragLayer");
-        if (dragLayer)
-            transform.SetParent(dragLayer.transform, true);
-        else
-            Debug.LogWarning("DragLayer not found!");
-
+        if (dragLayer) transform.SetParent(dragLayer, true);
         canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        // Move in Canvas-space, not world-space
         rectTransform.position = eventData.position;
     }
 
@@ -43,19 +50,20 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         canvasGroup.blocksRaycasts = true;
 
-        // If it’s not parented to a slot, return to original
-        if (transform.parent == GameObject.Find("DragLayer").transform)
-        {
+        // If we didn’t land on a FormulaSlot -> snap back
+        bool droppedOnSlot = eventData.pointerEnter &&
+                             eventData.pointerEnter.GetComponentInParent<FormulaSlot>();
+
+        if (!droppedOnSlot)
             ReturnToOrigin();
-        }
     }
 
+    /* ——— public so FormulaSlot can also reset when needed ——— */
     public void ReturnToOrigin()
     {
         transform.SetParent(originalParent, false);
-        rectTransform.anchoredPosition = originalPosition;
+        rectTransform.anchoredPosition = originalAnchoredPos;
 
-        if (layoutElement != null)
-            layoutElement.ignoreLayout = false;
+        if (layoutElement) layoutElement.ignoreLayout = false;
     }
 }

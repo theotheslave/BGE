@@ -1,79 +1,61 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class MoleculeParticle : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
     public float baseSpeed = 3f;
+
+    Rigidbody rb;
+    Renderer rend;
+
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody>();
+        rend = GetComponent<Renderer>();
     }
 
-    // Called at spawn: sets a fresh random direction + speed
+   
+
     public void InitializeVelocity(float temperatureK)
     {
-        float newSpeed = baseSpeed * Mathf.Sqrt(temperatureK / 273f);
-        Vector2 direction = Random.insideUnitCircle.normalized;
-        rb.linearVelocity = direction * newSpeed;
+        float speed = baseSpeed * Mathf.Sqrt(temperatureK / 273f);
+        rb.linearVelocity = Random.onUnitSphere * speed;
         UpdateColor(temperatureK);
     }
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            // Tell the Spawner we're removing this molecule
-            Spawner spawner = FindAnyObjectByType<Spawner>();
-            if (spawner != null)
-            {
-                spawner.RemoveMolecule(this);
-            }
 
-            Destroy(gameObject);
-        }
-
-        if (Random.value < 1f)
-        {
-            Vector2 randomNudge = Random.insideUnitCircle.normalized * 1f;
-            rb.linearVelocity += randomNudge;
-        }
-    }
-
-
-
+   
 
     public void AdjustSpeed(float temperatureK)
     {
-        if (rb == null) return;
-
         float targetSpeed = baseSpeed * Mathf.Sqrt(temperatureK / 273f);
-        float currentSpeed = rb.linearVelocity.magnitude;
-        Vector2 direction = rb.linearVelocity.normalized;
+        Vector3 dir = rb.linearVelocity.sqrMagnitude < 0.0001f
+                      ? Random.onUnitSphere
+                      : rb.linearVelocity.normalized;
 
-        if (currentSpeed < 0.05f)
-        {
-            direction = Random.insideUnitCircle.normalized;
-            rb.linearVelocity = direction * targetSpeed;
-            UpdateColor(temperatureK);
-            return;
-        }
-
-        if (currentSpeed < targetSpeed * 0.95f)
-        {
-            rb.linearVelocity = direction * targetSpeed;
-        }
-       
-
+        rb.linearVelocity = dir * targetSpeed;
         UpdateColor(temperatureK);
     }
 
 
-    private void UpdateColor(float temperatureK)
+    void OnCollisionEnter(Collision c)
     {
-        if (sr == null) return;
+        if (c.gameObject.CompareTag("Wall"))
+        {
+            FindAnyObjectByType<Spawner>()?.RemoveMolecule(this);
+            Destroy(gameObject);
+            return;
+        }
 
+        // Tiny random nudge to avoid perfect reflections
+        rb.linearVelocity += Random.onUnitSphere * 0.3f;
+    }
+
+    
+
+    void UpdateColor(float temperatureK)
+    {
+        if (!rend) return;
         float t = Mathf.InverseLerp(273f, 800f, temperatureK);
-        sr.color = Color.Lerp(Color.blue, Color.red, t);
+        rend.material.color = Color.Lerp(Color.blue, Color.red, t);
     }
 }
