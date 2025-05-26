@@ -11,20 +11,20 @@ public class Spawner : MonoBehaviour
     [Header("Chamber limits")]
     public float pistonMinY = -1.3f;
     public float pistonMaxY = 2.3f;
-    public float wallMargin = 0.2f;           // keep molecules this far from walls
+    public float wallMargin = 0.2f;           
 
     [Header("Runtime")]
     [HideInInspector] public float currentTemperature = 273f;
 
     private readonly List<MoleculeParticle> molecules = new();
-    private BoxCollider volume;               // the true bounds we spawn inside
+    private BoxCollider volume;              
 
-    /* ---------- life-cycle ---------- */
+   
 
     void Awake() => volume = GetComponent<BoxCollider>();
     void Start() => SpawnMolecules(startCount, currentTemperature);
 
-    /* ---------- public API ---------- */
+   
 
     public void SpawnMolecules(int count, float temperatureK)
     {
@@ -55,7 +55,7 @@ public class Spawner : MonoBehaviour
 
     public void RemoveMolecule(MoleculeParticle m) => molecules.Remove(m);
 
-    /* ---------- helpers ---------- */
+  
 
     MoleculeParticle InstantiateOne(float temperatureK)
     {
