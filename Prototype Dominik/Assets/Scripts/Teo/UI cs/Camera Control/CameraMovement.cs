@@ -7,11 +7,12 @@ using Unity.Cinemachine;
 public class CameraMovement : MonoBehaviour
 {
     [Header("Camera Components")]
-    [SerializeField] private CinemachineVirtualCamera virtualCam;   // Reference to the virtual camera
-    [SerializeField] private CinemachineSplineDolly dolly;          // Reference to the dolly component
+    [SerializeField] private CinemachineVirtualCamera virtualCam;   
+    [SerializeField] private CinemachineSplineDolly dolly;          
 
     [Header("Movement Settings")]
-    [SerializeField] private float travelSeconds = 1.2f;            // Duration of glide along the spline
+    [SerializeField] private float travelSeconds = 1.2f;           
+
 
     private Coroutine mover;
 
