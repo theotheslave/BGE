@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b01026efbfeb9d04cbb1a2ec48439176
+guid: b615f0bb4fef67447808e8d455ab5b5a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,22 +7,37 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Case1
-    second: {fileID: 2100000, guid: f5aacc45f1fb58c49853bb8e5c127ab8, type: 2}
+      name: Case3
+    second: {fileID: 2100000, guid: 58240fb84d4978d40866a52af7bd7d61, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material.002
-    second: {fileID: 2100000, guid: 651887b5a079e6b478f79fb340b6b27e, type: 2}
+      name: Case3.1
+    second: {fileID: 2100000, guid: 8d8e680a0d460d14095a31e27eedece4, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Pipes
-    second: {fileID: 2100000, guid: 1ce22da44a80a9b4f916ac61144a4e5e, type: 2}
+    second: {fileID: 2100000, guid: 402603417dd8c3d4e9b5387f589dd388, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Pipes2
+    second: {fileID: 2100000, guid: a3dd883f235e5f5479337fa369160f49, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Piston
+    second: {fileID: 2100000, guid: d7f8ee3be0a0ba0459d5a497c36716e4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Water3
+    second: {fileID: 2100000, guid: a8021be474c4cdb4b8cbf916564c2841, type: 2}
   materials:
     materialImportMode: 2
     materialName: 2
-    materialSearch: 1
+    materialSearch: 0
     materialLocation: 1
   animations:
     legacyGenerateAnimations: 4

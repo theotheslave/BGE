@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b01026efbfeb9d04cbb1a2ec48439176
+guid: 7a074abeb0a93e644bdb38f77bcdc1c7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,18 +7,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Case1
-    second: {fileID: 2100000, guid: f5aacc45f1fb58c49853bb8e5c127ab8, type: 2}
+      name: Case4
+    second: {fileID: 2100000, guid: 45ac8ea134611bb438feeb8fe9bbfde3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material.002
-    second: {fileID: 2100000, guid: 651887b5a079e6b478f79fb340b6b27e, type: 2}
+    second: {fileID: 2100000, guid: fb4269af43d39c94e8254d6281be6f9a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Pipes
-    second: {fileID: 2100000, guid: 1ce22da44a80a9b4f916ac61144a4e5e, type: 2}
+    second: {fileID: 2100000, guid: b9050b0fef8678244b8501d034832c28, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Piston2
+    second: {fileID: 2100000, guid: 296ca4efa66fc1a4fbc26df5c82d7131, type: 2}
   materials:
     materialImportMode: 2
     materialName: 2
