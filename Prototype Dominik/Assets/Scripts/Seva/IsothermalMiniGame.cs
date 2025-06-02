@@ -57,7 +57,7 @@ public class IsothermalMinigame : MonoBehaviour
 
         currentMoles = initialMoles;
         currentTemp = 273f;
-        moleculeSpawner.SpawnMolecules(currentTemp);
+      
         Vmin = (initialMoles * R * 273f) / pressure;
         Vmax = (initialMoles * R * 800f) / pressure;
 
