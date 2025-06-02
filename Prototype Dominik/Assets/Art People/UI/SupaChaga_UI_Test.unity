@@ -3063,6 +3063,11 @@ RectTransform:
   m_AnchoredPosition: {x: -6.8788, y: 20.85}
   m_SizeDelta: {x: 375, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1022794472 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8874046522584203775, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+  m_PrefabInstance: {fileID: 2319972195730440685}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1032328263
 GameObject:
   m_ObjectHideFlags: 0
@@ -9469,11 +9474,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graphVisualizer: {fileID: 0}
   graphSampleInterval: 0.2
-  heatSlider: {fileID: 0}
-  toggleGraphButton: {fileID: 0}
-  graphPanel: {fileID: 0}
-  debugText: {fileID: 0}
-  winText: {fileID: 0}
+  heatSlider: {fileID: 2109464164}
+  toggleGraphButton: {fileID: 1123384153}
+  graphPanel: {fileID: 1022794472}
+  debugText: {fileID: 2437257}
+  winText: {fileID: 2437257}
   piston: {fileID: 152795033}
   pistonMinY: -4.34
   pistonMaxY: 1.19
