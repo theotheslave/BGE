@@ -59,7 +59,7 @@ public class Spawner : MonoBehaviour
 
     MoleculeParticle InstantiateOne(float temperatureK)
     {
-        Vector3 pos = RandomPointInside(volume.bounds, wallMargin);
+        Vector3 pos = RandomPointInside(volume, wallMargin);
         GameObject go = Instantiate(moleculePrefab, pos, Random.rotation, transform);
         var mol = go.GetComponent<MoleculeParticle>();
         mol.InitializeVelocity(temperatureK);
@@ -73,12 +73,15 @@ public class Spawner : MonoBehaviour
         molecules.Clear();
     }
 
-    static Vector3 RandomPointInside(Bounds b, float margin)
+    static Vector3 RandomPointInside(BoxCollider box, float margin)
     {
-        return new Vector3(
-            Random.Range(b.min.x + margin, b.max.x - margin),
-            Random.Range(b.min.y + margin, b.max.y - margin),
-            Random.Range(b.min.z + margin, b.max.z - margin)
+        Vector3 localPos = new Vector3(
+            Random.Range(-0.5f + margin, 0.5f - margin),
+            Random.Range(-0.5f + margin, 0.5f - margin),
+            Random.Range(-0.5f + margin, 0.5f - margin)
         );
+
+        Vector3 scaledPos = Vector3.Scale(localPos, box.size);
+        return box.transform.TransformPoint(box.center + scaledPos);
     }
 }

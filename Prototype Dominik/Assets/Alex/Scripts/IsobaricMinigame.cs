@@ -29,8 +29,9 @@ public class IsobaricMinigame : MonoBehaviour
     [Header("Gas Constants")]
     public float pressure = 101_325f;  
     public float R = 8.314f;    
-    public float containerVolume = 0.065f; 
-
+    public float containerVolume = 0.065f;
+    [SerializeField] private float requiredHoldTime = 2f;
+    private float holdTimer = 0f;
     [Header("References")]
     public Spawner moleculeSpawner;  
 
@@ -111,13 +112,22 @@ public class IsobaricMinigame : MonoBehaviour
             moleculeSpawner.AddNewMolecules(missing, currentTemp);
         }
 
-     
+
         if (!isCycling && volume >= containerVolume - 0.0001f)
         {
-            cycleCoroutine = StartCoroutine(RunCycle());
+            holdTimer += Time.deltaTime;
+
+            if (holdTimer >= requiredHoldTime)
+            {
+                cycleCoroutine = StartCoroutine(RunCycle());
+            }
+        }
+        else
+        {
+            holdTimer = 0f; 
         }
 
-      
+
         float normVolume = Mathf.InverseLerp(Vmin, Vmax, volume);
         float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
