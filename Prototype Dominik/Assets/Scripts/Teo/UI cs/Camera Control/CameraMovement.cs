@@ -14,6 +14,7 @@ public class CameraMovement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float travelSeconds = 1.2f;
 
+
     [Header("Optional")]
     [SerializeField] private Transform defaultLookAt;
 
@@ -76,12 +77,13 @@ public class CameraMovement : MonoBehaviour
 
         for (float t = 0f; t < 1f; t += Time.deltaTime / travelSeconds)
         {
-            float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI); // ease-in-out
+            float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI); 
 
             dolly.CameraPosition = Mathf.Lerp(from, to, eased);
 
             if (returningToStart)
             {
+
                 virtualCam.transform.rotation = Quaternion.Slerp(startRotation, endRotation, eased);
             }
 
