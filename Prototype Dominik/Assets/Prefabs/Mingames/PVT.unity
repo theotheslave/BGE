@@ -381,6 +381,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_Canvas_OverlayData
       objectReference: {fileID: 0}
+    - target: {fileID: 906162769351629026, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 906162769351629026, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 906162769351629026, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1290723967037800592, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -507,6 +519,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4397097138455595624, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764499464217040340, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764499464217040340, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764499464217040340, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764499464217040340, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9048422663871832930, guid: 2d992a45f799bcb4b96f7525d127a85d, type: 3}
@@ -741,6 +769,38 @@ PrefabInstance:
     - target: {fileID: 6463806698984209593, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
       propertyPath: m_Name
       value: UI_Canvas_Buttons
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474291974768118080, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474291974768118080, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474291974768118080, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474291974768118080, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8141468463469967424, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8141468463469967424, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8141468463469967424, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8141468463469967424, guid: ad8c5f8c041f9dc4cbcd404114a96719, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1597,9 +1657,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 850837164772781004, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850837164772781004, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850837164772781004, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850837164772781004, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4194961594639831282, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
       propertyPath: m_Name
       value: UI_Canvas_OverlaySystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235978729583865110, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235978729583865110, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235978729583865110, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235978729583865110, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6302809180168431925, guid: e073a82e575207d449de969ffd8cfa04, type: 3}
       propertyPath: m_Pivot.x
@@ -1728,7 +1820,6 @@ MonoBehaviour:
   moleDisplay: {fileID: 1607787180}
   pressureDisplay: {fileID: 0}
   winText: {fileID: 396278273}
-  R: 8.314
   leftWall: {fileID: 1778858954}
   rightWall: {fileID: 746371871}
   wallMinX: -3
@@ -1742,6 +1833,8 @@ MonoBehaviour:
   targetPressure: 300000
   pressureTolerance: 5000
   winHoldTime: 2
+  wallMoveAmplitude: 0.05
+  wallMoveSpeed: 2
 --- !u!4 &2125848924
 Transform:
   m_ObjectHideFlags: 0
