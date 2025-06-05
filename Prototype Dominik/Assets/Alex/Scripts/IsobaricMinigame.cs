@@ -14,7 +14,8 @@ public class IsobaricMinigame : MonoBehaviour
     public Slider heatSlider;
     public Button toggleGraphButton;
     public GameObject graphPanel;
-    public TextMeshProUGUI debugText;
+    public TextMeshProUGUI temperatureDisplay;
+    public TextMeshProUGUI volumeDisplay;
     [SerializeField] private TextMeshProUGUI winText;
 
     [Header("Piston Visual")]
@@ -90,13 +91,8 @@ public class IsobaricMinigame : MonoBehaviour
         float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
 
-        // Debug info
-        debugText.text = $"T: {currentTemp:F1} K\n" +
-                         $"Target T: {targetTemp:F1} K\n" +
-                         $"V: {(volume * 1000f):F2} L\n" +
-                         $"n (moles): {currentMoles:F2}\n" +
-                         $"Molecules: {activeMolecules}\n" +
-                         $"Slider: {heatSlider.value:F2}";
+        temperatureDisplay.text = $"T = {currentTemp:F1} K";
+        volumeDisplay.text = $"V = {(volume * 1000f):F2} L";
 
         // Graph
         if (graphPanel.activeSelf)
