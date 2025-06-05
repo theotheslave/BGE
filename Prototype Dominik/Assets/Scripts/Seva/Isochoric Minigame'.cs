@@ -5,28 +5,28 @@ using UnityEngine.UI;
 public class IsochoricMinigame : MonoBehaviour
 {
     [Header("UI")]
-    public Slider nSlider;
-    public Slider tSlider;
-    public TextMeshProUGUI temperatureDisplay;
-    public TextMeshProUGUI pressureDisplay;
-    public TextMeshProUGUI winText;
+    [SerializeField] private Slider nSlider;
+    [SerializeField] private Slider tSlider;
+    [SerializeField] private TextMeshProUGUI temperatureDisplay;
+    [SerializeField] private TextMeshProUGUI pressureDisplay;
+    [SerializeField] private TextMeshProUGUI winText;
 
     [Header("Gas Constants")]
-    public float R = 8.314f;
-    public float containerVolume = 0.015f;
+    private float R = 8.314f;
+    [SerializeField] private float containerVolume = 0.015f;
 
     [Header("Problem Setup")]
-    public float initialPressure = 125000f; 
-    public float targetPressure = 250000f; 
-    public float initialTemperature = 670f;
-    private float targetTemperature;
+    [SerializeField] private float initialPressure = 125000f; 
+    [SerializeField] private float targetPressure = 250000f; 
+    [SerializeField] private float initialTemperature = 670f;
+    [SerializeField] private float targetTemperature;
     private float currentTemperature;
     private float currentMoles;
     private float currentPressure;
 
     [Header("Win Condition")]
-    public float temperatureTolerance = 5f;
-    public float winHoldTime = 2f;
+    [SerializeField] private float temperatureTolerance = 5f;
+    [SerializeField] private float winHoldTime = 2f;
     private float winTimer;
     private bool phase1Complete = false;
     private bool hasWon = false;

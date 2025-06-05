@@ -5,17 +5,14 @@ using TMPro;
 public class IdealGasMinigame : MonoBehaviour
 {
     [Header("UI")]
-    public Slider tSlider;
-    public Slider vSlider;
-    public Slider nSlider;
-    public TextMeshProUGUI temperatureDisplay;
-    public TextMeshProUGUI volumeDisplay;
-    public TextMeshProUGUI moleDisplay;
-    public TextMeshProUGUI pressureDisplay;
-    public TextMeshProUGUI winText;
-
-    [Header("Constants")]
-    public float R = 8.314f;
+    [SerializeField] private Slider tSlider;
+    [SerializeField] private Slider vSlider;
+    [SerializeField] private Slider nSlider;
+    [SerializeField] private TextMeshProUGUI temperatureDisplay;
+    [SerializeField] private TextMeshProUGUI volumeDisplay;
+    [SerializeField] private TextMeshProUGUI moleDisplay;
+    [SerializeField] private TextMeshProUGUI pressureDisplay;
+    [SerializeField] private TextMeshProUGUI winText;
 
     [Header("Wall Movement")]
     public Transform leftWall;
@@ -24,17 +21,27 @@ public class IdealGasMinigame : MonoBehaviour
     public float wallMaxX = -1.5f;
 
     [Header("Parameter Ranges")]
-    public float minTemp = 273f;
-    public float maxTemp = 900f;
-    public float minVol = 0.001f;
-    public float maxVol = 0.01f; 
-    public float minMol = 0.01f;
-    public float maxMol = 1.0f;
+    [SerializeField] private float minTemp = 273f;
+    [SerializeField] private float maxTemp = 900f;
+    [SerializeField] private float minVol = 0.001f;
+    [SerializeField] private float maxVol = 0.01f;
+    [SerializeField] private float minMol = 0.01f;
+    [SerializeField] private float maxMol = 1.0f;
 
     [Header("Target Conditions")]
-    public float targetPressure = 300000f;
-    public float pressureTolerance = 5000f;
-    public float winHoldTime = 2f;
+    [SerializeField] private float targetPressure = 300000f;
+    [SerializeField] private float pressureTolerance = 5000f;
+    [SerializeField] private float winHoldTime = 2f;
+
+    [Header("Wall Animation")]
+    public float wallMoveAmplitude = 0.05f;
+    public float wallMoveSpeed = 2f;
+
+    private float R = 8.314f;
+
+    private float baseLeftX;
+    private float baseRightX;
+    private bool isAnimating = false;
 
     private float currentTemp;
     private float currentVol;
@@ -47,6 +54,9 @@ public class IdealGasMinigame : MonoBehaviour
     void Start()
     {
         winText.gameObject.SetActive(false);
+
+        baseLeftX = leftWall.localPosition.x;
+        baseRightX = rightWall.localPosition.x;
     }
 
     void Update()
@@ -70,7 +80,6 @@ public class IdealGasMinigame : MonoBehaviour
         temperatureDisplay.text = $"T = {currentTemp:F1} K";
         volumeDisplay.text = $"V = {(currentVol * 1000f):F2} L";
         moleDisplay.text = $"n = {currentMol:F3} mol";
-        pressureDisplay.text = $"P = {(currentPressure / 1000f):F1} kPa";
 
         float deltaP = Mathf.Abs(currentPressure - targetPressure);
         if (!hasWon && deltaP <= pressureTolerance)

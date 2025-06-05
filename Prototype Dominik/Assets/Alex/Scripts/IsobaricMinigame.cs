@@ -26,7 +26,7 @@ public class IsobaricMinigame : MonoBehaviour
     [Header("Gas Constants")]
     public float pressure = 101_325f;
     public float R = 8.314f;
-    public float containerVolume = 0.065f; // Not used for win condition now
+    public float containerVolume = 0.065f;
 
     [Header("Gas State")]
     public float initialMoles = 1f;
@@ -39,7 +39,7 @@ public class IsobaricMinigame : MonoBehaviour
     public float heatTransferRate = 1f;
 
     [Header("Win Condition")]
-    [SerializeField] private float targetVolume = 0.003f; // 3 liters
+    [SerializeField] private float targetVolume = 0.003f; 
     [SerializeField] private float volumeTolerance = 0.0001f;
     [SerializeField] private float requiredHoldTime = 2f;
     private float correctHoldTimer = 0f;
@@ -72,19 +72,15 @@ public class IsobaricMinigame : MonoBehaviour
 
     void Update()
     {
-        // Heat simulation
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
 
-        // Molecule fraction → moles
         int activeMolecules = moleculeSpawner.ActiveCount();
         float fraction = moleculeSpawner.startCount > 0 ? (float)activeMolecules / moleculeSpawner.startCount : 0f;
         currentMoles = initialMoles * Mathf.Max(fraction, 0.01f);
 
-        // Ideal gas law
         volume = (currentMoles * R * currentTemp) / pressure;
 
-        // Visual piston position
         float Vmin = (initialMoles * R * 273f) / pressure;
         float Vmax = (initialMoles * R * 800f) / pressure;
         float normVolume = Mathf.InverseLerp(Vmin, Vmax, volume);
@@ -94,7 +90,6 @@ public class IsobaricMinigame : MonoBehaviour
         temperatureDisplay.text = $"T = {currentTemp:F1} K";
         volumeDisplay.text = $"V = {(volume * 1000f):F2} L";
 
-        // Graph
         if (graphPanel.activeSelf)
         {
             graphSampleTimer += Time.deltaTime;
@@ -105,11 +100,8 @@ public class IsobaricMinigame : MonoBehaviour
             }
         }
 
-        // Apply heat visually
         moleculeSpawner.ApplyTemperature(currentTemp);
         moleculeSpawner.currentTemperature = currentTemp;
-
-        // Win condition check
         if (!puzzleCompleted)
         {
             float delta = Mathf.Abs(volume - targetVolume);
