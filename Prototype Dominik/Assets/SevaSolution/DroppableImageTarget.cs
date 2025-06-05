@@ -1,43 +1,54 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-/// <summary>
-/// Attach this to any UI Image GameObject you want to act as a drop target.
-/// Implements IDropHandler so that when a DraggableImage is dropped on it,
-/// it grabs the dragged sprite and replaces its own Image.sprite with it.
-/// </summary>
-[RequireComponent(typeof(Image))]
-public class DroppableImageTarget : MonoBehaviour, IDropHandler
+[RequireComponent(typeof(Text))]
+public class DroppableTextTarget : MonoBehaviour, IDropHandler
 {
-    private Image imageComponent;
+    public string variableName; // e.g. “P1”, “V1”, “P2”, or “V2”
+
+    private Text _textComponent;
 
     private void Awake()
     {
-        imageComponent = GetComponent<Image>();
-        if (imageComponent == null)
-            Debug.LogError("DroppableImageTarget: no Image component found on this GameObject.");
+        _textComponent = GetComponent<Text>();
+        if (_textComponent == null)
+            Debug.LogError($"{name}: DroppableTextTarget requires a Text component.");
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        // eventData.pointerDrag is the GameObject being dragged
-        GameObject droppedObject = eventData.pointerDrag;
-        if (droppedObject == null) return;
+        Debug.Log($"[{name}] OnDrop called. pointerDrag = {eventData.pointerDrag?.name}");
 
-        // Check if it has a DraggableImage component
-        DraggableImage draggable = droppedObject.GetComponent<DraggableImage>();
-        if (draggable == null) return;
+        if (eventData.pointerDrag == null)
+        {
+            Debug.Log($"[{name}] OnDrop: pointerDrag is null → dropped outside a target");
+            return;
+        }
 
-        // Get the sprite from the dragged image
-        Sprite newSprite = draggable.GetSprite();
-        if (newSprite == null) return;
+        // Look for DraggableText on the dragged object
+        DraggableText draggable = eventData.pointerDrag.GetComponent<DraggableText>();
+        if (draggable == null)
+        {
+            Debug.Log($"[{name}] OnDrop: {eventData.pointerDrag.name} does not have DraggableText.");
+            return;
+        }
 
-        // Set our own Image to that sprite
-        imageComponent.sprite = newSprite;
+        // Get the string from the dragged Text
+        string newText = draggable.GetText();
+        Debug.Log($"[{name}] OnDrop: retrieved text = \"{newText ?? "null"}\"");
 
-        // Optional: if you want the target to resize to the sprite�s native size:
-        imageComponent.SetNativeSize();
+        if (string.IsNullOrEmpty(newText))
+        {
+            Debug.Log($"[{name}] OnDrop: text is empty or null, leaving target unchanged.");
+            return;
+        }
+
+        // Set our own Text to that string
+        _textComponent.text = newText;
+        Debug.Log($"[{name}] OnDrop: text successfully set → \"{newText}\"");
+
+        // Notify the manager that “variableName” now holds newText
+        FormulaManager.Instance.OnSlotUpdated(variableName, newText);
     }
 }
-
