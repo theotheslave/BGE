@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject Goggles;
+    [SerializeField] private GameObject UIGoggles;
 
     [Header("Camera Components")]
     [SerializeField] private CinemachineCamera virtualCam;
@@ -61,11 +62,17 @@ public class CameraMovement : MonoBehaviour
         if (lastTarget != null && !lastTarget.gameObject.activeSelf)
         {
             lastTarget.gameObject.SetActive(true);
+
         }
 
         mover = StartCoroutine(Move(dolly.CameraPosition, originalSplinePosition, true));
         Goggles.SetActive(false);
         lastTarget = null;
+
+        if (UIGoggles != null && UIGoggles.activeSelf)
+        {
+            UIGoggles.SetActive(false);
+        }
     }
 
     private IEnumerator Move(float from, float to, bool returningToStart = false)
