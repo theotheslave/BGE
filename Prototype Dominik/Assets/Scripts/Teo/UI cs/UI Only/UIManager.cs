@@ -1,23 +1,25 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    [Header("Formula Detail View")]
-    public Image formulaImage;
-    public TextMeshProUGUI formulaNameText;
-    public TextMeshProUGUI formulaDescriptionText;
-
     [Header("General UI")]
-    public GameObject formulaWindowPanel;
     public GameObject learnedFormulasPanel;
     public TextMeshProUGUI feedbackText;
+    [SerializeField] private GameObject puzzleMachine;
+    [SerializeField] private TextMeshProUGUI levelNameText;
+    [SerializeField] private GameObject UiForMachine;
 
     void Awake()
     {
+        UiForMachine.SetActive(false);
+        string sceneName = SceneManager.GetActiveScene().name;
+        levelNameText.text = $"Lvl#: {sceneName}";
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -29,22 +31,20 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        formulaWindowPanel?.SetActive(false);
         learnedFormulasPanel?.SetActive(false);
     }
 
-    public void TogglePanel(GameObject panel)
+    public void TogglePanel(GameObject panel, bool? forceState = null)
     {
         if (panel != null)
         {
-            bool isActive = panel.activeSelf;
-            panel.SetActive(!isActive);
+            bool newState = forceState.HasValue ? forceState.Value : !panel.activeSelf;
+            panel.SetActive(newState);
         }
     }
 
     public void ShowPuzzleFeedback(string message)
     {
-        Debug.Log("UI Feedback: " + message);
         if (feedbackText != null)
         {
             feedbackText.text = message;
@@ -58,30 +58,18 @@ public class UIManager : MonoBehaviour
         ShowPuzzleFeedback($"Unlocked: {formulaID}");
 
         var ui = learnedFormulasPanel?.GetComponent<LearnedFormulasUI>();
-        if (ui != null)
-        {
-            Debug.Log("Refreshing learned list after unlock...");
-            ui.RefreshList();
-        }
-        else
-        {
-            Debug.LogWarning("LearnedFormulasUI not found on panel!");
-        }
+        ui?.RefreshList();
     }
 
-    public void ShowFormulaDetails(string formulaID)
+    public void EnableMachine()
     {
-        FormulaCard card = Resources.Load<FormulaCard>($"FormulaCards/{formulaID}");
-        if (card != null)
+        if (puzzleMachine != null)
         {
-            if (formulaWindowPanel != null) formulaWindowPanel.SetActive(true);
-            if (formulaImage != null) formulaImage.sprite = card.formulaSprite;
-            if (formulaNameText != null) formulaNameText.text = card.formulaID;
-            if (formulaDescriptionText != null) formulaDescriptionText.text = card.description;
+            puzzleMachine.SetActive(!puzzleMachine.activeSelf);
         }
-        else
-        {
-            Debug.LogWarning($"FormulaCard with ID '{formulaID}' not found in Resources/FormulaCards/");
+        if (UiForMachine != null) { 
+        UiForMachine.SetActive(!UiForMachine.activeSelf);
+        
         }
     }
 }

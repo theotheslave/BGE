@@ -1,109 +1,108 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class IdealGasMinigame : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private Slider heatSlider;
-    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Slider tSlider;
+    [SerializeField] private Slider vSlider;
     [SerializeField] private Slider nSlider;
-    [SerializeField] private TextMeshProUGUI debugText;
+    [SerializeField] private TextMeshProUGUI temperatureDisplay;
+    [SerializeField] private TextMeshProUGUI volumeDisplay;
+    [SerializeField] private TextMeshProUGUI moleDisplay;
+    [SerializeField] private TextMeshProUGUI pressureDisplay;
     [SerializeField] private TextMeshProUGUI winText;
 
-    [Header("Info Toggle")]
-    [SerializeField] private GameObject infoPanel;
-    [SerializeField] private Button toggleInfoButton;
-    [SerializeField] private TextMeshProUGUI tLabel;
-    [SerializeField] private TextMeshProUGUI vLabel;
-    [SerializeField] private TextMeshProUGUI nLabel;
-    [SerializeField] private TextMeshProUGUI tText;
-    [SerializeField] private TextMeshProUGUI vText;
-    [SerializeField] private TextMeshProUGUI nText;
+    [Header("Wall Movement")]
+    public Transform leftWall;
+    public Transform rightWall;
+    public float wallMinX = -0.5f;
+    public float wallMaxX = -1.5f;
 
-    private bool showInfo = false;
+    [Header("Parameter Ranges")]
+    [SerializeField] private float minTemp = 273f;
+    [SerializeField] private float maxTemp = 900f;
+    [SerializeField] private float minVol = 0.001f;
+    [SerializeField] private float maxVol = 0.01f;
+    [SerializeField] private float minMol = 0.01f;
+    [SerializeField] private float maxMol = 1.0f;
 
-    [Header("Gas Constants")]
-    private float R = 8.314f; 
-    [SerializeField] private float tMin = 200f;
-    [SerializeField] private float tMax = 800f;
-    [SerializeField] private float vMin = 0.01f;
-    [SerializeField] private float vMax = 0.1f;
-    [SerializeField] private float nMin = 0.1f;
-    [SerializeField] private float nMax = 2f;
+    [Header("Target Conditions")]
+    [SerializeField] private float targetPressure = 300000f;
+    [SerializeField] private float pressureTolerance = 5000f;
+    [SerializeField] private float winHoldTime = 2f;
 
-    [Header("Chamber")]
-    [SerializeField] private Transform chamberWalls;
-    [SerializeField] private Vector3 chamberMinScale;
-    [SerializeField] private Vector3 chamberMaxScale;
+    [Header("Wall Animation")]
+    public float wallMoveAmplitude = 0.05f;
+    public float wallMoveSpeed = 2f;
 
-    [Header("Chamber Walls (2D)")]
-    [SerializeField] private Transform leftWall;
-    [SerializeField] private Transform rightWall;
-    [SerializeField] private float wallMoveRange = 2f; 
-    [SerializeField] private float volumeMin = 0.01f;
-    [SerializeField] private float volumeMax = 0.1f;
-    private Vector3 leftWallStartPos;
-    private Vector3 rightWallStartPos;
+    private float R = 8.314f;
 
-    private float T, V, n, P;
+    private float baseLeftX;
+    private float baseRightX;
+    private bool isAnimating = false;
 
-    private void Start()
+    private float currentTemp;
+    private float currentVol;
+    private float currentMol;
+    private float currentPressure;
+
+    private float winTimer;
+    private bool hasWon = false;
+
+    void Start()
     {
-        leftWallStartPos = leftWall.localPosition;
-        rightWallStartPos = rightWall.localPosition;
+        winText.gameObject.SetActive(false);
 
-        toggleInfoButton.onClick.AddListener(ToggleInfo);
-        infoPanel.SetActive(showInfo);
-        UpdateSliderLabels();
+        baseLeftX = leftWall.localPosition.x;
+        baseRightX = rightWall.localPosition.x;
     }
-    void ToggleInfo()
+
+    void Update()
     {
-        showInfo = !showInfo;
-        infoPanel.SetActive(showInfo);
-        UpdateSliderLabels();
-    }
-    void UpdateSliderLabels()
-    {
-        if (showInfo)
+        currentTemp = Mathf.Lerp(minTemp, maxTemp, tSlider.value);
+        currentVol = Mathf.Lerp(minVol, maxVol, vSlider.value);
+        currentMol = Mathf.Lerp(minMol, maxMol, nSlider.value);
+
+        float normVol = Mathf.InverseLerp(minVol, maxVol, currentVol);
+        float leftX = Mathf.Lerp(wallMinX, wallMaxX, normVol);
+        float rightX = -leftX;
+
+        Vector3 lPos = leftWall.localPosition;
+        Vector3 rPos = rightWall.localPosition;
+
+        leftWall.localPosition = new Vector3(leftX, lPos.y, lPos.z);
+        rightWall.localPosition = new Vector3(rightX, rPos.y, rPos.z);
+
+        currentPressure = (currentMol * R * currentTemp) / currentVol;
+
+        temperatureDisplay.text = $"T = {currentTemp:F1} K";
+        volumeDisplay.text = $"V = {(currentVol * 1000f):F2} L";
+        moleDisplay.text = $"n = {currentMol:F3} mol";
+
+        float deltaP = Mathf.Abs(currentPressure - targetPressure);
+        if (!hasWon && deltaP <= pressureTolerance)
         {
-            tLabel.text = "T";
-            vLabel.text = "V";
-            nLabel.text = "n";
+            winTimer += Time.deltaTime;
+            if (winTimer >= winHoldTime)
+            {
+                Win();
+            }
         }
         else
         {
-            tLabel.text = "Heating";
-            vLabel.text = "Expand chamber";
-            nLabel.text = "Add gas";
+            winTimer = 0f;
         }
     }
 
-    private void Update()
+    void Win()
     {
-        T = Mathf.Lerp(tMin, tMax, heatSlider.value);
-        V = Mathf.Lerp(vMin, vMax, volumeSlider.value);
-        n = Mathf.Lerp(nMin, nMax, nSlider.value);
-        P = (n * R * T) / V;
-
-        if (chamberWalls != null)
-        {
-            float chamberLerp = Mathf.InverseLerp(vMin, vMax, V);
-            chamberWalls.localScale = Vector3.Lerp(chamberMinScale, chamberMaxScale, chamberLerp);
-            float volumeLerp = Mathf.InverseLerp(volumeMin, volumeMax, V);
-            float offset = Mathf.Lerp(0f, wallMoveRange, volumeLerp);
-
-            leftWall.localPosition = leftWallStartPos + new Vector3(-offset, 0f, 0f);
-            rightWall.localPosition = rightWallStartPos + new Vector3(offset, 0f, 0f);
-        }
-
-        debugText.text = $"T: {T:F1} K\nV: {V:F3} m3\nn: {n:F2} mol\nP: {P:F1} Pa";
-        
-        if (infoPanel.activeSelf)
-        {
-            tText.text = $"{T:F0} K";
-            vText.text = $"{(V * 1000f):F0} L";
-            nText.text = $"{n:F2} mol";
-        }
+        hasWon = true;
+        winText.gameObject.SetActive(true);
+        winText.text = "Correct!";
+        tSlider.interactable = false;
+        vSlider.interactable = false;
+        nSlider.interactable = false;
     }
 }
