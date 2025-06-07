@@ -37,6 +37,9 @@ public class IdealGasMinigame : MonoBehaviour
     public float wallMoveAmplitude = 0.05f;
     public float wallMoveSpeed = 2f;
 
+    [Header("References")]
+    public Spawner moleculeSpawner;
+
     private float R = 8.314f;
 
     private float baseLeftX;
@@ -94,6 +97,19 @@ public class IdealGasMinigame : MonoBehaviour
         {
             winTimer = 0f;
         }
+
+        if (isAnimating)
+        {
+            float offset = Mathf.Sin(Time.time * wallMoveSpeed) * wallMoveAmplitude;
+
+            leftWall.localPosition = new Vector3(baseLeftX + offset, leftWall.localPosition.y, leftWall.localPosition.z);
+            rightWall.localPosition = new Vector3(baseRightX - offset, rightWall.localPosition.y, rightWall.localPosition.z);
+        }
+        else
+        {
+            leftWall.localPosition = new Vector3(leftX, leftWall.localPosition.y, leftWall.localPosition.z);
+            rightWall.localPosition = new Vector3(rightX, rightWall.localPosition.y, rightWall.localPosition.z);
+        }
     }
 
     void Win()
@@ -104,5 +120,7 @@ public class IdealGasMinigame : MonoBehaviour
         tSlider.interactable = false;
         vSlider.interactable = false;
         nSlider.interactable = false;
+
+        isAnimating = true;
     }
 }
