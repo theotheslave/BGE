@@ -31,6 +31,8 @@ public class IsochoricMinigame : MonoBehaviour
     private bool phase1Complete = false;
     private bool hasWon = false;
 
+    [Header("References")]
+    public Spawner moleculeSpawner;
     void Start()
     {
         currentTemperature = initialTemperature;
@@ -47,6 +49,8 @@ public class IsochoricMinigame : MonoBehaviour
 
         tSlider.interactable = false;
         winText.gameObject.SetActive(false);
+
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.startCount, currentTemperature);
     }
 
     void Update()
@@ -91,6 +95,9 @@ public class IsochoricMinigame : MonoBehaviour
 
         temperatureDisplay.text = $"T = {currentTemperature:F1} K";
         pressureDisplay.text = $"n = {(currentMoles):F2} kPa";
+
+        moleculeSpawner.ApplyTemperature(currentTemperature);
+        moleculeSpawner.currentTemperature = currentTemperature;
     }
 
     void Win()
