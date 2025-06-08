@@ -194,6 +194,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1350324819}
   m_SourcePrefab: {fileID: 100100000, guid: c9749aa2c1a08264fb28e46b857ed10e, type: 3}
+--- !u!4 &109213626 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 296004090994703776, guid: c9749aa2c1a08264fb28e46b857ed10e, type: 3}
+  m_PrefabInstance: {fileID: 109213625}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &248828360
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,7 +542,9 @@ MonoBehaviour:
   virtualCam: {fileID: 2118337644}
   dolly: {fileID: 2118337643}
   travelSeconds: 1.2
-  defaultLookAt: {fileID: 0}
+  gogglesSplinePosition: 0.8
+  gogglesFocusTarget: {fileID: 776331782}
+  defaultLookAt: {fileID: 109213626}
 --- !u!1001 &776331781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -687,6 +694,27 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d9b8e042385096479ce081c92429bed, type: 3}
+--- !u!4 &776331782 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4081087662241564296, guid: 3d9b8e042385096479ce081c92429bed, type: 3}
+  m_PrefabInstance: {fileID: 776331781}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &776331783 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4127138859047910516, guid: 3d9b8e042385096479ce081c92429bed, type: 3}
+  m_PrefabInstance: {fileID: 776331781}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &776331784 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5954932645231019296, guid: 3d9b8e042385096479ce081c92429bed, type: 3}
+  m_PrefabInstance: {fileID: 776331781}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1002638964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -695,6 +723,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1181836220846260962, guid: 4deb4ee7c76da0943a2ac584283a5624, type: 3}
+      propertyPath: UiForMachine
+      value: 
+      objectReference: {fileID: 776331784}
+    - target: {fileID: 1181836220846260962, guid: 4deb4ee7c76da0943a2ac584283a5624, type: 3}
+      propertyPath: levelNameText
+      value: 
+      objectReference: {fileID: 776331783}
     - target: {fileID: 2484005175805629027, guid: 4deb4ee7c76da0943a2ac584283a5624, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.3332442
@@ -764,7 +800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ea9f0430b9ef84099de4f4796fef5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splinePosition: 0.5
+  splinePosition: 0.8
 --- !u!65 &1350324820
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -780,12 +816,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 3.84, y: 8.53, z: 4.55}
-  m_Center: {x: 0.69, y: 2.58, z: 1.42}
+  m_Center: {x: -0.77, y: 2.72, z: -0.19}
 --- !u!1 &1972805994
 GameObject:
   m_ObjectHideFlags: 0

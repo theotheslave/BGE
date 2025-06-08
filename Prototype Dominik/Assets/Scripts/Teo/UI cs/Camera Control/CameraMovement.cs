@@ -14,7 +14,8 @@ public class CameraMovement : MonoBehaviour
     private Quaternion originalRotation;
     [Header("Movement Settings")]
     [SerializeField] private float travelSeconds = 1.2f;
-
+    [SerializeField] private float gogglesSplinePosition = 0.8f;
+    [SerializeField] private Transform gogglesFocusTarget;
 
     [Header("Optional")]
     [SerializeField] private Transform defaultLookAt;
@@ -39,7 +40,7 @@ public class CameraMovement : MonoBehaviour
         if (isMoving) return; 
 
         if (virtualCam != null)
-            virtualCam.LookAt = lookTarget;
+            virtualCam.LookAt = defaultLookAt;
 
         if (mover != null)
             StopCoroutine(mover);
@@ -49,6 +50,19 @@ public class CameraMovement : MonoBehaviour
         Goggles.SetActive(true);
     }
 
+    public void FocusGoggles()
+    {
+        if (isMoving) return;
+
+        if (virtualCam != null)
+            virtualCam.LookAt = gogglesFocusTarget != null ? gogglesFocusTarget : defaultLookAt;
+
+        if (mover != null)
+            StopCoroutine(mover);
+
+        mover = StartCoroutine(Move(dolly.CameraPosition, gogglesSplinePosition));
+        Goggles.SetActive(true);
+    }
     public void ReturnToStart()
     {
         if (isMoving) return; 
