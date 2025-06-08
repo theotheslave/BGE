@@ -15,7 +15,7 @@ public class SceneManagerDoor : MonoBehaviour
     [SerializeField] private float fadeDuration = 1f;
 
     private Outline outline;
-    private static Transform currentHighlight;
+    private bool isHovered = false;
     private static bool isFading = false;
 
     void Awake()
@@ -28,7 +28,7 @@ public class SceneManagerDoor : MonoBehaviour
             outline.OutlineWidth = 6f;
         }
 
-        outline.enabled = false;
+        
 
         if (fadeCanvasGroup != null)
         {
@@ -44,34 +44,25 @@ public class SceneManagerDoor : MonoBehaviour
     {
         if (isFading) return;
 
-        bool hoveredThisFrame = false;
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit))
         {
             if (hit.transform == transform)
             {
-                hoveredThisFrame = true;
-
-                if (currentHighlight != transform)
+                if (!isHovered)
                 {
-                    if (currentHighlight != null)
-                    {
-                        Outline prevOutline = currentHighlight.GetComponent<Outline>();
-                        if (prevOutline != null) prevOutline.enabled = false;
-                    }
-
-                    currentHighlight = transform;
+                    
+                    isHovered = true;
                 }
-
-                if (outline != null) outline.enabled = true;
+                return;
             }
         }
 
-        if (!hoveredThisFrame && currentHighlight == transform)
+        // If not hovering anymore
+        if (isHovered)
         {
-            if (outline != null) outline.enabled = false;
-            currentHighlight = null;
+            
+            isHovered = false;
         }
     }
 
@@ -95,14 +86,12 @@ public class SceneManagerDoor : MonoBehaviour
             yield break;
         }
 
-        // Fade to black
-        yield return StartCoroutine(Fade(1f));
+        yield return StartCoroutine(Fade(1f)); // Fade to black
 
         SceneManager.LoadScene(sceneIndex);
         yield return null;
 
-        // Optional: fade in again (or remove this if you start new scenes already black)
-        yield return StartCoroutine(Fade(0f));
+        yield return StartCoroutine(Fade(0f)); // Optional fade in again
 
         isFading = false;
     }

@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Rendering.Universal;
 
 public class IdealGasMinigame : MonoBehaviour
 {
@@ -37,9 +40,14 @@ public class IdealGasMinigame : MonoBehaviour
     public float wallMoveAmplitude = 0.05f;
     public float wallMoveSpeed = 2f;
 
+    [Header("Decal Fade Settings")]
+    [SerializeField] private List<DecalProjector> decalProjectors = new List<DecalProjector>();
+    [SerializeField] private float decalFadeDuration = 1f;
+
     [Header("References")]
     public Spawner moleculeSpawner;
-
+    public UnityEngine.Rendering.Volume globalVolume;  
+    public float volumeFadeDuration = 1f;
     private float R = 8.314f;
 
     private float baseLeftX;
@@ -111,6 +119,67 @@ public class IdealGasMinigame : MonoBehaviour
             rightWall.localPosition = new Vector3(rightX, rightWall.localPosition.y, rightWall.localPosition.z);
         }
     }
+    
+    
+
+    private IEnumerator FadeOutVolume()
+    {
+        float startWeight = globalVolume.weight;
+        float time = 0f;
+
+        while (time < volumeFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / volumeFadeDuration;
+            globalVolume.weight = Mathf.Lerp(startWeight, 0f, t);
+            yield return null;
+        }
+
+        globalVolume.weight = 0f;
+    }
+
+    private IEnumerator FadeOutIce()
+    {
+        float time = 0f;
+
+        // Store initial colors
+        List<Color> originalColors = new List<Color>();
+        foreach (var decal in decalProjectors)
+        {
+            if (decal != null && decal.material.HasProperty("_BaseColor"))
+                originalColors.Add(decal.material.GetColor("_BaseColor"));
+            else
+                originalColors.Add(Color.white);
+        }
+
+        while (time < decalFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / decalFadeDuration;
+
+            for (int i = 0; i < decalProjectors.Count; i++)
+            {
+                var decal = decalProjectors[i];
+                if (decal == null) continue;
+
+                Color c = originalColors[i];
+                c.a = Mathf.Lerp(c.a, 0f, t);
+                decal.material.SetColor("_BaseColor", c);
+            }
+
+            yield return null;
+        }
+
+        // Ensure it's fully faded at the end
+        foreach (var decal in decalProjectors)
+        {
+            if (decal == null) continue;
+
+            Color faded = decal.material.GetColor("_BaseColor");
+            faded.a = 0f;
+            decal.material.SetColor("_BaseColor", faded);
+        }
+    }
 
     void Win()
     {
@@ -122,5 +191,10 @@ public class IdealGasMinigame : MonoBehaviour
         nSlider.interactable = false;
 
         isAnimating = true;
+        if (globalVolume != null)
+            StartCoroutine(FadeOutVolume());
+
+        if (decalProjectors.Count > 0)
+            StartCoroutine(FadeOutIce());
     }
 }

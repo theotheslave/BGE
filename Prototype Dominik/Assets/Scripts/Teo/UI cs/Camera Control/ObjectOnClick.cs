@@ -19,7 +19,6 @@ public class SelectableObject : MonoBehaviour
             outline.OutlineWidth = 7f;
         }
 
-        outline.enabled = false;
     }
 
     void Update()
