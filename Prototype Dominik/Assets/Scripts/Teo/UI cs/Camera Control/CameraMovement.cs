@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject Goggles;
+    [SerializeField] private GameObject UIGoggles;
 
     [Header("Camera Components")]
     [SerializeField] private CinemachineCamera virtualCam;
@@ -13,6 +14,7 @@ public class CameraMovement : MonoBehaviour
     private Quaternion originalRotation;
     [Header("Movement Settings")]
     [SerializeField] private float travelSeconds = 1.2f;
+
 
     [Header("Optional")]
     [SerializeField] private Transform defaultLookAt;
@@ -60,11 +62,17 @@ public class CameraMovement : MonoBehaviour
         if (lastTarget != null && !lastTarget.gameObject.activeSelf)
         {
             lastTarget.gameObject.SetActive(true);
+
         }
 
         mover = StartCoroutine(Move(dolly.CameraPosition, originalSplinePosition, true));
         Goggles.SetActive(false);
         lastTarget = null;
+
+        if (UIGoggles != null && UIGoggles.activeSelf)
+        {
+            UIGoggles.SetActive(false);
+        }
     }
 
     private IEnumerator Move(float from, float to, bool returningToStart = false)
@@ -76,12 +84,13 @@ public class CameraMovement : MonoBehaviour
 
         for (float t = 0f; t < 1f; t += Time.deltaTime / travelSeconds)
         {
-            float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI); // ease-in-out
+            float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI); 
 
             dolly.CameraPosition = Mathf.Lerp(from, to, eased);
 
             if (returningToStart)
             {
+
                 virtualCam.transform.rotation = Quaternion.Slerp(startRotation, endRotation, eased);
             }
 

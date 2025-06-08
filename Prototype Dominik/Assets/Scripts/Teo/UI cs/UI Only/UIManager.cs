@@ -12,9 +12,11 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI feedbackText;
     [SerializeField] private GameObject puzzleMachine;
     [SerializeField] private TextMeshProUGUI levelNameText;
+    [SerializeField] private GameObject UiForMachine;
 
     void Awake()
     {
+        UiForMachine.SetActive(false);
         string sceneName = SceneManager.GetActiveScene().name;
         levelNameText.text = $"Lvl#: {sceneName}";
         if (Instance != null && Instance != this)
@@ -63,6 +65,10 @@ public class UIManager : MonoBehaviour
         if (puzzleMachine != null)
         {
             puzzleMachine.SetActive(!puzzleMachine.activeSelf);
+        }
+        if (UiForMachine != null) { 
+        UiForMachine.SetActive(!UiForMachine.activeSelf);
+        
         }
     }
 }

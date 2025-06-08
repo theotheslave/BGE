@@ -164,6 +164,10 @@ PrefabInstance:
       value: GasFollow (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6759939999016625987, guid: 4060e7c202be5d24b9e66421be299ac0, type: 3}
+      propertyPath: lengthInSec
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759939999016625987, guid: 4060e7c202be5d24b9e66421be299ac0, type: 3}
       propertyPath: ShapeModule.type
       value: 4
       objectReference: {fileID: 0}
@@ -182,6 +186,10 @@ PrefabInstance:
     - target: {fileID: 6759939999016625987, guid: 4060e7c202be5d24b9e66421be299ac0, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 50.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759939999016625987, guid: 4060e7c202be5d24b9e66421be299ac0, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 6759939999016625987, guid: 4060e7c202be5d24b9e66421be299ac0, type: 3}
       propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].time

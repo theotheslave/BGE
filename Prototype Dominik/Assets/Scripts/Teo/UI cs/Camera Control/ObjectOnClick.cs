@@ -34,7 +34,8 @@ public class SelectableObject : MonoBehaviour
 
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit))
+        int mask = ~LayerMask.GetMask("fadeblack");
+        if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
         {
             if (hit.transform == transform && transform != currentSelection)
             {
