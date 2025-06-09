@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class IsochoricMinigame : MonoBehaviour
 {
@@ -33,8 +34,17 @@ public class IsochoricMinigame : MonoBehaviour
 
     [Header("References")]
     public Spawner moleculeSpawner;
+
+    [SerializeField] private float phase1HoldTime = 2f;
+
+    private float phase1Timer = 0f;
     void Start()
     {
+       if (!MachineProgressManager.Instance.isobaricCompleted)
+       {
+            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");  
+            return;
+       }
         currentTemperature = initialTemperature;
 
         targetTemperature = (targetPressure * currentTemperature) / initialPressure;
@@ -66,16 +76,24 @@ public class IsochoricMinigame : MonoBehaviour
             float targetN = (initialPressure * containerVolume) / (R * currentTemperature);
             float deltaN = Mathf.Abs(currentMoles - targetN);
 
-            if (deltaN <= targetN * 0.01f)
+            if (deltaN <= currentMoles * 0.1f)
             {
-                phase1Complete = true;
-                nSlider.interactable = false;
-                tSlider.interactable = true;
+                phase1Timer += Time.deltaTime;
+                if (phase1Timer >= phase1HoldTime)
+                {
+                    phase1Complete = true;
+                    nSlider.interactable = false;
+                    tSlider.interactable = true;
+                }
+            }
+            else
+            {
+                phase1Timer = 0f;
             }
         }
         else if (!hasWon)
         {
-            currentTemperature = Mathf.Lerp(273f, 1340f, tSlider.value);
+            currentTemperature = Mathf.Lerp(273f, 1500f, tSlider.value);
             currentPressure = (currentMoles * R * currentTemperature) / containerVolume;
 
             float deltaT = Mathf.Abs(currentTemperature - targetTemperature);
@@ -106,5 +124,7 @@ public class IsochoricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         tSlider.interactable = false;
+
+        MachineProgressManager.Instance.isochoricCompleted = true;
     }
 }
