@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Collider))]
 public class SceneManagerDoor : MonoBehaviour
 {
-    [SerializeField] private int targetSceneIndex = -1;
+    [SerializeField] private int targetSceneIndex = 0;
     [SerializeField] private Texture2D lockedCursor;
     [SerializeField] private Texture2D unlockedCursor;
     [SerializeField] private Vector2 hotspot = Vector2.zero;
@@ -17,6 +17,7 @@ public class SceneManagerDoor : MonoBehaviour
 
     void Awake()
     {
+
         outline = GetComponent<Outline>();
         if (outline == null)
         {
@@ -72,6 +73,7 @@ public class SceneManagerDoor : MonoBehaviour
         if (!isUnlocked) return;
 
         FadeToBlack.Instance.FadeToScene(targetSceneIndex);
+
     }
 
     public void UnlockDoor()

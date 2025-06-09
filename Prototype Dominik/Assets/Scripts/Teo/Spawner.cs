@@ -65,6 +65,12 @@ public class Spawner : MonoBehaviour
         mol.InitializeVelocity(temperatureK);
         return mol;
     }
+    void OnDrawGizmosSelected()
+    {
+        if (volume == null) volume = GetComponent<BoxCollider>();
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(volume.bounds.center, volume.bounds.size);
+    }
 
     void ClearAll()
     {
@@ -75,13 +81,14 @@ public class Spawner : MonoBehaviour
 
     static Vector3 RandomPointInside(BoxCollider box, float margin)
     {
-        Vector3 localPos = new Vector3(
-            Random.Range(-0.5f + margin, 0.5f - margin),
-            Random.Range(-0.5f + margin, 0.5f - margin),
-            Random.Range(-0.5f + margin, 0.5f - margin)
-        );
+        Bounds bounds = box.bounds;
+        Vector3 min = bounds.min + Vector3.one * margin;
+        Vector3 max = bounds.max - Vector3.one * margin;
 
-        Vector3 scaledPos = Vector3.Scale(localPos, box.size);
-        return box.transform.TransformPoint(box.center + scaledPos);
+        return new Vector3(
+            Random.Range(min.x, max.x),
+            Random.Range(min.y, max.y),
+            Random.Range(min.z, max.z)
+        );
     }
 }
