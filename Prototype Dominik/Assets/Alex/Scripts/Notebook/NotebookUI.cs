@@ -2,73 +2,50 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System;
 
 public class NotebookUI : MonoBehaviour
 {
-    [Header("UI References")]
-    [SerializeField] private Transform categoryContainer;     
-    [SerializeField] private Transform entryContainer;     
-    [SerializeField] private GameObject categoryButtonPrefab; 
-    [SerializeField] private GameObject entryButtonPrefab;
-    [SerializeField] private TextMeshProUGUI entryViewerText;
-    [SerializeField] private GameObject notebookPanel;
+    public static NotebookUI Instance;
 
-    private Dictionary<string, NotebookCategory> currentData;
+    [SerializeField] private GameObject categoryButtonPrefab;
+    [SerializeField] private Transform categoryListParent;
+    [SerializeField] private TextMeshProUGUI noteContentText;
+    [SerializeField] private GameObject notebookRoot;
 
-    private void Start()
+    private void Awake()
     {
-        notebookPanel.SetActive(false);
+        Instance = this;
+        notebookRoot.SetActive(false);
     }
 
     public void ToggleNotebook()
     {
-        notebookPanel.SetActive(!notebookPanel.activeSelf);
-        if (notebookPanel.activeSelf && currentData != null)
-            Refresh(currentData);
+        notebookRoot.SetActive(!notebookRoot.activeSelf);
     }
 
-    public void Refresh(Dictionary<string, NotebookCategory> categories)
+    public void RefreshNotebook(List<NotebookCategory> categories)
     {
-        currentData = categories;
-        ClearContainer(categoryContainer);
-        ClearContainer(entryContainer);
-        entryViewerText.text = "";
-
-        foreach (var cat in categories.Values)
+        foreach (Transform child in categoryListParent)
         {
-            GameObject catButtonObj = Instantiate(categoryButtonPrefab, categoryContainer);
-            var text = catButtonObj.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = cat.title;
-
-            var button = catButtonObj.GetComponent<Button>();
-            button.onClick.AddListener(() => ShowEntries(cat));
-        }
-    }
-
-    void ShowEntries(NotebookCategory category)
-    {
-        ClearContainer(entryContainer);
-        entryViewerText.text = "";
-
-        foreach (var entry in category.entries)
-        {
-            GameObject entryButtonObj = Instantiate(entryButtonPrefab, entryContainer);
-            var text = entryButtonObj.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = entry.title;
-
-            var button = entryButtonObj.GetComponent<Button>();
-            button.onClick.AddListener(() => ShowEntry(entry));
-        }
-    }
-
-    void ShowEntry(NotebookEntry entry)
-    {
-        entryViewerText.text = entry.content;
-    }
-
-    void ClearContainer(Transform container)
-    {
-        foreach (Transform child in container)
             Destroy(child.gameObject);
+        }
+
+        foreach (var cat in categories)
+        {
+            foreach (var entry in cat.entries)
+            {
+                GameObject buttonGO = Instantiate(categoryButtonPrefab, categoryListParent);
+                buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = "• " + entry.title;
+                buttonGO.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    noteContentText.text = entry.content;
+                });
+            }
+        }
     }
 }
+
+
+
+

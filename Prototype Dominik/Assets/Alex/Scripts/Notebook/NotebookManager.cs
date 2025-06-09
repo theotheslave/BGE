@@ -1,45 +1,37 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class NotebookManager : MonoBehaviour
 {
     public static NotebookManager Instance;
 
-    [SerializeField] private NotebookUI notebookUI;
+    private Dictionary<string, NotebookCategory> unlockedCategories = new();
 
-    private Dictionary<string, NotebookCategory> categories = new();
-
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
-        else
-            Destroy(gameObject);
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else Destroy(gameObject);
     }
 
-    public void AddEntry(string categoryId, string categoryTitle, NotebookEntry entry)
+    public void UnlockNote(string category, string title, string content)
     {
-        if (!categories.ContainsKey(categoryId))
+        if (!unlockedCategories.ContainsKey(category))
         {
-            categories[categoryId] = new NotebookCategory
-            {
-                id = categoryId,
-                title = categoryTitle
-            };
+            var newCat = new NotebookCategory { categoryName = category };
+            unlockedCategories[category] = newCat;
         }
 
-        var category = categories[categoryId];
-
-        if (!category.entries.Exists(e => e.id == entry.id))
+        var cat = unlockedCategories[category];
+        if (!cat.entries.Any(e => e.title == title))
         {
-            category.entries.Add(entry);
-            Debug.Log($"New notebook entry unlocked: {entry.title}");
-            notebookUI?.Refresh(categories);
+            cat.entries.Add(new NotebookEntry { title = title, content = content });
         }
-    }
 
-    public Dictionary<string, NotebookCategory> GetAllData()
-    {
-        return categories;
+        NotebookUI.Instance?.RefreshNotebook(unlockedCategories.Values.ToList());
     }
 }

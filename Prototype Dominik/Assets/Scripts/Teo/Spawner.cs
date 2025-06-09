@@ -9,8 +9,6 @@ public class Spawner : MonoBehaviour
     public int startCount = 300;
 
     [Header("Chamber limits")]
-    public float pistonMinY = -1.3f;
-    public float pistonMaxY = 2.3f;
     public float wallMargin = 0.2f;           
 
     [Header("Runtime")]
@@ -24,18 +22,11 @@ public class Spawner : MonoBehaviour
     void Awake() => volume = GetComponent<BoxCollider>();
     void Start() => SpawnMolecules(startCount, currentTemperature);
 
-   
+
 
     public void SpawnMolecules(int count, float temperatureK)
     {
         ClearAll();
-
-        for (int i = 0; i < count; i++)
-            molecules.Add(InstantiateOne(temperatureK));
-    }
-
-    public void AddNewMolecules(int count, float temperatureK)
-    {
         for (int i = 0; i < count; i++)
             molecules.Add(InstantiateOne(temperatureK));
     }
@@ -47,17 +38,39 @@ public class Spawner : MonoBehaviour
             if (m) m.AdjustSpeed(temperatureK);
     }
 
+    public void SetActiveMoleculeFraction(float fraction)
+    {
+        int desired = Mathf.Clamp(Mathf.RoundToInt(startCount * fraction), 1, startCount);
+
+        for (int i = 0; i < molecules.Count; i++)
+        {
+            if (molecules[i])
+                molecules[i].gameObject.SetActive(i < desired);
+        }
+    }
+
+    public void SetVolumeScale(float normalized)
+    {
+        float scale = Mathf.Lerp(0.5f, 1.5f, normalized);
+        transform.localScale = new Vector3(scale, scale, scale);
+    }
+
     public int ActiveCount()
     {
         molecules.RemoveAll(m => m == null);
         return molecules.Count;
     }
 
-    public void RemoveMolecule(MoleculeParticle m) => molecules.Remove(m);
+    public void RemoveMolecule(MoleculeParticle m)
+    {
+        if (molecules.Contains(m))
+        {
+            molecules.Remove(m);
+            Destroy(m.gameObject);
+        }
+    }
 
-  
-
-    MoleculeParticle InstantiateOne(float temperatureK)
+    private MoleculeParticle InstantiateOne(float temperatureK)
     {
         Vector3 pos = RandomPointInside(volume, wallMargin);
         GameObject go = Instantiate(moleculePrefab, pos, Random.rotation, transform);
@@ -66,21 +79,20 @@ public class Spawner : MonoBehaviour
         return mol;
     }
 
-    void ClearAll()
+    private void ClearAll()
     {
         foreach (var m in molecules)
             if (m) Destroy(m.gameObject);
         molecules.Clear();
     }
 
-    static Vector3 RandomPointInside(BoxCollider box, float margin)
+    private static Vector3 RandomPointInside(BoxCollider box, float margin)
     {
         Vector3 localPos = new Vector3(
             Random.Range(-0.5f + margin, 0.5f - margin),
             Random.Range(-0.5f + margin, 0.5f - margin),
             Random.Range(-0.5f + margin, 0.5f - margin)
         );
-
         Vector3 scaledPos = Vector3.Scale(localPos, box.size);
         return box.transform.TransformPoint(box.center + scaledPos);
     }

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 
-[Serializable]
+[System.Serializable]
 public class NotebookCategory
 {
-    public string id;
-    public string title;
+    public string categoryName;
     public List<NotebookEntry> entries = new List<NotebookEntry>();
 }
