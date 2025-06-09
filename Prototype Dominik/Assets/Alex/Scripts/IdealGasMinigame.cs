@@ -40,10 +40,11 @@ public class IdealGasMinigame : MonoBehaviour
     public float wallMoveAmplitude = 0.05f;
     public float wallMoveSpeed = 2f;
 
-    [Header("Decal Fade Settings")]
+    [Header("Fade Settings")]
     [SerializeField] private List<DecalProjector> decalProjectors = new List<DecalProjector>();
     [SerializeField] private float decalFadeDuration = 1f;
-
+    [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
+    [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
@@ -181,6 +182,42 @@ public class IdealGasMinigame : MonoBehaviour
         }
     }
 
+    private IEnumerator FadeOutFog()
+    {
+        float time = 0f;
+
+        // Cache original start colors
+        List<Color> originalColors = new List<Color>();
+        foreach (var ps in fogParticles)
+        {
+            var main = ps.main;
+            originalColors.Add(main.startColor.color);
+        }
+
+        while (time < fogFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / fogFadeDuration;
+
+            for (int i = 0; i < fogParticles.Count; i++)
+            {
+                var ps = fogParticles[i];
+                var main = ps.main;
+                Color c = originalColors[i];
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
+                main.startColor = c;
+            }
+
+            yield return null;
+        }
+
+        
+        foreach (var ps in fogParticles)
+        {
+            ps.Stop();
+        }
+    }
+
     void Win()
     {
         hasWon = true;
@@ -189,12 +226,18 @@ public class IdealGasMinigame : MonoBehaviour
         tSlider.interactable = false;
         vSlider.interactable = false;
         nSlider.interactable = false;
-
+        StartCoroutine(FadeOutFog());
         isAnimating = true;
         if (globalVolume != null)
             StartCoroutine(FadeOutVolume());
 
         if (decalProjectors.Count > 0)
             StartCoroutine(FadeOutIce());
+        if (CameraMovement.Instance != null)
+        {
+            CameraMovement.Instance.ReturnToStart();
+        }
+
+
     }
 }

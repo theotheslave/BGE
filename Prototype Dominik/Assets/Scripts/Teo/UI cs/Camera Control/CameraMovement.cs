@@ -23,12 +23,14 @@ public class CameraMovement : MonoBehaviour
     private Coroutine mover;
     private float originalSplinePosition;
     private Transform originalLookAt;
-    private Transform lastTarget;
+    public Transform lastTarget;
 
-    private bool isMoving = false; 
+    private bool isMoving = false;
+    public static CameraMovement Instance { get; private set; }
 
     void Awake()
     {
+        CameraMovement.Instance = this;
         Goggles.SetActive(false);
         originalSplinePosition = dolly.CameraPosition;
         originalLookAt = defaultLookAt != null ? defaultLookAt : null;
