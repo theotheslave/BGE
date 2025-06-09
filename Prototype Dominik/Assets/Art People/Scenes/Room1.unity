@@ -612,7 +612,7 @@ MonoBehaviour:
         z: 0.7446548
       Rotation:
         value:
-          x: -0.017878428
+          x: -0.017878426
           y: 0.8902816
           z: 0.0452723
           w: 0.4528018
@@ -989,7 +989,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 662835167}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1f0a4880cb9bfa4a80b80683ff6d7a5, type: 3}
   m_Name: 
