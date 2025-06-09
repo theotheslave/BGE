@@ -1,54 +1,44 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;  // if you use TextMeshProUGUI
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
 public class DroppableTextTarget : MonoBehaviour, IDropHandler
 {
-    public string variableName; // e.g. “P1”, “V1”, “P2”, or “V2”
+    [Tooltip("Must match P1, V1, P2, V2, etc.")]
+    public string variableName;
 
-    private Text _textComponent;
+    private Text uiText;
+    private TMP_Text tmpText;
 
     private void Awake()
     {
-        _textComponent = GetComponent<Text>();
-        if (_textComponent == null)
-            Debug.LogError($"{name}: DroppableTextTarget requires a Text component.");
+        uiText = GetComponent<Text>();
+        tmpText = GetComponent<TMP_Text>();
+
+        if (uiText == null && tmpText == null)
+            UnityEngine.Debug.LogError($"[{name}] needs a Text or TMP_Text!");
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log($"[{name}] OnDrop called. pointerDrag = {eventData.pointerDrag?.name}");
+        var dragGO = eventData.pointerDrag;
+        if (dragGO == null) return;
 
-        if (eventData.pointerDrag == null)
-        {
-            Debug.Log($"[{name}] OnDrop: pointerDrag is null → dropped outside a target");
-            return;
-        }
+        // pull the string off the dragged object
+        string dropped = null;
+        if (dragGO.TryGetComponent<Text>(out var t1)) dropped = t1.text;
+        else if (dragGO.TryGetComponent<TMP_Text>(out var t2)) dropped = t2.text;
 
-        // Look for DraggableText on the dragged object
-        DraggableText draggable = eventData.pointerDrag.GetComponent<DraggableText>();
-        if (draggable == null)
-        {
-            Debug.Log($"[{name}] OnDrop: {eventData.pointerDrag.name} does not have DraggableText.");
-            return;
-        }
+        if (string.IsNullOrEmpty(dropped)) return;
 
-        // Get the string from the dragged Text
-        string newText = draggable.GetText();
-        Debug.Log($"[{name}] OnDrop: retrieved text = \"{newText ?? "null"}\"");
+        // **Overwrite** the slot's Text with *just* the dropped text
+        if (uiText != null) uiText.text = dropped;
+        if (tmpText != null) tmpText.text = dropped;
 
-        if (string.IsNullOrEmpty(newText))
-        {
-            Debug.Log($"[{name}] OnDrop: text is empty or null, leaving target unchanged.");
-            return;
-        }
+        // notify the manager of the raw dropped value
+        FormulaManager.Instance.OnSlotUpdated(variableName, dropped);
 
-        // Set our own Text to that string
-        _textComponent.text = newText;
-        Debug.Log($"[{name}] OnDrop: text successfully set → \"{newText}\"");
-
-        // Notify the manager that “variableName” now holds newText
-        FormulaManager.Instance.OnSlotUpdated(variableName, newText);
+        UnityEngine.Debug.Log($"Dropped '{dropped}' into {variableName}");
     }
 }

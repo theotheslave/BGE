@@ -1,263 +1,201 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FormulaManager : MonoBehaviour
 {
-    // Singleton instance
     public static FormulaManager Instance { get; private set; }
 
-    [Header("Assign the four slot objects here (each has a DroppableTextTarget)")]
-    public DroppableTextTarget slotP1;
-    public DroppableTextTarget slotV1;
-    public DroppableTextTarget slotP2;
-    public DroppableTextTarget slotV2;
+    [Header("PV slots (P₁·V₁ = P₂·V₂)")]
+    public DroppableTextTarget PV_P1, PV_V1, PV_P2, PV_V2;
 
-    [Header("Prefabs for displaying the computed result")]
-    [Tooltip("A simple UI Text prefab. At runtime, we will set its .text to the variable name (e.g. \"P1\").")]
+    [Header("PT slots (P₁/T₁ = P₂/T₂)")]
+    public DroppableTextTarget PT_P1, PT_T1, PT_P2, PT_T2;
+
+    [Header("VT slots (V₁/T₁ = V₂/T₂)")]
+    public DroppableTextTarget VT_V1, VT_T1, VT_V2, VT_T2;
+
+    [Header("IG slots (P·V = n·R·T)")]
+    public DroppableTextTarget IG_P, IG_V, IG_n, IG_T, IG_R;
+
+    [Header("Result Areas (one per formula)")]
+    public RectTransform resultAreaPV;
+    public RectTransform resultAreaPT;
+    public RectTransform resultAreaVT;
+    public RectTransform resultAreaIG;
+
+    [Header("Result‐line Prefabs")]
     public GameObject variableLabelPrefab;
-
-    [Tooltip("A UI Text or Image prefab showing \"=\". This is the equals‐sign that goes in between.")]
     public GameObject equalsSignPrefab;
-
-    [Tooltip("A simple UI Text prefab. At runtime, we will set its .text to the computed numeric result.")]
     public GameObject resultTextPrefab;
 
-    [Header("Where should the trio (var = result) appear?")]
-    [Tooltip("Any RectTransform (e.g. an empty GameObject with a HorizontalLayoutGroup) under which we'll parent the new elements.")]
-    public RectTransform resultArea;
+    // parsed numbers + suffixes
+    private readonly Dictionary<string, float> _nums = new Dictionary<string, float>();
+    private readonly Dictionary<string, string> _suffix = new Dictionary<string, string>();
 
-    // Internal storage: each variable name -> its current text (letter or number)
-    private Dictionary<string, string> _slotTexts = new Dictionary<string, string>()
+    // track solved
+    private bool _solvedPV, _solvedPT, _solvedVT, _solvedIG;
+
+    // default units
+    private readonly Dictionary<string, string> _unitPV = new Dictionary<string, string>
     {
-        { "P1", null },
-        { "V1", null },
-        { "P2", null },
-        { "V2", null }
+        {"P1","Pa"}, {"V1","L"}, {"P2","Pa"}, {"V2","L"}
     };
+    private readonly Dictionary<string, string> _unitPT = new Dictionary<string, string>
+    {
+        {"P1","Pa"}, {"T1","K"}, {"P2","Pa"}, {"T2","K"}
+    };
+    private readonly Dictionary<string, string> _unitVT = new Dictionary<string, string>
+    {
+        {"V1","L"}, {"T1","K"}, {"V2","L"}, {"T2","K"}
+    };
+    private readonly Dictionary<string, string> _unitIG = new Dictionary<string, string>
+    {
+        {"P","Pa"}, {"V","L"}, {"n","mol"}, {"T","K"}, {"R", "(Pa*L)/mol*K"}
+    };
+
 
     private void Awake()
     {
-        // Singleton setup
         if (Instance != null && Instance != this)
-        {
-            Debug.LogWarning("FormulaManager: Another instance detected; destroying this one.");
             Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        Debug.Log("FormulaManager: Awake() - Singleton instance set.");
-
-        // Quick null-check on assigned slots
-        if (slotP1 == null || slotV1 == null || slotP2 == null || slotV2 == null)
-        {
-            Debug.LogError("FormulaManager: One or more slot references (P1, V1, P2, V2) are not assigned in the Inspector.");
-        }
         else
-        {
-            Debug.Log("FormulaManager: All four slot references are assigned.");
-        }
-
-        // Quick null-check on prefabs and resultArea
-        if (variableLabelPrefab == null) Debug.LogError("FormulaManager: variableLabelPrefab is not assigned.");
-        if (equalsSignPrefab == null) Debug.LogError("FormulaManager: equalsSignPrefab is not assigned.");
-        if (resultTextPrefab == null) Debug.LogError("FormulaManager: resultTextPrefab is not assigned.");
-        if (resultArea == null) Debug.LogError("FormulaManager: resultArea is not assigned.");
+            Instance = this;
     }
 
     /// <summary>
-    /// Called by each DroppableTextTarget when a slot's text changes.
+    /// Called by any DroppableTextTarget on drop.
     /// </summary>
-    public void OnSlotUpdated(string variableName, string newText)
+    public void OnSlotUpdated(string varName, string droppedText)
     {
-        Debug.Log($"FormulaManager: OnSlotUpdated called for {variableName} with newText = \"{newText}\"");
-
-        // Update internal dictionary
-        if (_slotTexts.ContainsKey(variableName))
+        // parse numeric prefix + suffix
+        var m = Regex.Match(droppedText.Trim(), @"^([-+]?\d*\.?\d+)(.*)$");
+        if (m.Success)
         {
-            _slotTexts[variableName] = newText;
+            _nums[varName] = float.Parse(m.Groups[1].Value);
+            _suffix[varName] = m.Groups[2].Value;
         }
         else
         {
-            Debug.LogError($"FormulaManager: OnSlotUpdated called with unknown variableName \"{variableName}\"");
-            return;
+            _nums.Remove(varName);
+            _suffix.Remove(varName);
         }
 
-        // Log current dictionary state
-        Debug.Log("FormulaManager: Current slot values:");
-        foreach (var kvp in _slotTexts)
-        {
-            Debug.Log($"  {kvp.Key} => \"{kvp.Value}\"");
-        }
-
-        // Attempt to solve
-        TrySolveIfReady();
+        TrySolvePV();
+        TrySolvePT();
+        TrySolveVT();
+        TrySolveIG();
     }
 
-    /// <summary>
-    /// Checks how many slots are numeric vs. non‐numeric. If exactly one is missing and three are numeric,
-    /// compute and display the result (but do not overwrite the original slot).
-    /// </summary>
-    private void TrySolveIfReady()
+    private void TrySolvePV()
     {
-        Debug.Log("FormulaManager: TrySolveIfReady() called.");
-
-        // 1) Attempt to parse each filled string into a float
-        var numericValues = new Dictionary<string, float>();
-        var nonNumericSlots = new List<string>();
-
-        foreach (var kvp in _slotTexts)
+        if (_solvedPV) return;
+        var keys = new[] { "PV_P1", "PV_V1", "PV_P2", "PV_V2" };
+        if (CountFilled(keys) != 3) return;
+        string missing = FindMissing(keys);
+        float p1 = _nums.GetValueOrDefault("PV_P1"), v1 = _nums.GetValueOrDefault("PV_V1");
+        float p2 = _nums.GetValueOrDefault("PV_P2"), v2 = _nums.GetValueOrDefault("PV_V2");
+        float res = missing switch
         {
-            string key = kvp.Key;
-            string textValue = kvp.Value;
-
-            if (string.IsNullOrEmpty(textValue))
-            {
-                nonNumericSlots.Add(key);
-                Debug.Log($"  [{key}] is empty or null => non‐numeric");
-            }
-            else
-            {
-                if (float.TryParse(textValue, out float parsed))
-                {
-                    numericValues[key] = parsed;
-                    Debug.Log($"  [{key}] parsed as {parsed}");
-                }
-                else
-                {
-                    nonNumericSlots.Add(key);
-                    Debug.Log($"  [{key}] \"{textValue}\" is not a valid float => non‐numeric");
-                }
-            }
-        }
-
-        Debug.Log($"FormulaManager: numeric count = {numericValues.Count}, non‐numeric count = {nonNumericSlots.Count}");
-
-        // We need exactly 3 numeric and 1 non‐numeric to proceed
-        if (nonNumericSlots.Count == 1 && numericValues.Count == 3)
-        {
-            string missingVar = nonNumericSlots[0];
-            Debug.Log($"FormulaManager: Exactly one missing slot: {missingVar}");
-
-            // Compute the missing variable
-            float resultValue = ComputeMissingVariable(missingVar, numericValues);
-            Debug.Log($"FormulaManager: Computed {missingVar} = {resultValue}");
-
-            // Display the result in the ResultArea
-            CreateResultLine(missingVar, resultValue);
-
-            // NOTE: We intentionally do NOT overwrite the missing slot’s Text.
-            // The original letter remains visible.
-        }
-        else
-        {
-            Debug.Log("FormulaManager: Not ready to solve yet (need exactly 3 numeric and 1 non‐numeric).");
-        }
+            "PV_P1" => p2 * v2 / v1,
+            "PV_V1" => p2 * v2 / p1,
+            "PV_P2" => p1 * v1 / v2,
+            _ => p1 * v1 / p2
+        };
+        CreateResultLine(missing.Substring(3), res, resultAreaPV, _unitPV);
+        _solvedPV = true;
     }
 
-    /// <summary>
-    /// Computes the value of the missing variable from P1·V1 = P2·V2.
-    /// </summary>
-    private float ComputeMissingVariable(string missingVar, Dictionary<string, float> numericValues)
+    private void TrySolvePT()
     {
-        numericValues.TryGetValue("P1", out float p1);
-        numericValues.TryGetValue("V1", out float v1);
-        numericValues.TryGetValue("P2", out float p2);
-        numericValues.TryGetValue("V2", out float v2);
-
-        Debug.Log($"ComputeMissingVariable: Received numeric values: P1={p1}, V1={v1}, P2={p2}, V2={v2}");
-
-        switch (missingVar)
+        if (_solvedPT) return;
+        var keys = new[] { "PT_P1", "PT_T1", "PT_P2", "PT_T2" };
+        if (CountFilled(keys) != 3) return;
+        string missing = FindMissing(keys);
+        float p1 = _nums.GetValueOrDefault("PT_P1"), t1 = _nums.GetValueOrDefault("PT_T1");
+        float p2 = _nums.GetValueOrDefault("PT_P2"), t2 = _nums.GetValueOrDefault("PT_T2");
+        float res = missing switch
         {
-            case "P1":
-                float calcP1 = (p2 * v2) / v1;
-                Debug.Log($"ComputeMissingVariable: P1 = (P2·V2)/V1 = ({p2}*{v2})/{v1} = {calcP1}");
-                return calcP1;
-
-            case "V1":
-                float calcV1 = (p2 * v2) / p1;
-                Debug.Log($"ComputeMissingVariable: V1 = (P2·V2)/P1 = ({p2}*{v2})/{p1} = {calcV1}");
-                return calcV1;
-
-            case "P2":
-                float calcP2 = (p1 * v1) / v2;
-                Debug.Log($"ComputeMissingVariable: P2 = (P1·V1)/V2 = ({p1}*{v1})/{v2} = {calcP2}");
-                return calcP2;
-
-            case "V2":
-                float calcV2 = (p1 * v1) / p2;
-                Debug.Log($"ComputeMissingVariable: V2 = (P1·V1)/P2 = ({p1}*{v1})/{p2} = {calcV2}");
-                return calcV2;
-
-            default:
-                Debug.LogError($"ComputeMissingVariable: Unknown key \"{missingVar}\"");
-                return 0f;
-        }
+            "PT_P1" => p2 * t1 / t2,
+            "PT_T1" => p2 * t2 / p1,
+            "PT_P2" => p1 * t2 / t1,
+            _ => p1 * t1 / p2
+        };
+        CreateResultLine(missing.Substring(3), res, resultAreaPT, _unitPT);
+        _solvedPT = true;
     }
 
-    /// <summary>
-    /// Instantiates three UI elements under resultArea:
-    /// [ variable label ], [ equals sign ], [ numeric result ].
-    /// </summary>
-    private void CreateResultLine(string missingVar, float resultValue)
+    private void TrySolveVT()
     {
-        Debug.Log($"CreateResultLine: Attempting to display: {missingVar} = {resultValue}");
-
-        if (resultArea == null)
+        if (_solvedVT) return;
+        var keys = new[] { "VT_V1", "VT_T1", "VT_V2", "VT_T2" };
+        if (CountFilled(keys) != 3) return;
+        string missing = FindMissing(keys);
+        float v1 = _nums.GetValueOrDefault("VT_V1"), t1 = _nums.GetValueOrDefault("VT_T1");
+        float v2 = _nums.GetValueOrDefault("VT_V2"), t2 = _nums.GetValueOrDefault("VT_T2");
+        float res = missing switch
         {
-            Debug.LogError("CreateResultLine: resultArea is not assigned in the Inspector!");
-            return;
-        }
-        if (variableLabelPrefab == null || equalsSignPrefab == null || resultTextPrefab == null)
-        {
-            Debug.LogError("CreateResultLine: One or more prefabs (label, equals, resultText) are not assigned.");
-            return;
-        }
-
-        // Instantiate variable label
-        GameObject varLabelGO = Instantiate(variableLabelPrefab, resultArea);
-        Text varLabelText = varLabelGO.GetComponent<Text>();
-        if (varLabelText != null)
-        {
-            varLabelText.text = missingVar;
-            Debug.Log($"CreateResultLine: Instantiated variable label and set text to \"{missingVar}\"");
-        }
-        else
-        {
-            Debug.LogWarning("CreateResultLine: variableLabelPrefab has no Text component; cannot set variable name.");
-        }
-
-        // Instantiate equals sign
-        GameObject eqGO = Instantiate(equalsSignPrefab, resultArea);
-        Debug.Log("CreateResultLine: Instantiated equals sign prefab.");
-
-        // Instantiate result text
-        GameObject resultGO = Instantiate(resultTextPrefab, resultArea);
-        Text resultText = resultGO.GetComponent<Text>();
-        if (resultText != null)
-        {
-            resultText.text = resultValue.ToString();
-            Debug.Log($"CreateResultLine: Instantiated result text and set text to \"{resultValue}\"");
-        }
-        else
-        {
-            Debug.LogWarning("CreateResultLine: resultTextPrefab has no Text component; cannot set numeric value.");
-        }
+            "VT_V1" => v2 * t1 / t2,
+            "VT_T1" => v2 * t2 / v1,
+            "VT_V2" => v1 * t2 / t1,
+            _ => v1 * t1 / v2
+        };
+        CreateResultLine(missing.Substring(3), res, resultAreaVT, _unitVT);
+        _solvedVT = true;
     }
 
-    /// <summary>
-    /// Helper to find the DroppableTextTarget component by variable name.
-    /// </summary>
-    private DroppableTextTarget GetDroppedTargetByName(string varName)
+    private void TrySolveIG()
     {
-        switch (varName)
+        if (_solvedIG) return;
+        var keys = new[] { "IG_P", "IG_V", "IG_n", "IG_T", "IG_R" };
+        if (CountFilled(keys) != 4) return;
+        string missing = FindMissing(keys);
+        float P = _nums.GetValueOrDefault("IG_P"), V = _nums.GetValueOrDefault("IG_V");
+        float n = _nums.GetValueOrDefault("IG_n"), T = _nums.GetValueOrDefault("IG_T");
+        float R = _nums.GetValueOrDefault("IG_R");
+        float res = missing switch
         {
-            case "P1": return slotP1;
-            case "V1": return slotV1;
-            case "P2": return slotP2;
-            case "V2": return slotV2;
-            default: return null;
+            "IG_P" => n * R * T / V,
+            "IG_V" => n * R * T / P,
+            "IG_n" => P * V / (R * T),
+            "IG_R" => P * V / (n * T),
+            "IG_T" => P * V / (n * R),       
+            _ => P * V / (n * R)
+        };
+        CreateResultLine(missing.Substring(3), res, resultAreaIG, _unitIG);
+        _solvedIG = true;
+    }
+
+    private int CountFilled(string[] keys)
+    {
+        int c = 0;
+        foreach (var k in keys) if (_nums.ContainsKey(k)) c++;
+        return c;
+    }
+
+    private string FindMissing(string[] keys)
+        => Array.Find(keys, k => !_nums.ContainsKey(k));
+
+    private void CreateResultLine(string varName, float value, RectTransform area, Dictionary<string, string> unitMap)
+    {
+        // variable label
+        var lblGO = Instantiate(variableLabelPrefab, area);
+        var lbl = lblGO.GetComponent<Text>();
+        if (lbl != null) lbl.text = varName;
+
+        // equals
+        Instantiate(equalsSignPrefab, area);
+
+        // result
+        var resGO = Instantiate(resultTextPrefab, area);
+        var res = resGO.GetComponent<Text>();
+        if (res != null)
+        {
+            string suf = _suffix.GetValueOrDefault(varName,
+                         unitMap.GetValueOrDefault(varName, ""));
+            res.text = value.ToString("G9") + suf;
         }
     }
 }
