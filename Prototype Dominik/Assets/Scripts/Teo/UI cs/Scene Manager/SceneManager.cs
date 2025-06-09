@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Collider))]
 public class SceneManagerDoor : MonoBehaviour
 {
-    [SerializeField] private int targetSceneIndex = -1;
+    [SerializeField] private int targetSceneIndex = 0;
     [SerializeField] private Texture2D lockedCursor;
     [SerializeField] private Texture2D unlockedCursor;
     [SerializeField] private Vector2 hotspot = Vector2.zero;

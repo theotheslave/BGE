@@ -46,6 +46,8 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
+    [SerializeField] private SceneManagerDoor doorToUnlock;
+
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
     public float volumeFadeDuration = 1f;
@@ -164,14 +166,14 @@ public class IdealGasMinigame : MonoBehaviour
                 if (decal == null) continue;
 
                 Color c = originalColors[i];
-                c.a = Mathf.Lerp(c.a, 0f, t);
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
                 decal.material.SetColor("_BaseColor", c);
             }
 
             yield return null;
         }
 
-        // Ensure it's fully faded at the end
+        // Ensure it's fully faded and deactivate
         foreach (var decal in decalProjectors)
         {
             if (decal == null) continue;
@@ -179,6 +181,7 @@ public class IdealGasMinigame : MonoBehaviour
             Color faded = decal.material.GetColor("_BaseColor");
             faded.a = 0f;
             decal.material.SetColor("_BaseColor", faded);
+            decal.gameObject.SetActive(false); // <--- Disabling here
         }
     }
 
@@ -237,6 +240,12 @@ public class IdealGasMinigame : MonoBehaviour
         {
             CameraMovement.Instance.ReturnToStart();
         }
+
+        if (doorToUnlock != null)
+        {
+            doorToUnlock.UnlockDoor();
+        }
+
 
 
     }
