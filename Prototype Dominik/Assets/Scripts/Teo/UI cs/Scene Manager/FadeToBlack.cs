@@ -26,6 +26,19 @@ public class FadeToBlack : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    void Start()
+    {
+        StartCoroutine(FadeInFromBlack());
+    }
+    private IEnumerator FadeInFromBlack()
+    {
+        fadeCanvasGroup.alpha = 1f; 
+        fadeCanvasGroup.blocksRaycasts = true; 
+
+        yield return new WaitForSeconds(0.5f); 
+
+        yield return StartCoroutine(Fade(0f)); 
+    }
 
     public void FadeToScene(int sceneIndex)
     {
