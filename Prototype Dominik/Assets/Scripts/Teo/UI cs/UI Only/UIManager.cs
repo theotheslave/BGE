@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     public bool IsPuzzleCompleted { get; private set; } = false;
     void Awake()
     {
+
         UiForMachine.SetActive(false);
         string sceneName = SceneManager.GetActiveScene().name;
         levelNameText.text = $"Lvl#: {sceneName}";

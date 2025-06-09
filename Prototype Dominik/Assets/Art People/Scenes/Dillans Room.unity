@@ -6028,7 +6028,7 @@ MonoBehaviour:
   decalFadeDuration: 1
   fogParticles: []
   fogFadeDuration: 1
-  doorToUnlock: {fileID: 0}
+  doorToUnlock: {fileID: 1740301260}
   moleculeSpawner: {fileID: 64401326340415528}
   globalVolume: {fileID: 1834600316}
   volumeFadeDuration: 1

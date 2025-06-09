@@ -220,6 +220,10 @@ PrefabInstance:
       value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1103468270255433498, guid: c9749aa2c1a08264fb28e46b857ed10e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1103468270255433498, guid: c9749aa2c1a08264fb28e46b857ed10e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -1321,7 +1325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e8ea56113873448ba2e2e587f12fe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneIndex: -1
+  targetSceneIndex: 2
   lockedCursor: {fileID: 2800000, guid: 998b6f2f48b1c014da642a2384d7ad99, type: 3}
   unlockedCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
   hotspot: {x: 0, y: 0}

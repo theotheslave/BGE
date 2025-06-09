@@ -17,6 +17,7 @@ public class SceneManagerDoor : MonoBehaviour
 
     void Awake()
     {
+
         outline = GetComponent<Outline>();
         if (outline == null)
         {
@@ -72,6 +73,7 @@ public class SceneManagerDoor : MonoBehaviour
         if (!isUnlocked) return;
 
         FadeToBlack.Instance.FadeToScene(targetSceneIndex);
+
     }
 
     public void UnlockDoor()

@@ -229,8 +229,10 @@ public class IdealGasMinigame : MonoBehaviour
         tSlider.interactable = false;
         vSlider.interactable = false;
         nSlider.interactable = false;
-        StartCoroutine(FadeOutFog());
+      
         isAnimating = true;
+
+        StartCoroutine(FadeOutFog());
         if (globalVolume != null)
             StartCoroutine(FadeOutVolume());
 
