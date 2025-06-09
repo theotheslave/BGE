@@ -2,80 +2,83 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-/// <summary>
-/// Attach this to any UI Image GameObject that you want to be draggable.
-/// It implements IBeginDragHandler, IDragHandler, IEndDragHandler:
-///  • OnBeginDrag: remembers its original parent & anchored position, then re‐parents to the root Canvas
-///    (so it can move freely above everything else), and disables its own raycast target so drop targets
-///    underneath can receive the drop event.
-///  • OnDrag: moves the RectTransform to the mouse/finger position.
-///  • OnEndDrag: restores its parent & original anchored position, and re‐enables raycast blocking.
-/// </summary>
 [RequireComponent(typeof(RectTransform))]
-public class DraggableImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+[RequireComponent(typeof(Text))]
+public class DraggableText : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Canvas canvas;            // the root Canvas this element lives under
-    private RectTransform rectTransform;    // to move it around
-    private CanvasGroup canvasGroup;      // to toggle blocksRaycasts
-
-    private Transform originalParent;       // to return under
-    private Vector2 originalAnchoredPos;   // to snap back
-
-    private Image imageComponent;           // to fetch its sprite
+    private Canvas _canvas;
+    private RectTransform _rectTransform;
+    private CanvasGroup _canvasGroup;
+    private Transform _originalParent;
+    private Vector2 _originalAnchoredPos;
+    private Text _textComponent;
+    private Vector2 _pointerOffset;
 
     private void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
+        _rectTransform = GetComponent<RectTransform>();
 
-        // Ensure a CanvasGroup exists so we can turn off raycast blocking while dragging
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        // Add (or get) a CanvasGroup so we can disable raycasts during drag
+        _canvasGroup = GetComponent<CanvasGroup>();
+        if (_canvasGroup == null)
+            _canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
-        imageComponent = GetComponent<Image>();
-        if (imageComponent == null)
-            Debug.LogError("DraggableImage: no Image component found on this GameObject.");
+        // Get the Text component (it must be on this same GameObject)
+        _textComponent = GetComponent<Text>();
+        if (_textComponent == null)
+            Debug.LogError($"{name}: DraggableText requires a Text component.");
 
-        // Find the root Canvas (walk up parents until you hit a Canvas)
-        canvas = GetComponentInParent<Canvas>();
-        if (canvas == null)
-            Debug.LogError("DraggableImage: must be placed under a Canvas.");
+        // Find the parent Canvas
+        _canvas = GetComponentInParent<Canvas>();
+        if (_canvas == null)
+            Debug.LogError($"{name}: DraggableText must be a child of a Canvas.");
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // 1) Remember where we came from
-        originalParent = transform.parent;
-        originalAnchoredPos = rectTransform.anchoredPosition;
+        if (_textComponent == null) return;
 
-        // 2) Re-parent to root canvas so we render on top
-        transform.SetParent(canvas.transform, true);
+        // Remember original parent & anchored position so we can restore later
+        _originalParent = transform.parent;
+        _originalAnchoredPos = _rectTransform.anchoredPosition;
 
-        // 3) Allow drop targets under this to receive raycasts
-        canvasGroup.blocksRaycasts = false;
+        // Reparent to root Canvas so it renders on top of everything else
+        transform.SetParent(_canvas.transform, true);
+        transform.SetAsLastSibling();
+
+        // Disable raycast blocking so drop targets can receive OnDrop
+        _canvasGroup.blocksRaycasts = false;
+
+        // Compute offset between pointer and object to prevent “jumping”
+        Vector2 pointerScreenPos = eventData.position;
+        Vector2 objectScreenPos = _rectTransform.position;
+        _pointerOffset = objectScreenPos - pointerScreenPos;
+
+        Debug.Log($"{name}: OnBeginDrag, text = \"{_textComponent.text}\"");
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Move the UI element to the pointer position
-        rectTransform.position = eventData.position;
+        // Move the object so that the pointer holds the same spot inside the text
+        Vector2 newPos = eventData.position + _pointerOffset;
+        _rectTransform.position = newPos;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // 1) Re‐enable raycast blocking
-        canvasGroup.blocksRaycasts = true;
+        Debug.Log($"{name}: OnEndDrag");
 
-        // 2) Restore parent & anchored position
-        transform.SetParent(originalParent, true);
-        rectTransform.anchoredPosition = originalAnchoredPos;
+        // Re-enable raycast blocking
+        _canvasGroup.blocksRaycasts = true;
+
+        // Return to original parent & anchored position
+        transform.SetParent(_originalParent, true);
+        _rectTransform.anchoredPosition = _originalAnchoredPos;
     }
 
-    /// <summary>
-    /// Public accessor so drop‐targets can read the sprite we carry.
-    /// </summary>
-    public Sprite GetSprite()
+    // Provide the string so that the drop target can read it
+    public string GetText()
     {
-        return imageComponent != null ? imageComponent.sprite : null;
+        return _textComponent != null ? _textComponent.text : null;
     }
 }

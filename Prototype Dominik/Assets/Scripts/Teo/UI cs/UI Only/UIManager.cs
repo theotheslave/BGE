@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject puzzleMachine;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private GameObject UiForMachine;
-
+    public bool IsPuzzleCompleted { get; private set; } = false;
     void Awake()
     {
         UiForMachine.SetActive(false);
@@ -41,7 +42,10 @@ public class UIManager : MonoBehaviour
             panel.SetActive(newState);
         }
     }
-
+    public void MarkPuzzleComplete()
+    {
+        IsPuzzleCompleted = true;
+    }
     public void ShowPuzzleFeedback(string message)
     {
         if (feedbackText != null)

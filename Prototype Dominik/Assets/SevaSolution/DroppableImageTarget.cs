@@ -1,43 +1,44 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;  // if you use TextMeshProUGUI
 using UnityEngine.UI;
 
-/// <summary>
-/// Attach this to any UI Image GameObject you want to act as a drop target.
-/// Implements IDropHandler so that when a DraggableImage is dropped on it,
-/// it grabs the dragged sprite and replaces its own Image.sprite with it.
-/// </summary>
-[RequireComponent(typeof(Image))]
-public class DroppableImageTarget : MonoBehaviour, IDropHandler
+public class DroppableTextTarget : MonoBehaviour, IDropHandler
 {
-    private Image imageComponent;
+    [Tooltip("Must match P1, V1, P2, V2, etc.")]
+    public string variableName;
+
+    private Text uiText;
+    private TMP_Text tmpText;
 
     private void Awake()
     {
-        imageComponent = GetComponent<Image>();
-        if (imageComponent == null)
-            Debug.LogError("DroppableImageTarget: no Image component found on this GameObject.");
+        uiText = GetComponent<Text>();
+        tmpText = GetComponent<TMP_Text>();
+
+        if (uiText == null && tmpText == null)
+            UnityEngine.Debug.LogError($"[{name}] needs a Text or TMP_Text!");
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        // eventData.pointerDrag is the GameObject being dragged
-        GameObject droppedObject = eventData.pointerDrag;
-        if (droppedObject == null) return;
+        var dragGO = eventData.pointerDrag;
+        if (dragGO == null) return;
 
-        // Check if it has a DraggableImage component
-        DraggableImage draggable = droppedObject.GetComponent<DraggableImage>();
-        if (draggable == null) return;
+        // pull the string off the dragged object
+        string dropped = null;
+        if (dragGO.TryGetComponent<Text>(out var t1)) dropped = t1.text;
+        else if (dragGO.TryGetComponent<TMP_Text>(out var t2)) dropped = t2.text;
 
-        // Get the sprite from the dragged image
-        Sprite newSprite = draggable.GetSprite();
-        if (newSprite == null) return;
+        if (string.IsNullOrEmpty(dropped)) return;
 
-        // Set our own Image to that sprite
-        imageComponent.sprite = newSprite;
+        // **Overwrite** the slot's Text with *just* the dropped text
+        if (uiText != null) uiText.text = dropped;
+        if (tmpText != null) tmpText.text = dropped;
 
-        // Optional: if you want the target to resize to the sprite’s native size:
-        imageComponent.SetNativeSize();
+        // notify the manager of the raw dropped value
+        FormulaManager.Instance.OnSlotUpdated(variableName, dropped);
+
+        UnityEngine.Debug.Log($"Dropped '{dropped}' into {variableName}");
     }
 }
-

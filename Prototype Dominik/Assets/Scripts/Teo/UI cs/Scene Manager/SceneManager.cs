@@ -1,22 +1,19 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.Collections;
 
 [RequireComponent(typeof(Collider))]
 public class SceneManagerDoor : MonoBehaviour
 {
-    [Header("Scene Settings")]
-    [SerializeField] private int targetSceneIndex = -1;
-
-    [Header("Fade Settings")]
-    [SerializeField] private CanvasGroup fadeCanvasGroup;
-    [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private int targetSceneIndex = 0;
+    [SerializeField] private Texture2D lockedCursor;
+    [SerializeField] private Texture2D unlockedCursor;
+    [SerializeField] private Vector2 hotspot = Vector2.zero;
 
     private Outline outline;
     private static Transform currentHighlight;
-    private static bool isFading = false;
+
+    private bool isUnlocked = false;
 
     void Awake()
     {
@@ -28,22 +25,13 @@ public class SceneManagerDoor : MonoBehaviour
             outline.OutlineWidth = 6f;
         }
 
-        outline.enabled = false;
+        if (outline != null)
+            outline.enabled = false;
 
-        if (fadeCanvasGroup != null)
-        {
-            fadeCanvasGroup.alpha = 0f;
-            fadeCanvasGroup.blocksRaycasts = false;
-
-            if (fadeCanvasGroup.TryGetComponent<Image>(out var img))
-                img.raycastTarget = true;
-        }
     }
 
     void Update()
     {
-        if (isFading) return;
-
         bool hoveredThisFrame = false;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -52,6 +40,8 @@ public class SceneManagerDoor : MonoBehaviour
             if (hit.transform == transform)
             {
                 hoveredThisFrame = true;
+
+                Cursor.SetCursor(isUnlocked ? unlockedCursor : lockedCursor, hotspot, CursorMode.Auto);
 
                 if (currentHighlight != transform)
                 {
@@ -71,6 +61,7 @@ public class SceneManagerDoor : MonoBehaviour
         if (!hoveredThisFrame && currentHighlight == transform)
         {
             if (outline != null) outline.enabled = false;
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             currentHighlight = null;
         }
     }
@@ -78,61 +69,13 @@ public class SceneManagerDoor : MonoBehaviour
     private void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (!isUnlocked) return;
 
-        if (!isFading && targetSceneIndex >= 0 && targetSceneIndex < SceneManager.sceneCountInBuildSettings)
-        {
-            StartCoroutine(FadeAndSwitch(targetSceneIndex));
-        }
+        FadeToBlack.Instance.FadeToScene(targetSceneIndex);
     }
 
-    private IEnumerator FadeAndSwitch(int sceneIndex)
+    public void UnlockDoor()
     {
-        isFading = true;
-
-        if (fadeCanvasGroup == null)
-        {
-            Debug.LogError("Missing Fade Canvas Group!");
-            yield break;
-        }
-
-        // Fade to black
-        yield return StartCoroutine(Fade(1f));
-
-        SceneManager.LoadScene(sceneIndex);
-        yield return null;
-
-        // Optional: fade in again (or remove this if you start new scenes already black)
-        yield return StartCoroutine(Fade(0f));
-
-        isFading = false;
-    }
-
-    private IEnumerator Fade(float targetAlpha)
-    {
-        float startAlpha = fadeCanvasGroup.alpha;
-        float time = 0f;
-        bool goingToBlack = targetAlpha > 0.5f;
-        bool raycastSet = false;
-
-        while (time < fadeDuration)
-        {
-            time += Time.deltaTime;
-            float t = time / fadeDuration;
-            float currentAlpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-            fadeCanvasGroup.alpha = currentAlpha;
-
-            if (goingToBlack && !raycastSet && currentAlpha >= 0.5f)
-            {
-                fadeCanvasGroup.blocksRaycasts = true;
-                raycastSet = true;
-            }
-
-            yield return null;
-        }
-
-        fadeCanvasGroup.alpha = targetAlpha;
-
-        if (targetAlpha <= 0.01f)
-            fadeCanvasGroup.blocksRaycasts = false;
+        isUnlocked = true;
     }
 }

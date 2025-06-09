@@ -4,11 +4,14 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Collider))]
 public class SelectableObject : MonoBehaviour
 {
-    [SerializeField] private float splinePosition = 0.5f; // Assign in inspector
-    private Outline outline;
-    private static Transform currentHighlight;
-    private static Transform currentSelection;
+    [SerializeField] private float splinePosition = 0.5f;
 
+    private Outline outline;
+
+    // Track currently hovered and selected object
+    private static SelectableObject currentHighlight;
+    private static SelectableObject currentSelection;
+    public static Transform CurrentSelectionTransform;
     void Awake()
     {
         outline = GetComponent<Outline>();
@@ -24,22 +27,23 @@ public class SelectableObject : MonoBehaviour
 
     void Update()
     {
-        
+        // Clear previous highlight if needed
         if (currentHighlight != null && currentHighlight != currentSelection)
         {
-            Outline prev = currentHighlight.GetComponent<Outline>();
-            if (prev != null) prev.enabled = false;
+            currentHighlight.outline.enabled = false;
             currentHighlight = null;
         }
 
-        
+        // Raycast to detect hover
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int mask = ~LayerMask.GetMask("fadeblack");
-        if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
+
+        if (!EventSystem.current.IsPointerOverGameObject() &&
+            Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
         {
-            if (hit.transform == transform && transform != currentSelection)
+            if (hit.transform == transform && currentSelection != this)
             {
-                currentHighlight = transform;
+                currentHighlight = this;
                 if (outline != null) outline.enabled = true;
             }
         }
@@ -49,11 +53,12 @@ public class SelectableObject : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
-        
+        // Disable outline on click
         if (outline != null) outline.enabled = false;
-        currentSelection = transform;
 
-       
+        currentSelection = this;
+
+        // Focus the camera
         CameraMovement cam = FindFirstObjectByType<CameraMovement>();
         if (cam != null)
         {
@@ -61,13 +66,11 @@ public class SelectableObject : MonoBehaviour
         }
     }
 
-   
     public static void ClearSelection()
     {
-        if (currentSelection != null)
+        if (currentSelection != null && currentSelection.outline != null)
         {
-            Outline o = currentSelection.GetComponent<Outline>();
-            if (o != null) o.enabled = false;
+            currentSelection.outline.enabled = false;
         }
 
         currentSelection = null;
