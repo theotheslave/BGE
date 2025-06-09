@@ -612,7 +612,7 @@ MonoBehaviour:
         z: 0.7446548
       Rotation:
         value:
-          x: -0.017878426
+          x: -0.017878428
           y: 0.8902816
           z: 0.0452723
           w: 0.4528018
@@ -979,10 +979,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad1198ad711db13498500cac1b740667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
-  lockedCursor: {fileID: 2800000, guid: 998b6f2f48b1c014da642a2384d7ad99, type: 3}
-  doorCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
+  customCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
   hotSpot: {x: 0, y: 0}
+  cursorMode: 0
 --- !u!114 &662835174
 MonoBehaviour:
   m_ObjectHideFlags: 0

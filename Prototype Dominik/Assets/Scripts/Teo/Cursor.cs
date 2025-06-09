@@ -2,31 +2,12 @@ using UnityEngine;
 
 public class CursorManager : MonoBehaviour
 {
-    public static CursorManager Instance;
-
-    public Texture2D defaultCursor;
-    public Texture2D lockedCursor;
-    public Texture2D doorCursor;
+    public Texture2D customCursor;
     public Vector2 hotSpot = Vector2.zero;
+    public CursorMode cursorMode = CursorMode.Auto;
 
-    void Awake()
+    void Start()
     {
-        Instance = this;
-        SetDefaultCursor();
-    }
-
-    public void SetDefaultCursor()
-    {
-        Cursor.SetCursor(defaultCursor, hotSpot, CursorMode.Auto);
-    }
-
-    public void SetLockedCursor()
-    {
-        Cursor.SetCursor(lockedCursor, hotSpot, CursorMode.Auto);
-    }
-
-    public void SetDoorCursor()
-    {
-        Cursor.SetCursor(doorCursor, hotSpot, CursorMode.Auto);
+        Cursor.SetCursor(customCursor, hotSpot, cursorMode);
     }
 }

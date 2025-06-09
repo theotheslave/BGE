@@ -25,7 +25,9 @@ public class SceneManagerDoor : MonoBehaviour
             outline.OutlineWidth = 6f;
         }
 
-        outline.enabled = false;
+        if (outline != null)
+            outline.enabled = false;
+
     }
 
     void Update()

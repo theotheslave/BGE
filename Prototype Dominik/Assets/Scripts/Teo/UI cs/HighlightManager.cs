@@ -12,14 +12,24 @@ public class HighlightManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, interactableLayer))
         {
-            Outline newOutline = hit.transform.GetComponent<Outline>();
+            if (hit.transform.TryGetComponent(out Outline hitOutline))
+            {
+                if (hit.transform.TryGetComponent(out SelectableObject selectable) &&
+                    hit.transform == SelectableObject.CurrentSelectionTransform)
+                {
+                    return; // Let SelectableObject handle it
+                }
 
-            if (newOutline != null && newOutline != currentOutline)
+                if (currentOutline != hitOutline)
+                {
+                    ClearHighlight();
+                    currentOutline = hitOutline;
+                    currentOutline.enabled = true;
+                }
+            }
+            else
             {
                 ClearHighlight();
-
-                currentOutline = newOutline;
-                currentOutline.enabled = true;
             }
         }
         else
