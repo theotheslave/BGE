@@ -3,7 +3,32 @@ guid: fabe4a81ff908304c81f0b845c66b26d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Goggles
+    second: {fileID: 2100000, guid: 6b25f03de21730844b61c8444ead8d4b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MetalSquare
+    second: {fileID: 2100000, guid: c34587e2f00e20e4b9e7ccbf32bd59eb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: StrapBig
+    second: {fileID: 2100000, guid: 35a768837c1bb5c4f894921ea00df01c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: StrapSide
+    second: {fileID: 2100000, guid: e1204c81d45a7a84690348796a823120, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: StrapSmall
+    second: {fileID: 2100000, guid: bc909b7aaab73334a99d500f8ce66585, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
