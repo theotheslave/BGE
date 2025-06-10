@@ -2,11 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class SequenceController : MonoBehaviour
 {
-    // UI hand to move
+    [Header("UI Button to listen on")]
+    [SerializeField] private Button GogglesButton;
+
+    [Header("Object to deactivate on click")]
+    [SerializeField] private GameObject objectToDeactivate;
+
+    [Header("Flag to toggle")]
+    private bool ThirdHand = false;
+
+
+    [SerializeField] private Interactable speaker;
+
+    [SerializeField]
+    private string[] dialogueLines1;
+
+    [SerializeField]
+    private string[] dialogueLines2;
+
+    [SerializeField]
+    private GameObject gogglesUI;
+
+
+
+    public bool FirstHand = true;
+    public bool SecondHand = false;
+
+
+   // UI hand to move
     [SerializeField] private Vector2 targetAnchoredPosition; // target position in canvas space
+    [SerializeField] private Vector2 targetAnchoredPosition2;
     [SerializeField] private float moveDuration = 1f;        // time to move there
 
     private Vector2 startAnchoredPosition;
@@ -27,6 +57,9 @@ public class SequenceController : MonoBehaviour
     [Header("UI Settings")]
     [SerializeField] private RectTransform uiCanvas;
     [SerializeField] private RectTransform phantomHandUI;      // Pre-placed UI hand
+    [SerializeField] private RectTransform phantomHandUI2;
+    [SerializeField] private RectTransform phantomHandUI3;
+    [SerializeField] private RectTransform phantomHandUI4;
     [SerializeField] private float handMoveDuration = 1f;      // duration in seconds
 
     [Header("UI Targets for Hand")]
@@ -104,6 +137,22 @@ public class SequenceController : MonoBehaviour
                 phantomHandUI.anchoredPosition = pos;
             }
         }
+
+        if (handMoving && phantomHandUI2 != null)
+        {
+            handElapsed += Time.deltaTime;
+            float t = handElapsed / handMoveDuration;
+            if (t >= 1f)
+            {
+                phantomHandUI2.anchoredPosition = handControlPoints[handControlPoints.Count - 1];
+                handMoving = false;
+            }
+            else
+            {
+                Vector2 pos = Bezier2D(handControlPoints, t);
+                phantomHandUI2.anchoredPosition = pos;
+            }
+        }
     }
 
     private void HandleClick()
@@ -125,7 +174,19 @@ public class SequenceController : MonoBehaviour
         // Step 2: Machine
         if (clicked == machineHitbox && currentPhantomMouse == null)
         {
-            StartCoroutine(MachineSequence());
+            if (SecondHand == true)
+            {
+                //SEVA WORK FROM HERE. JUST CHANGE IT TO A SECOND CURSOR, THEN ADD A 3RD ONE FOR CLICKING ON FORMULA, THEN A 4TH ONE FOR 
+                phantomHandUI2.gameObject.SetActive(true);
+                DialogueManager.Instance.StartDialogue(dialogueLines2, speaker);
+                GogglesButton.onClick.AddListener(HandleButtonClick);
+                StartCoroutine(MachineSequence2());
+                return;
+            }
+            if (FirstHand == true)
+            {
+                StartCoroutine(MachineSequence());
+            }
             return;
         }
 
@@ -134,8 +195,8 @@ public class SequenceController : MonoBehaviour
         {
             if (currentPhantomMouse != null)
             {
-                Destroy(currentPhantomMouse);
-                backButton.SetActive(false);
+//                Destroy(currentPhantomMouse);
+//                backButton.SetActive(false);
             }
             return;
         }
@@ -143,30 +204,25 @@ public class SequenceController : MonoBehaviour
         // Step 3: Goggles
         if (clicked == gogglesHitbox && goggles.activeSelf)
         {
+            if (gogglesUI != null)
+                gogglesUI.SetActive(true);
+
             gogglesHitbox.enabled = false;
             goggles.SetActive(false);
+            FirstHand = false;
+            SecondHand = true;
             // TODO: trigger goggles dialogue
             return;
         }
 
         // Steps 4 & 5: Button targets
-        for (int i = 0; i < buttonHitboxes.Length; i++)
+        if (clicked == machineHitbox)
         {
-            if (clicked == buttonHitboxes[i])
+            if (SecondHand == true)
             {
-                // Activate and position hand
+                UnityEngine.Debug.Log($"HandleClick: clicked on '{clicked.name}', collider: {clicked}.");  // Debug message
                 phantomHandUI.gameObject.SetActive(true);
-                phantomHandUI.anchoredPosition = handStartPointUI.anchoredPosition;
-
-                // Prepare control points (start -> target)
-                handControlPoints = new List<Vector2> {
-                    handStartPointUI.anchoredPosition,
-                    buttonTargetsUI[i].anchoredPosition
-                };
-                handElapsed = 0f;
-                handMoving = true;
-
-                // TODO: trigger button dialogue
+                DialogueManager.Instance.StartDialogue(dialogueLines2, speaker);
                 return;
             }
         }
@@ -175,17 +231,30 @@ public class SequenceController : MonoBehaviour
     private IEnumerator MachineSequence()
     {
         yield return new WaitForSeconds(machineTimer);
-
-        goggles.SetActive(true);
-        gogglesHitbox.enabled = true;
+        if (FirstHand)
+        { 
+            goggles.SetActive(true);
+            gogglesHitbox.enabled = true;
         // TODO: post-timer dialogue
 
+            
+            // Cache start position (center of screen assumed at Start)
+            startAnchoredPosition = phantomHandUI.anchoredPosition;
+            phantomHandUI.gameObject.SetActive(true);
+            StartCoroutine(MoveAndResetLoop());
+            backButton.SetActive(true);
+            DialogueManager.Instance.StartDialogue(dialogueLines1, speaker);
+        }
+    }
 
-        // Cache start position (center of screen assumed at Start)
-        startAnchoredPosition = phantomHandUI.anchoredPosition;
-        phantomHandUI.gameObject.SetActive(true);
-        StartCoroutine(MoveAndResetLoop());
-        backButton.SetActive(true);
+    private IEnumerator MachineSequence2()
+    {
+        yield return new WaitForSeconds(machineTimer/8);
+            // Cache start position (center of screen assumed at Start)
+            startAnchoredPosition = phantomHandUI2.anchoredPosition;
+            phantomHandUI2.gameObject.SetActive(true);
+            StartCoroutine(MoveAndResetLoop2());
+        
     }
 
     private Vector2 Bezier2D(List<Vector2> points, float t)
@@ -211,7 +280,19 @@ public class SequenceController : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveHand(Vector2 from, Vector2 to, float duration)
+private IEnumerator MoveAndResetLoop2()
+{
+    while (true)
+    {
+        // Move from start to target
+        yield return MoveHand2(startAnchoredPosition, targetAnchoredPosition2, moveDuration);
+        // Teleport back instantly
+        phantomHandUI2.anchoredPosition = startAnchoredPosition;
+        // Optionally wait before next move
+        yield return new WaitForSeconds(0.5f);
+    }
+}
+private IEnumerator MoveHand(Vector2 from, Vector2 to, float duration)
     {
         float elapsed = 0f;
         while (elapsed < duration)
@@ -223,6 +304,34 @@ public class SequenceController : MonoBehaviour
         }
         // Ensure final position
         phantomHandUI.anchoredPosition = to;
+    }
+
+private IEnumerator MoveHand2(Vector2 from, Vector2 to, float duration)
+{
+    float elapsed = 0f;
+    while (elapsed < duration)
+    {
+        elapsed += Time.deltaTime;
+        float t = elapsed / duration;
+        phantomHandUI2.anchoredPosition = Vector2.Lerp(from, to, t);
+        yield return null;
+    }
+    // Ensure final position
+    phantomHandUI2.anchoredPosition = to;
+}
+
+
+    private void HandleButtonClick()
+    {
+        // Deactivate the assigned object
+        if (objectToDeactivate != null)
+        {
+            objectToDeactivate.SetActive(false);
+        }
+
+        // Toggle the bool flag
+        ThirdHand = true;
+        SecondHand = false;
     }
 
     private void DisableColliders(Collider[] cols)
