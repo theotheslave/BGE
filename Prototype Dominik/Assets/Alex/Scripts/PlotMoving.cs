@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class SequenceController : MonoBehaviour
 {
-    [Header("UI Button to listen on")]
-    [SerializeField] private Button GogglesButton;
+///    [SerializeField] private Button GogglesButton;
 
     [Header("Object to deactivate on click")]
     [SerializeField] private GameObject objectToDeactivate;
@@ -28,7 +27,8 @@ public class SequenceController : MonoBehaviour
     [SerializeField]
     private GameObject gogglesUI;
 
-
+    [SerializeField]
+    private GameObject gogglesButton;
 
     public bool FirstHand = true;
     public bool SecondHand = false;
@@ -217,6 +217,7 @@ public class SequenceController : MonoBehaviour
 
             gogglesHitbox.enabled = false;
             goggles.SetActive(false);
+            gogglesButton.SetActive(true);
             FirstHand = false;
             SecondHand = true;
             // TODO: trigger goggles dialogue
