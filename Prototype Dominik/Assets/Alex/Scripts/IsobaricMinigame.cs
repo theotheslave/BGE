@@ -232,7 +232,7 @@ public class IsobaricMinigame : MonoBehaviour
 
     private void Win()
     {
-        UIManager.Instance?.HandlePuzzleSolved("Puzzle_A");
+        //UIManager.Instance?.HandlePuzzleSolved("Puzzle_A");
 
         MachineProgressManager.Instance.isobaricCompleted = true;
 
