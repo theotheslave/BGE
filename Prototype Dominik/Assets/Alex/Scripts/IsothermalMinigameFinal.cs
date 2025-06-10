@@ -180,14 +180,14 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 if (decal == null) continue;
 
                 Color c = originalColors[i];
-                c.a = Mathf.Lerp(c.a, 0f, t);
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
                 decal.material.SetColor("_BaseColor", c);
             }
 
             yield return null;
         }
 
-        // Ensure it's fully faded at the end
+        // Ensure it's fully faded and deactivate
         foreach (var decal in decalProjectors)
         {
             if (decal == null) continue;
@@ -195,6 +195,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
             Color faded = decal.material.GetColor("_BaseColor");
             faded.a = 0f;
             decal.material.SetColor("_BaseColor", faded);
+            decal.gameObject.SetActive(false); // <--- Disabling here
         }
     }
 
