@@ -55,8 +55,17 @@ public class IsothermalMinigameFinal : MonoBehaviour
     private bool hasWon = false;
     private float pistonBaseY;
 
+    [SerializeField] private float phase1HoldTime = 2f;
+    private float phase1Timer = 0f;
+
     void Start()
     {
+        if (!MachineProgressManager.Instance.isochoricCompleted)
+        {
+            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
+            return;
+        }
+
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
         pistonBaseY = piston.position.y;
@@ -83,10 +92,18 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
                 if (deltaN <= calculatedN * 0.1f)
                 {
-                    phase1Complete = true;
-                    nSlider.interactable = false;
-                    vSlider.interactable = true;
-                    Debug.Log("Phase 1 complete. Now adjust Volume.");
+                    phase1Timer += Time.deltaTime;
+                    if (phase1Timer >= phase1HoldTime)
+                    {
+                        phase1Complete = true;
+                        nSlider.interactable = false;
+                        vSlider.interactable = true;
+                        Debug.Log("Phase 1 complete. Now adjust Volume.");
+                    }
+                }
+                else
+                {
+                    phase1Timer = 0f;
                 }
             }
             else if (!hasWon)

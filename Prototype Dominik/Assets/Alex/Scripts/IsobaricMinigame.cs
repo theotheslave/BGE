@@ -234,6 +234,8 @@ public class IsobaricMinigame : MonoBehaviour
     {
         UIManager.Instance?.HandlePuzzleSolved("Puzzle_A");
 
+        MachineProgressManager.Instance.isobaricCompleted = true;
+
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         heatSlider.interactable = false;
