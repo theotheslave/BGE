@@ -3,7 +3,17 @@ guid: 0677b28ab37db6d4c8a26e13cd283183
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GroundLamp
+    second: {fileID: 2100000, guid: 775af9c3cf5bb084d9465dd00e0ed2d1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GroundLampGlass
+    second: {fileID: 2100000, guid: d1b001e87e30b3c449fdf9e6f5dbf266, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
