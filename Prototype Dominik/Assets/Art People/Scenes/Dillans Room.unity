@@ -4864,7 +4864,7 @@ MonoBehaviour:
   virtualCam: {fileID: 2358462484373434718}
   dolly: {fileID: 7562126394225397378}
   travelSeconds: 3
-  gogglesSplinePosition: 0.8
+  gogglesSplinePosition: 1
   gogglesFocusTarget: {fileID: 0}
   defaultLookAt: {fileID: 2016547779773415343}
   lastTarget: {fileID: 396080825}
@@ -5975,7 +5975,11 @@ MonoBehaviour:
   - {fileID: 8119020839324113792}
   - {fileID: 3077976465851594483}
   decalFadeDuration: 1
-  fogParticles: []
+  fogParticles:
+  - {fileID: 4287705826978669666}
+  - {fileID: 2509428742281995211}
+  - {fileID: 3839069968554979662}
+  - {fileID: 4212524799514364793}
   fogFadeDuration: 1
   doorToUnlock: {fileID: 1740301260}
   objectToLock: {fileID: 396080824}
@@ -28943,7 +28947,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5532768823688475960, guid: cdd34cd862f06364a964a79b3b7d120e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
