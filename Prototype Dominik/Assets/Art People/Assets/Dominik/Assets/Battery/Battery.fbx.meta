@@ -3,7 +3,22 @@ guid: c569720673c8a404fbc4bba606620a21
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Battery
+    second: {fileID: 2100000, guid: 7175cb6b3fdf977468711c57921048c5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BatteryHolder
+    second: {fileID: 2100000, guid: 43e760f2451dcd24aa0a5362882562ca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wire
+    second: {fileID: 2100000, guid: e5a4c122c04a28c419f961888a283b1a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
