@@ -99,15 +99,15 @@ public class IsobaricMinigame : MonoBehaviour
         temperatureDisplay.text = $"T = {currentTemp:F1} K";
         volumeDisplay.text = $"V = {(volume * 1000f):F2} L";
 
-        if (graphPanel.activeSelf)
-        {
-            graphSampleTimer += Time.deltaTime;
-            if (graphSampleTimer >= graphSampleInterval)
-            {
-                graphVisualizer.AddPoint(currentTemp, volume);
-                graphSampleTimer = 0f;
-            }
-        }
+        //if (graphPanel.activeSelf)
+        //{
+        //    graphSampleTimer += Time.deltaTime;
+        //    if (graphSampleTimer >= graphSampleInterval)
+        //    {
+        //        graphVisualizer.AddPoint(currentTemp, volume);
+        //        graphSampleTimer = 0f;
+        //    }
+        //}
 
         moleculeSpawner.ApplyTemperature(currentTemp);
         moleculeSpawner.currentTemperature = currentTemp;
@@ -235,10 +235,8 @@ public class IsobaricMinigame : MonoBehaviour
     {
         //UIManager.Instance?.HandlePuzzleSolved("Puzzle_A");
 
-        MachineProgressManager.Instance.isobaricCompleted = true;
-
-        winText.gameObject.SetActive(true);
-        winText.text = "Correct!";
+       // winText.gameObject.SetActive(true);
+      //  winText.text = "Correct!";
         heatSlider.interactable = false;
         toggleGraphButton.interactable = false;
         StartCoroutine(FadeOutFog());
@@ -257,6 +255,8 @@ public class IsobaricMinigame : MonoBehaviour
             objectToLock.enabled = false;
         }
         GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor>()?.UnlockDoor();
+
+        MachineProgressManager.Instance.isobaricCompleted = true;
     }
 
     private void AnimatePiston()

@@ -2,6 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using UnityEngine.Rendering.Universal;
+using System.Collections;
 
 public class IsochoricMinigame : MonoBehaviour
 {
@@ -25,6 +28,14 @@ public class IsochoricMinigame : MonoBehaviour
     private float currentMoles;
     private float currentPressure;
 
+
+
+    [Header("Fade Settings")]
+    [SerializeField] private List<DecalProjector> decalProjectors = new List<DecalProjector>();
+    [SerializeField] private float decalFadeDuration = 1f;
+    [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
+    [SerializeField] private float fogFadeDuration = 1f;
+
     [Header("Win Condition")]
     [SerializeField] private float temperatureTolerance = 5f;
     [SerializeField] private float winHoldTime = 2f;
@@ -34,6 +45,10 @@ public class IsochoricMinigame : MonoBehaviour
 
     [Header("References")]
     public Spawner moleculeSpawner;
+    public UnityEngine.Rendering.Volume globalVolume;
+    public float volumeFadeDuration = 1f;
+    public Collider objectToLock;
+    [SerializeField] private SceneManagerDoor doorToUnlock;
 
     [SerializeField] private float phase1HoldTime = 2f;
 
@@ -118,13 +133,128 @@ public class IsochoricMinigame : MonoBehaviour
         moleculeSpawner.currentTemperature = currentTemperature;
     }
 
+
+    private IEnumerator FadeOutVolume()
+    {
+        float startWeight = globalVolume.weight;
+        float time = 0f;
+
+        while (time < volumeFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / volumeFadeDuration;
+            globalVolume.weight = Mathf.Lerp(startWeight, 0f, t);
+            yield return null;
+        }
+
+        globalVolume.weight = 0f;
+    }
+
+    private IEnumerator FadeOutIce()
+    {
+        float time = 0f;
+
+        // Store initial colors
+        List<Color> originalColors = new List<Color>();
+        foreach (var decal in decalProjectors)
+        {
+            if (decal != null && decal.material.HasProperty("_BaseColor"))
+                originalColors.Add(decal.material.GetColor("_BaseColor"));
+            else
+                originalColors.Add(Color.white);
+        }
+
+        while (time < decalFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / decalFadeDuration;
+
+            for (int i = 0; i < decalProjectors.Count; i++)
+            {
+                var decal = decalProjectors[i];
+                if (decal == null) continue;
+
+                Color c = originalColors[i];
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
+                decal.material.SetColor("_BaseColor", c);
+            }
+
+            yield return null;
+        }
+
+        // Ensure it's fully faded and deactivate
+        foreach (var decal in decalProjectors)
+        {
+            if (decal == null) continue;
+
+            Color faded = decal.material.GetColor("_BaseColor");
+            faded.a = 0f;
+            decal.material.SetColor("_BaseColor", faded);
+            decal.gameObject.SetActive(false); // <--- Disabling here
+        }
+    }
+
+    private IEnumerator FadeOutFog()
+    {
+        float time = 0f;
+
+        // Cache original start colors
+        List<Color> originalColors = new List<Color>();
+        foreach (var ps in fogParticles)
+        {
+            var main = ps.main;
+            originalColors.Add(main.startColor.color);
+        }
+
+        while (time < fogFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / fogFadeDuration;
+
+            for (int i = 0; i < fogParticles.Count; i++)
+            {
+                var ps = fogParticles[i];
+                var main = ps.main;
+                Color c = originalColors[i];
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
+                main.startColor = c;
+            }
+
+            yield return null;
+        }
+
+
+        foreach (var ps in fogParticles)
+        {
+            ps.Stop();
+        }
+    }
+
+
     void Win()
     {
         hasWon = true;
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         tSlider.interactable = false;
+        StartCoroutine(FadeOutFog());
+        if (globalVolume != null)
+            StartCoroutine(FadeOutVolume());
 
+        if (decalProjectors.Count > 0)
+            StartCoroutine(FadeOutIce());
+        if (CameraMovement.Instance != null)
+        {
+            CameraMovement.Instance.ReturnToStart();
+        }
+        if (objectToLock != null)
+        {
+            objectToLock.enabled = false;
+        }
+        if (doorToUnlock != null)
+        {
+            doorToUnlock.UnlockDoor();
+        }
         MachineProgressManager.Instance.isochoricCompleted = true;
     }
 }
