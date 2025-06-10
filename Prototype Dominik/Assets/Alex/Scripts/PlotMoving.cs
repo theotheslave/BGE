@@ -14,7 +14,7 @@ public class SequenceController : MonoBehaviour
     [SerializeField] private GameObject objectToDeactivate;
 
     [Header("Flag to toggle")]
-    private bool ThirdHand = false;
+    public bool ThirdHand = false;
 
 
     [SerializeField] private Interactable speaker;
@@ -37,6 +37,7 @@ public class SequenceController : MonoBehaviour
    // UI hand to move
     [SerializeField] private Vector2 targetAnchoredPosition; // target position in canvas space
     [SerializeField] private Vector2 targetAnchoredPosition2;
+    [SerializeField] private Vector2 targetAnchoredPosition3;
     [SerializeField] private float moveDuration = 1f;        // time to move there
 
     private Vector2 startAnchoredPosition;
@@ -171,6 +172,13 @@ public class SequenceController : MonoBehaviour
             return;
         }
 
+        if (ThirdHand == true)
+        {
+            phantomHandUI2.gameObject.SetActive(false);
+            phantomHandUI3.gameObject.SetActive(true);
+            DialogueManager.Instance.StartDialogue(dialogueLines2, speaker);
+            targetAnchoredPosition = targetAnchoredPosition3;
+        }
         // Step 2: Machine
         if (clicked == machineHitbox && currentPhantomMouse == null)
         {
@@ -179,7 +187,7 @@ public class SequenceController : MonoBehaviour
                 //SEVA WORK FROM HERE. JUST CHANGE IT TO A SECOND CURSOR, THEN ADD A 3RD ONE FOR CLICKING ON FORMULA, THEN A 4TH ONE FOR 
                 phantomHandUI2.gameObject.SetActive(true);
                 DialogueManager.Instance.StartDialogue(dialogueLines2, speaker);
-                GogglesButton.onClick.AddListener(HandleButtonClick);
+                //GogglesButton.onClick.AddListener(HandleButtonClick);
                 StartCoroutine(MachineSequence2());
                 return;
             }
@@ -340,4 +348,8 @@ private IEnumerator MoveHand2(Vector2 from, Vector2 to, float duration)
             if (c != null)
                 c.enabled = false;
     }
+
+
+
+
 }
