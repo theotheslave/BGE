@@ -47,7 +47,7 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
     [SerializeField] private SceneManagerDoor doorToUnlock;
-
+    public Collider objectToLock;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
     public float volumeFadeDuration = 1f;
@@ -242,7 +242,10 @@ public class IdealGasMinigame : MonoBehaviour
         {
             CameraMovement.Instance.ReturnToStart();
         }
-
+        if (objectToLock != null)
+        {
+            objectToLock.enabled = false;
+        }
         if (doorToUnlock != null)
         {
             doorToUnlock.UnlockDoor();

@@ -1272,6 +1272,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.71, y: 6.58, z: 4.7}
   m_Center: {x: 0, y: 5.17, z: 0}
+--- !u!4 &396080825 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6021376279237824079, guid: a2bdd3dd5643c2a4fa0e73378bad71d7, type: 3}
+  m_PrefabInstance: {fileID: 889010292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!65 &397494044
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4859,10 +4864,10 @@ MonoBehaviour:
   virtualCam: {fileID: 2358462484373434718}
   dolly: {fileID: 7562126394225397378}
   travelSeconds: 3
-  gogglesSplinePosition: 0.8
+  gogglesSplinePosition: 1
   gogglesFocusTarget: {fileID: 0}
-  defaultLookAt: {fileID: 0}
-  lastTarget: {fileID: 0}
+  defaultLookAt: {fileID: 2016547779773415343}
+  lastTarget: {fileID: 396080825}
 --- !u!224 &159182469817223543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5394,20 +5399,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5735569257012384576}
   m_CullTransparentMesh: 1
---- !u!114 &697722587356898797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3222988992302916234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5ff40921e7590544a8620bdb67c86ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeCanvasGroup: {fileID: 0}
-  fadeDuration: 3.26
 --- !u!224 &715541044589311098
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5984,9 +5975,14 @@ MonoBehaviour:
   - {fileID: 8119020839324113792}
   - {fileID: 3077976465851594483}
   decalFadeDuration: 1
-  fogParticles: []
+  fogParticles:
+  - {fileID: 4287705826978669666}
+  - {fileID: 2509428742281995211}
+  - {fileID: 3839069968554979662}
+  - {fileID: 4212524799514364793}
   fogFadeDuration: 1
   doorToUnlock: {fileID: 1740301260}
+  objectToLock: {fileID: 396080824}
   moleculeSpawner: {fileID: 64401326340415528}
   globalVolume: {fileID: 6635089025206927982}
   volumeFadeDuration: 1
@@ -12351,7 +12347,6 @@ GameObject:
   - component: {fileID: 8832285044540033728}
   - component: {fileID: 2657081159606060578}
   - component: {fileID: 102068398739489632}
-  - component: {fileID: 697722587356898797}
   - component: {fileID: 1815423819}
   - component: {fileID: 1815423818}
   m_Layer: 0
@@ -12998,7 +12993,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3222988992302916234}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c979d8cc11e200246ad0ac48b1601eac, type: 3}
   m_Name: 
@@ -32796,10 +32791,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507912bbbee167c4da107304468fd3ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  learnedFormulasPanel: {fileID: 0}
   feedbackText: {fileID: 0}
   puzzleMachine: {fileID: 396080821}
-  levelNameText: {fileID: 0}
+  levelNameText: {fileID: 6829071133355496635}
   UiForMachine: {fileID: 5523506566213600219}
 --- !u!1 &8866762830520391525
 GameObject:

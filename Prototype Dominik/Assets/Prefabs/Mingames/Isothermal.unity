@@ -497,7 +497,15 @@ MonoBehaviour:
   pistonMaxY: 1.7
   pistonMoveAmplitude: 1
   pistonMoveSpeed: 1
+  decalProjectors: []
+  decalFadeDuration: 1
+  fogParticles: []
+  fogFadeDuration: 1
+  globalVolume: {fileID: 0}
+  volumeFadeDuration: 1
   moleculeSpawner: {fileID: 1612854607}
+  objectToLock: {fileID: 0}
+  phase1HoldTime: 2
 --- !u!4 &712201952
 Transform:
   m_ObjectHideFlags: 0

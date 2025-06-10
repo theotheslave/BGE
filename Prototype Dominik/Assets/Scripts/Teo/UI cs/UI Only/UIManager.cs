@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     [Header("General UI")]
-    public GameObject learnedFormulasPanel;
+   // public GameObject learnedFormulasPanel;
     public TextMeshProUGUI feedbackText;
     [SerializeField] private GameObject puzzleMachine;
     [SerializeField] private TextMeshProUGUI levelNameText;
@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        learnedFormulasPanel?.SetActive(false);
+      //  learnedFormulasPanel?.SetActive(false);
     }
 
     public void TogglePanel(GameObject panel, bool? forceState = null)
@@ -56,14 +56,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void HandlePuzzleSolved(string formulaID)
-    {
-        FormulaUnlockManager.Instance.UnlockFormula(formulaID);
-        ShowPuzzleFeedback($"Unlocked: {formulaID}");
+    //public void HandlePuzzleSolved(string formulaID)
+    //{
+    //    FormulaUnlockManager.Instance.UnlockFormula(formulaID);
+    //    ShowPuzzleFeedback($"Unlocked: {formulaID}");
 
-        var ui = learnedFormulasPanel?.GetComponent<LearnedFormulasUI>();
-        ui?.RefreshList();
-    }
+    //    var ui = learnedFormulasPanel?.GetComponent<LearnedFormulasUI>();
+    //    ui?.RefreshList();
+    //}
 
     public void EnableMachine()
     {
