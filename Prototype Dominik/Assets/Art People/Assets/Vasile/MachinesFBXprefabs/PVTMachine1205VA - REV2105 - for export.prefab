@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6060297740780464548
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 13.894995
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -19.472187
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8034678575367880721, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0d5f0d0df58611f4097e97517220f7e0, type: 2}
+    - target: {fileID: 919132149155446097, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: m_Name
+      value: PVTMachine1205VA - REV2105 - for export
+      objectReference: {fileID: 0}
+    - target: {fileID: 3865973942701943644, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 46f569d54ef792c4c8fc863e7843c343, type: 2}
+    - target: {fileID: 4142337114806868205, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 371f3e330dac3174c86d3c76fb783277, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 560dcc35e035e9344aafacd27c526ea4, type: 3}
