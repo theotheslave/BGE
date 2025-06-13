@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class MachineWorkTransition : MonoBehaviour
 {
     [Header("Trigger Value")] 
-    [SerializeField] private float WorkTrigger;
+    [SerializeField] private bool WorkTrigger = false;
     [Header("Particle List/Settings")]
     [SerializeField] private List<ParticleSystem> SteamParticles = new List<ParticleSystem>();
     [Header("Object Rotation List")] 
@@ -24,6 +24,8 @@ public class MachineWorkTransition : MonoBehaviour
     [SerializeField] private List<Material> EmissionMaterials = new List<Material>();
     [Header("Light Settings")]
     [SerializeField] private Light TargetLight;
+    [SerializeField] private Light AuxiliaryLight;
+    [SerializeField] private float AuxiliaryLightIntensity;
     [SerializeField] private float LightIntensity;
     [SerializeField] private Color TargetLightColor; 
     [SerializeField] private Color DefaultLightColor;
@@ -48,8 +50,9 @@ public class MachineWorkTransition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (WorkTrigger > 1 )
+        if (WorkTrigger == true )
         {
+            AuxiliaryLight.intensity = AuxiliaryLightIntensity;
             TargetLight.intensity = LightIntensity;
             TargetLight.color = TargetLightColor;
             
@@ -75,6 +78,7 @@ public class MachineWorkTransition : MonoBehaviour
         }
         else
         {
+          AuxiliaryLight.intensity = 0;  
           TargetLight.color = DefaultLightColor;
             foreach (Material mat in EmissionMaterials)
             {
