@@ -12,13 +12,17 @@ public class MachineWorkTransition : MonoBehaviour
     [SerializeField] private List<ParticleSystem> SteamParticles = new List<ParticleSystem>();
     [Header("Object Rotation List")] 
     [SerializeField] private List<GameObject> ObjectRotation = new List<GameObject>();
-    [Header("Object Rotation Values")] 
+    [Header("Object Rotation Values Arrows")] 
     [SerializeField] private float AngleX;
     [SerializeField] private float AngleY;
     [SerializeField] private float AngleZ;
     [SerializeField] private float AngleZ2;
     [SerializeField] private float TimeAtoB;
-    
+    [Header("Object Rotation Valves")] 
+    [SerializeField] private List<GameObject> ObjectValveRotation = new List<GameObject>();
+    [SerializeField] private float ValveAngleX;
+    [SerializeField] private float ValveAngleY;
+    [SerializeField] private float ValveAngleZ3;
     
     [Header("Emission Material List")]
     [SerializeField] private List<Material> EmissionMaterials = new List<Material>();
@@ -60,6 +64,12 @@ public class MachineWorkTransition : MonoBehaviour
             {
                 mat.EnableKeyword("_EMISSION");
             }
+            foreach (GameObject obj in ObjectValveRotation)
+            {
+                obj.transform.localRotation = Quaternion.Euler(ValveAngleX,ValveAngleY,ValveAngleZ3);
+                //obj.transform.localRotation = Quaternion.Euler(AngleX,AngleY,AngleZ);
+                //obj.transform.localRotation = Quaternion.Euler(AngleX,AngleY,Mathf.Clamp(AngleZ, 50, 110));
+            }
             
             foreach (GameObject obj in ObjectRotation)
             {
@@ -80,15 +90,20 @@ public class MachineWorkTransition : MonoBehaviour
         {
           AuxiliaryLight.intensity = 0;  
           TargetLight.color = DefaultLightColor;
-            foreach (Material mat in EmissionMaterials)
+            foreach (Material mat in EmissionMaterials) // turns off the emisson map in the material
             {
                 mat.DisableKeyword("_EMISSION");
             }
-            foreach (GameObject obj in ObjectRotation)
+            foreach (GameObject obj in ObjectValveRotation) // keeps the valve rotation as default one after edit
             {
-                obj.transform.rotation = default;
+                obj.transform.localRotation = Quaternion.Euler(ValveAngleX,ValveAngleY,ValveAngleX);
+                
             }
-            foreach (ParticleSystem particle in SteamParticles)
+            foreach (GameObject obj in ObjectRotation) // re writes the rotation for bar meters arrows
+            {
+                obj.transform.localRotation = default;
+            }
+            foreach (ParticleSystem particle in SteamParticles) // just stops the particles from the list 
             {
                 particle.Stop(true);
             }
