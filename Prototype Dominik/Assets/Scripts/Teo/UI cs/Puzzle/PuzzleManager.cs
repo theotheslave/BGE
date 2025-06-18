@@ -16,7 +16,7 @@ public class PuzzleSceneManager : MonoBehaviour
     {
         checkButton?.onClick.AddListener(ValidatePuzzle);
         resetButton?.onClick.AddListener(() => puzzleController?.ResetPuzzle());
-        showLearnedButton?.onClick.AddListener(() => UIManager.Instance?.TogglePanel(UIManager.Instance.learnedFormulasPanel));
+        //showLearnedButton?.onClick.AddListener(() => UIManager.Instance?.TogglePanel(UIManager.Instance.learnedFormulasPanel));
     }
 
     void ValidatePuzzle()
@@ -29,7 +29,7 @@ public class PuzzleSceneManager : MonoBehaviour
 
         if (puzzleController.IsPuzzleSolvedCorrectly())
         {
-            UIManager.Instance?.HandlePuzzleSolved(puzzleController.GetPuzzleID());
+            //UIManager.Instance?.HandlePuzzleSolved(puzzleController.GetPuzzleID());
             puzzlePanel?.SetActive(false);
         }
         else

@@ -55,8 +55,17 @@ public class IsothermalMinigameFinal : MonoBehaviour
     private bool hasWon = false;
     private float pistonBaseY;
 
+    [SerializeField] private float phase1HoldTime = 2f;
+    private float phase1Timer = 0f;
+
     void Start()
     {
+        if (!MachineProgressManager.Instance.isochoricCompleted)
+        {
+            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
+            return;
+        }
+
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
         pistonBaseY = piston.position.y;
@@ -83,10 +92,18 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
                 if (deltaN <= calculatedN * 0.1f)
                 {
-                    phase1Complete = true;
-                    nSlider.interactable = false;
-                    vSlider.interactable = true;
-                    Debug.Log("Phase 1 complete. Now adjust Volume.");
+                    phase1Timer += Time.deltaTime;
+                    if (phase1Timer >= phase1HoldTime)
+                    {
+                        phase1Complete = true;
+                        nSlider.interactable = false;
+                        vSlider.interactable = true;
+                        Debug.Log("Phase 1 complete. Now adjust Volume.");
+                    }
+                }
+                else
+                {
+                    phase1Timer = 0f;
                 }
             }
             else if (!hasWon)
@@ -163,14 +180,14 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 if (decal == null) continue;
 
                 Color c = originalColors[i];
-                c.a = Mathf.Lerp(c.a, 0f, t);
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
                 decal.material.SetColor("_BaseColor", c);
             }
 
             yield return null;
         }
 
-        // Ensure it's fully faded at the end
+        // Ensure it's fully faded and deactivate
         foreach (var decal in decalProjectors)
         {
             if (decal == null) continue;
@@ -178,6 +195,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
             Color faded = decal.material.GetColor("_BaseColor");
             faded.a = 0f;
             decal.material.SetColor("_BaseColor", faded);
+            decal.gameObject.SetActive(false); // <--- Disabling here
         }
     }
 
