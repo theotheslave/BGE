@@ -12,6 +12,8 @@ public class SceneLogic : MonoBehaviour
     [SerializeField] private string[] dialogueLines1;
     [SerializeField] private string[] dialogueLines2;
 
+    [SerializeField] private bool MachineDialogue1 = true;
+
     [SerializeField] private GameObject gogglesUI;
     [SerializeField] private GameObject gogglesButton;
 
@@ -64,24 +66,24 @@ public class SceneLogic : MonoBehaviour
             pvtMachineHitbox.enabled = true;
             return;
         }
+
+
+        // step 2: machine interaction
+        if (clicked == pvtMachineHitbox)
+        {
+            if (MachineDialogue1)
+            {
+   //             dialoguemanager.instance.startdialogue(dialoguelines1, speaker);
+                return;
+            }
+        }
     }
 
-    //    // Step 2: Machine interaction
-    //    if (clicked == machineHitbox && currentPhantomMouse == null)
-    //    {
-    //        if (SecondHand)
-    //        {
-    //            DialogueManager.Instance.StartDialogue(dialogueLines2, speaker);
-    //            StartCoroutine(MachineSequence2());
-    //            return;
-    //        }
-
-    //        if (FirstHand)
-    //        {
-    //            StartCoroutine(MachineSequence());
-    //            return;
-    //        }
-    //    }
+//if (firsthand)
+//{
+//    startcoroutine(machinesequence());
+//    return;
+//}
 
     //    // Back button interaction
     //    if (clicked == backButtonCollider)

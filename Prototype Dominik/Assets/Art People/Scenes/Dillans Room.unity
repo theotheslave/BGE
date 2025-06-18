@@ -1477,7 +1477,7 @@ Transform:
   m_Children:
   - {fileID: 1350346888}
   - {fileID: 105581444}
-  m_Father: {fileID: 1855429254}
+  m_Father: {fileID: 1084769406}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &654810352 stripped
 RectTransform:
@@ -2281,6 +2281,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1049442489}
   m_LocalEulerAnglesHint: {x: -101.389, y: 91.733, z: 1.1560059}
+--- !u!1 &1084769405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1084769406}
+  m_Layer: 0
+  m_Name: GogglesUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1084769406
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084769405}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 566881953}
+  - {fileID: 5393340359937424652}
+  m_Father: {fileID: 1855429254}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1137240862 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 641864997389903052, guid: 8d8af39efa7a22b4092262e50e324b7d, type: 3}
+  m_PrefabInstance: {fileID: 8229636884586436589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1143185545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4316,24 +4354,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToDeactivate: {fileID: 0}
   speaker: {fileID: 2143261603}
-  dialogueLines1:
-  - 'Cough, cough, cough. '
-  - "Ah, Cal, you\u2019ve arrived!  "
-  - Praise be to the Three Steam Principles!
-  - 'Yeah, I know, it''s freezing here. '
-  - That's why I asked for you.
-  - I know that we only started learning the thermodynamics....
-  - 'but I''m afraid you''ll have to move to practice. '
-  - First of all try to launch the Regulator Machine.
-  - It's right behind my bed.
-  - "You\u2019re our last hope or the whole building\u2019ll freeze."
+  dialogueLines1: []
   dialogueLines2: []
-  gogglesUI: {fileID: 0}
+  MachineDialogue1: 1
+  gogglesUI: {fileID: 1084769405}
   gogglesButton: {fileID: 0}
   dillan: {fileID: 921384997}
   pvtMachine: {fileID: 396080821}
   machineTimer: 3
-  goggles: {fileID: 0}
+  goggles: {fileID: 1137240862}
 --- !u!4 &1535118944
 Transform:
   m_ObjectHideFlags: 0
@@ -4868,9 +4897,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 543174509}
-  - {fileID: 566881953}
+  - {fileID: 1084769406}
   - {fileID: 1274675475767575159}
-  - {fileID: 5393340359937424652}
   - {fileID: 5156404134751755685}
   - {fileID: 230137711900797366}
   m_Father: {fileID: 0}
@@ -5128,7 +5156,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCharacter: 1
-  dialogueLines: []
+  dialogueLines:
+  - 'Cough, cough, cough. '
+  - "Ah, Cal, you\u2019ve arrived!  "
+  - Praise be to the Three Steam Principles!
+  - 'Yeah, I know, it''s freezing here. '
+  - That's why I asked for you.
+  - I know that we only started learning the thermodynamics....
+  - 'but I''m afraid you''ll have to move to practice. '
+  - First of all try to launch the Regulator Machine.
+  - It's right behind my bed.
+  - "You\u2019re our last hope or the building freezes."
 --- !u!1 &44059332686095691
 GameObject:
   m_ObjectHideFlags: 0
@@ -29469,7 +29507,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7147895077203257265}
-  m_Father: {fileID: 1855429254}
+  m_Father: {fileID: 1084769406}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -32761,13 +32799,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 641864997389903052, guid: 8d8af39efa7a22b4092262e50e324b7d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8229636884586436591}
   m_SourcePrefab: {fileID: 100100000, guid: 8d8af39efa7a22b4092262e50e324b7d, type: 3}
 --- !u!4 &8229636884586436590 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 262207671306747510, guid: 8d8af39efa7a22b4092262e50e324b7d, type: 3}
   m_PrefabInstance: {fileID: 8229636884586436589}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &8229636884586436591
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137240862}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 3, z: 8}
+  m_Center: {x: 0, y: 1, z: -1}
 --- !u!224 &8279673749029757337
 RectTransform:
   m_ObjectHideFlags: 0
