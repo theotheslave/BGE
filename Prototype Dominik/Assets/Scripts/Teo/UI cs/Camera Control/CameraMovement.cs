@@ -4,6 +4,8 @@ using Unity.Cinemachine;
 
 public class CameraMovement : MonoBehaviour
 {
+    public static CameraMovement Instance { get; set; }
+
     [Header("UI")]
     [SerializeField] private GameObject Goggles;
     [SerializeField] private GameObject UIGoggles;
@@ -12,6 +14,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private CinemachineCamera virtualCam;
     [SerializeField] private CinemachineSplineDolly dolly;
     private Quaternion originalRotation;
+
     [Header("Movement Settings")]
     [SerializeField] private float travelSeconds = 1.2f;
     [SerializeField] private float gogglesSplinePosition = 0.8f;
@@ -26,20 +29,43 @@ public class CameraMovement : MonoBehaviour
     public Transform lastTarget;
 
     private bool isMoving = false;
-    public static CameraMovement Instance { get; private set; }
 
     void Awake()
     {
-        CameraMovement.Instance = this;
-        Goggles.SetActive(false);
-        originalSplinePosition = dolly.CameraPosition;
-        originalLookAt = defaultLookAt != null ? defaultLookAt : null;
-        originalRotation = virtualCam.transform.rotation;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (gameObject.scene.name == "DontDestroyOnLoad") // It's been carried across
+        {
+            Debug.LogWarning("Destroying UIManager that was preserved by mistake.");
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        InitializeCamera();
+    }
+
+    public void InitializeCamera()
+    {
+        if (Goggles != null) Goggles.SetActive(false);
+
+        if (dolly != null)
+            originalSplinePosition = dolly.CameraPosition;
+
+        if (defaultLookAt != null)
+            originalLookAt = defaultLookAt;
+
+        if (virtualCam != null)
+            originalRotation = virtualCam.transform.rotation;
     }
 
     public void Focus(float destination, Transform lookTarget)
     {
-        if (isMoving) return; 
+        if (isMoving) return;
 
         if (virtualCam != null)
             virtualCam.LookAt = defaultLookAt;
@@ -49,7 +75,7 @@ public class CameraMovement : MonoBehaviour
 
         lastTarget = lookTarget;
         mover = StartCoroutine(Move(dolly.CameraPosition, destination));
-        Goggles.SetActive(true);
+        if (Goggles != null) Goggles.SetActive(true);
     }
 
     public void FocusGoggles()
@@ -63,11 +89,12 @@ public class CameraMovement : MonoBehaviour
             StopCoroutine(mover);
 
         mover = StartCoroutine(Move(dolly.CameraPosition, gogglesSplinePosition));
-        Goggles.SetActive(true);
+        if (Goggles != null) Goggles.SetActive(true);
     }
+
     public void ReturnToStart()
     {
-        if (isMoving) return; 
+        if (isMoving) return;
 
         if (virtualCam != null)
             virtualCam.LookAt = originalLookAt;
@@ -78,11 +105,10 @@ public class CameraMovement : MonoBehaviour
         if (lastTarget != null && !lastTarget.gameObject.activeSelf)
         {
             lastTarget.gameObject.SetActive(true);
-
         }
 
         mover = StartCoroutine(Move(dolly.CameraPosition, originalSplinePosition, true));
-        Goggles.SetActive(false);
+        if (Goggles != null) Goggles.SetActive(false);
         lastTarget = null;
 
         if (UIGoggles != null && UIGoggles.activeSelf)
@@ -100,15 +126,11 @@ public class CameraMovement : MonoBehaviour
 
         for (float t = 0f; t < 1f; t += Time.deltaTime / travelSeconds)
         {
-            float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI); 
-
+            float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI);
             dolly.CameraPosition = Mathf.Lerp(from, to, eased);
 
             if (returningToStart)
-            {
-
                 virtualCam.transform.rotation = Quaternion.Slerp(startRotation, endRotation, eased);
-            }
 
             yield return null;
         }
