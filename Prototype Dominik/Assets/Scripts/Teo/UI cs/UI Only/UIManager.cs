@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject puzzleMachine;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private GameObject UiForMachine;
+    [SerializeField] private GameObject SolutionUI;
+    [SerializeField] private GameObject TitleObjective;
     public bool IsPuzzleCompleted { get; private set; } = false;
     void Awake()
     {
@@ -71,9 +73,17 @@ public class UIManager : MonoBehaviour
         {
             puzzleMachine.SetActive(!puzzleMachine.activeSelf);
         }
-        if (UiForMachine != null) { 
-        UiForMachine.SetActive(!UiForMachine.activeSelf);
-        
+        if (UiForMachine != null)
+        {
+            UiForMachine.SetActive(!UiForMachine.activeSelf);
+        }
+        if (SolutionUI != null) 
+        {
+        SolutionUI.SetActive(!SolutionUI.activeSelf);
+        }
+        if (TitleObjective != null)
+        {
+        TitleObjective.SetActive(!TitleObjective.activeSelf);
         }
     }
 }
