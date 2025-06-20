@@ -20,17 +20,18 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WorkIndicatorLampVA0806-Lamp
+  m_Name: WorkIndicatorLampVA0806-LampWorking
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 2100000, guid: 7ae32e801196182428ad94a3b902d416, type: 2}
+  m_Parent: {fileID: 2100000, guid: 93024d8e6cff44e48b243b5880dce9cd, type: 2}
   m_ModifiedSerializedProperties: 2
   m_ValidKeywords:
   - _DETAIL_MULX2
+  - _EMISSION
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -73,8 +74,8 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0.3090873, b: 0, a: 0}
+    - _BaseColor: {r: 0.3882353, g: 0.23921569, b: 0.23921569, a: 1}
+    - _Color: {r: 0.38823527, g: 0.23921564, b: 0.23921564, a: 1}
+    - _EmissionColor: {r: 0, g: 0.14465404, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
