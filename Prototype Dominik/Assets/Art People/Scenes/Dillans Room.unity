@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &18659000 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8919670882260355519, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
+  m_PrefabInstance: {fileID: 543174508}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8acddf9ec352e254a8e0fb119edb6630, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &80688677
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,6 +349,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4000174758718575846, guid: 10334813fe4c3174abc06c02f0c20aa4, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4581393639038812813, guid: 10334813fe4c3174abc06c02f0c20aa4, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -534,7 +549,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1298,6 +1313,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1855429254}
     m_Modifications:
+    - target: {fileID: 1158386805128078987, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4252049451984721280, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1520.2585
@@ -1342,6 +1361,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dialogue Prefab 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6631658956030049298, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8495257699048600477, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
       propertyPath: m_fontSize
       value: 30
@@ -1349,6 +1372,10 @@ PrefabInstance:
     - target: {fileID: 8495257699048600477, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
       propertyPath: m_fontSizeBase
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9193701822769977812, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1461,7 +1488,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &566881953
 Transform:
   m_ObjectHideFlags: 0
@@ -1684,7 +1711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2120,6 +2147,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6f05f13ffc0929e49bb4e7a858a61a9a, type: 3}
   m_PrefabInstance: {fileID: 1160790749}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1054455207 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6631658956030049298, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
+  m_PrefabInstance: {fileID: 543174508}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1056618011
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,7 +2203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3675,7 +3707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3699,6 +3731,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289859180}
   m_CullTransparentMesh: 1
+--- !u!1 &1308509425 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9193701822769977812, guid: b508ebbc81b5d734fa9edf435873f67d, type: 3}
+  m_PrefabInstance: {fileID: 543174508}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1350346884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4352,17 +4389,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede61a451a9fdfd49b350144f31ae3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToDeactivate: {fileID: 0}
+  dialogueManager: {fileID: 18659000}
+  MiniGameManager: {fileID: 1219878823351116078}
   speaker: {fileID: 2143261603}
-  dialogueLines1: []
-  dialogueLines2: []
+  dialogueLines1:
+  - Good, now try to set the correct values
+  - What? You don't understand how to do it?
+  - Just use the goggles and calculate the...
+  - Oh wait, I forgot to give them to you
+  - Come here, I put them besides me.
+  - Goggles are very important, never lose them!
+  dialogueLines2:
+  - Ok, now use the goggles, the button to turn them on is in the top left corner.
+  - Now you see the inside of the machine!
+  - Somebody would say it's magic, if they didn't know tehcnologies, hohoho
+  - Now you should determine the right formula for this problem
+  - You can click on the formula and drag the values from the problem description
+    on top of the variables
+  - This way you will be able to calcualte the right values
+  - And after that you can input them in the machine!
+  dialogueLines3:
+  - 'Good job! You made it work! '
+  - But this won't hold for long
+  - Now you need to make all other machines to work
+  - They're in the next rooms
+  - You can do it, Cal!
   MachineDialogue1: 1
+  missionText: {fileID: 5037744374567479778}
   gogglesUI: {fileID: 1084769405}
-  gogglesButton: {fileID: 0}
+  gogglesButton: {fileID: 8763535705583693793}
+  UIBlueFrame1: {fileID: 1054455207}
+  UIBlueFrame2: {fileID: 566881952}
+  UIBlueFrame3: {fileID: 1308509425}
   dillan: {fileID: 921384997}
   pvtMachine: {fileID: 396080821}
-  machineTimer: 3
   goggles: {fileID: 1137240862}
+  machineInteractionText: Inspect the machine behind Dillan.
+  missionGoggles: Take the goggles on the table beside of Dillan
+  gogglesAcquiredText: Inspect the machine and use goggles on it.
 --- !u!4 &1535118944
 Transform:
   m_ObjectHideFlags: 0
@@ -4813,7 +4877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6389,6 +6453,7 @@ MonoBehaviour:
   moleculeSpawner: {fileID: 64401326340415528}
   globalVolume: {fileID: 6635089025206927982}
   volumeFadeDuration: 1
+  hasWon: 0
 --- !u!224 &1274675475767575159
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12288,7 +12353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -29031,8 +29096,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "New TextNew TextNew Text New TextNew TextNew TextNew T ex tNew \n\nNew
-    TextNew TextNew Text New TextNew TextNew TextNew T ex tNew "
+  m_text: '-Find out why the building is freezing
+
+    -Talk with Dillan (Press LMC
+    on the bed).'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -29059,8 +29126,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.8
-  m_fontSizeBase: 24.8
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -30520,7 +30587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 10, y: 0}
+  m_AnchoredPosition: {x: 10, y: -16}
   m_SizeDelta: {x: -60, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6481295507079663168
@@ -30890,7 +30957,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lvl# Super Charger
+  m_text: Dillan's room
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -33124,9 +33191,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5381634532310925221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 25, y: -50}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8517253321628124411
@@ -33292,7 +33359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8832285044540033728
 MonoBehaviour:
   m_ObjectHideFlags: 0
