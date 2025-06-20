@@ -3,8 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class Interactable : MonoBehaviour
 {
-    public bool isCharacter = false;
-    public string[] dialogueLines;
+    [SerializeField]
+    private bool isCharacter = false;
+    [SerializeField]
+    private string[] dialogueLines;
 
     private Outline outline;
 

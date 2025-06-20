@@ -63,7 +63,7 @@ public class IdealGasMinigame : MonoBehaviour
     private float currentPressure;
 
     private float winTimer;
-    private bool hasWon = false;
+    public bool hasWon = false;
 
     void Start()
     {

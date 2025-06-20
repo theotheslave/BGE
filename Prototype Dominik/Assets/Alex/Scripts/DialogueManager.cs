@@ -20,7 +20,7 @@ public class DialogueManager : MonoBehaviour
 
     private bool isTyping = false;
     private bool lineFinished = false;
-    private bool inputEnabled = false;
+    public bool inputEnabled = false;
     private bool justOpened = false;
 
     private Interactable currentSpeaker;
