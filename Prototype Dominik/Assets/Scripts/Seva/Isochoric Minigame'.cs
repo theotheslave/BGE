@@ -34,7 +34,7 @@ public class IsochoricMinigame : MonoBehaviour
 
     [Header("References")]
     public Spawner moleculeSpawner;
-
+    public event System.Action OnPuzzleComplete;
     [SerializeField] private float phase1HoldTime = 2f;
 
     private float phase1Timer = 0f;
@@ -124,7 +124,7 @@ public class IsochoricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         tSlider.interactable = false;
-
+        OnPuzzleComplete?.Invoke();
         MachineProgressManager.Instance.isochoricCompleted = true;
     }
 }

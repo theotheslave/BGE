@@ -46,6 +46,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [Header("Spawner")]
     [SerializeField] private Spawner moleculeSpawner;
 
+   
+
     public Collider objectToLock;
     private float currentN;
     private float currentV;
@@ -57,7 +59,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
     [SerializeField] private float phase1HoldTime = 2f;
     private float phase1Timer = 0f;
-
+    public event System.Action OnPuzzleComplete;
     void Start()
     {
         if (!MachineProgressManager.Instance.isochoricCompleted)
@@ -256,7 +258,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
-
+        OnPuzzleComplete?.Invoke();
         UIManager.Instance?.MarkPuzzleComplete();
 
     }
