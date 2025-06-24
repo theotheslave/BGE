@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject puzzleMachine;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private GameObject UiForMachine;
+    [SerializeField] private GameObject ProblemText;
+
 
     public bool IsPuzzleCompleted { get; private set; } = false;
 
@@ -54,6 +58,7 @@ public class UIManager : MonoBehaviour
         {
             bool newState = forceState.HasValue ? forceState.Value : !panel.activeSelf;
             panel.SetActive(newState);
+            Debug.Log("TogglePanel called by " + this.name + " at " + Time.time);
         }
     }
 
@@ -80,6 +85,10 @@ public class UIManager : MonoBehaviour
         if (UiForMachine != null)
         {
             UiForMachine.SetActive(!UiForMachine.activeSelf);
+        }
+        if (ProblemText != null)
+        {
+            ProblemText.SetActive(!ProblemText.activeSelf);
         }
     }
 }
