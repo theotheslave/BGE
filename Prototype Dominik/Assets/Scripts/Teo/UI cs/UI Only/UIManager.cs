@@ -23,14 +23,10 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        if (gameObject.scene.name == "DontDestroyOnLoad") // It's been carried across
-        {
-            Debug.LogWarning("Destroying UIManager that was preserved by mistake.");
-            Destroy(gameObject);
-            return;
-        }
-
         Instance = this;
+        // Optional: persist if you want UIManager to live across scenes
+        // DontDestroyOnLoad(gameObject); // <- ONLY if you want that
+
         RebindIfNeeded();
     }
 

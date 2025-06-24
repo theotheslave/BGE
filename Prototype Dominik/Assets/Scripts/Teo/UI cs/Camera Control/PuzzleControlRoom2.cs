@@ -1,66 +1,78 @@
-//using UnityEngine;
+using UnityEngine;
 
-//public class PuzzleControlRoom2 : MonoBehaviour
-//{
-//    [Header("Puzzle Logic")]
-//    public IsochoricMinigame isochoricPuzzle;
-//    public IsothermalMinigameFinal isothermalPuzzle;
-//    public SceneManagerDoor finalDoor;
+public class PuzzleControlRoom2 : MonoBehaviour
+{
+    [Header("Puzzle Logic")]
+    public IsochoricMinigame isochoricPuzzle;
+    public IsothermalMinigameFinal isothermalPuzzle;
+    public SceneManagerDoor finalDoor;
+    [SerializeField] private GameObject isothermalPuzzleGroup;
+    [Header("Puzzle Panels")]
+    [SerializeField] private GameObject isochoricPanel;
+    [SerializeField] private GameObject isothermalPanel;
 
-//    [Header("Puzzle Panels")]
-//    [SerializeField] private GameObject isochoricPanel;
-//    [SerializeField] private GameObject isothermalPanel;
+    private bool isochoricDone = false;
+    private bool isothermalDone = false;
 
-//    private bool isochoricDone = false;
-//    private bool isothermalDone = false;
+    void Start()
+    {
+        if (isochoricPuzzle != null)
+            isochoricPuzzle.OnPuzzleComplete += HandleIsochoricComplete;
 
-//    void Start()
-//    {
-//        if (isochoricPuzzle != null)
-//            isochoricPuzzle.OnPuzzleComplete += HandleIsochoricComplete;
+        if (isothermalPuzzle != null)
+            isothermalPuzzle.OnPuzzleComplete += HandleIsothermalComplete;
 
-//        if (isothermalPuzzle != null)
-//            isothermalPuzzle.OnPuzzleComplete += HandleIsothermalComplete;
+        isochoricPanel?.SetActive(false);
+        isothermalPanel?.SetActive(false);
 
-//        isochoricPanel?.SetActive(false);
-//        isothermalPanel?.SetActive(false);
-//    }
+        // Lock second puzzle at the start
+        if (isothermalPuzzleGroup != null && isothermalPuzzleGroup.TryGetComponent<Collider>(out var col))
+            col.enabled = false;
+    }
 
-//    void HandleIsochoricComplete()
-//    {
-//        isochoricDone = true;
-//        Debug.Log("Isochoric complete");
-//        CameraMovement.Instance?.ReturnToStart();
-//        CameraMovement.Instance?.FocusGoggles();
-//    }
+    void HandleIsochoricComplete()
+    {
+        isochoricDone = true;
+        Debug.Log("Isochoric complete");
 
-//    void HandleIsothermalComplete()
-//    {
-//        isothermalDone = true;
-//        Debug.Log("Isothermal complete");
-//        CameraMovement.Instance?.ReturnToStart();
-//        if (finalDoor != null)
-//            finalDoor.UnlockDoor();
-//    }
+        CameraMovement.Instance?.ReturnToStart();
+        CameraMovement.Instance?.FocusToGogglesView();
 
-//    public void ActivatePuzzle(SelectableObject.PuzzleType type)
-//    {
-//        if (type == SelectableObject.PuzzleType.Isochoric)
-//        {
-//            isochoricPanel?.SetActive(true);
-//            isothermalPanel?.SetActive(false);
-//        }
-//        else if (type == SelectableObject.PuzzleType.Isothermal)
-//        {
-//            isothermalPanel?.SetActive(true);
-//            isochoricPanel?.SetActive(false);
-//        }
-//    }
+        // Unlock second puzzle interaction
+        if (isothermalPuzzleGroup != null && isothermalPuzzleGroup.TryGetComponent<Collider>(out var col))
+            col.enabled = true;
+    }
 
-//    public void ReturnToHub()
-//    {
-//        isochoricPanel?.SetActive(false);
-//        isothermalPanel?.SetActive(false);
-//        CameraMovement.Instance?.ReturnToStart();
-//    }
-//}
+    void HandleIsothermalComplete()
+    {
+        isothermalDone = true;
+        Debug.Log("Isothermal complete");
+        CameraMovement.Instance?.ReturnToStart();
+        finalDoor?.UnlockDoor();
+    }
+
+    public void ActivatePuzzle(SelectableObjectRoom2.PuzzleType type)
+    {
+        if (type == SelectableObjectRoom2.PuzzleType.Isochoric)
+        {
+            isochoricPanel?.SetActive(true);
+            isothermalPanel?.SetActive(false);
+            GogglesManagerRoom2.Instance?.SetActivePuzzle(type);
+        }
+        else if (type == SelectableObjectRoom2.PuzzleType.Isothermal)
+        {
+            isochoricPanel?.SetActive(false);
+            isothermalPanel?.SetActive(true);
+            GogglesManagerRoom2.Instance?.SetActivePuzzle(type);
+        }
+    }
+
+    public void ReturnToHub()
+    {
+        Debug.Log("ReturnToHub called");
+        GogglesManagerRoom2.Instance?.ForceClose();
+        isochoricPanel?.SetActive(false);
+        isothermalPanel?.SetActive(false);
+        CameraMovement.Instance?.ReturnToStart();
+    }
+}

@@ -40,11 +40,11 @@ public class IsochoricMinigame : MonoBehaviour
     private float phase1Timer = 0f;
     void Start()
     {
-       if (!MachineProgressManager.Instance.isobaricCompleted)
-       {
-            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");  
-            return;
-       }
+       //if (!MachineProgressManager.Instance.isobaricCompleted)
+       //{
+       //     Debug.LogWarning("Isobaric puzzle not completed. Access denied.");  
+       //     return;
+       //}
         currentTemperature = initialTemperature;
 
         targetTemperature = (targetPressure * currentTemperature) / initialPressure;
@@ -124,7 +124,10 @@ public class IsochoricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         tSlider.interactable = false;
+        
+        GogglesManagerRoom2.Instance?.ForceClose();
+        CameraMovement.Instance?.ReturnToStart();
         OnPuzzleComplete?.Invoke();
-        MachineProgressManager.Instance.isochoricCompleted = true;
+        //MachineProgressManager.Instance.isochoricCompleted = true;
     }
 }

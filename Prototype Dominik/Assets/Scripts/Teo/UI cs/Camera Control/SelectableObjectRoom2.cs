@@ -2,16 +2,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Collider))]
-public class SelectableObject : MonoBehaviour
+public class SelectableObjectRoom2 : MonoBehaviour
 {
+    public enum PuzzleType { None, Isochoric, Isothermal }
     [SerializeField] private float splinePosition = 0.5f;
+    [SerializeField] private PuzzleType puzzleType = PuzzleType.None;
 
-    public Outline outline;
-
-    // Track currently hovered and selected object
-    private static SelectableObject currentHighlight;
-    private static SelectableObject currentSelection;
-    public static Transform CurrentSelectionTransform;
+    private Outline outline;
+    private static SelectableObjectRoom2 currentHighlight;
+    private static SelectableObjectRoom2 currentSelection;
 
     void Awake()
     {
@@ -22,20 +21,17 @@ public class SelectableObject : MonoBehaviour
             outline.OutlineColor = Color.magenta;
             outline.OutlineWidth = 7f;
         }
-
         outline.enabled = false;
     }
 
     void Update()
     {
-        // Clear previous highlight if needed
         if (currentHighlight != null && currentHighlight != currentSelection)
         {
             currentHighlight.outline.enabled = false;
             currentHighlight = null;
         }
 
-        // Raycast to detect hover
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int mask = ~LayerMask.GetMask("fadeblack");
 
@@ -53,26 +49,19 @@ public class SelectableObject : MonoBehaviour
     private void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
-
-        // Disable outline on click
         if (outline != null) outline.enabled = false;
 
         currentSelection = this;
+        CameraMovement.Instance?.FocusTo(splinePosition, transform);
 
-        // Focus the camera
-        CameraMovement cam = FindFirstObjectByType<CameraMovement>();
-        if (cam != null)
-        {
-            cam.FocusTo(splinePosition, transform);
-        }
+        var controller = FindObjectOfType<PuzzleControlRoom2>();
+        controller?.ActivatePuzzle(puzzleType);
     }
 
     public static void ClearSelection()
     {
         if (currentSelection != null && currentSelection.outline != null)
-        {
             currentSelection.outline.enabled = false;
-        }
 
         currentSelection = null;
     }

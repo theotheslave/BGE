@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
+using System;
 
 public class CameraMovement : MonoBehaviour
 {
-    public static CameraMovement Instance { get; set; }
+    public enum ActivePuzzleType { None, Isochoric, Isothermal }
+    public static CameraMovement Instance { get; private set; }
 
     [Header("UI")]
     [SerializeField] private GameObject Goggles;
     [SerializeField] private GameObject UIGoggles;
+    [SerializeField] private GameObject isochoricGoggles;
+    [SerializeField] private GameObject isothermalGoggles;
 
     [Header("Camera Components")]
     [SerializeField] private CinemachineCamera virtualCam;
     [SerializeField] private CinemachineSplineDolly dolly;
-    private Quaternion originalRotation;
 
     [Header("Movement Settings")]
     [SerializeField] private float travelSeconds = 1.2f;
@@ -23,12 +26,14 @@ public class CameraMovement : MonoBehaviour
     [Header("Optional")]
     [SerializeField] private Transform defaultLookAt;
 
-    private Coroutine mover;
+    private Quaternion originalRotation;
     private float originalSplinePosition;
     private Transform originalLookAt;
     public Transform lastTarget;
 
+    private Coroutine mover;
     private bool isMoving = false;
+    private bool lastTargetWasDeactivated;
 
     void Awake()
     {
@@ -37,59 +42,55 @@ public class CameraMovement : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        if (gameObject.scene.name == "DontDestroyOnLoad") // It's been carried across
-        {
-            Debug.LogWarning("Destroying UIManager that was preserved by mistake.");
-            Destroy(gameObject);
-            return;
-        }
-
         Instance = this;
         InitializeCamera();
     }
 
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+    public static void Register(CameraMovement cam)
+    {
+        if (Instance == null)
+        {
+            Instance = cam;
+            cam.InitializeCamera();
+        }
+    }
     public void InitializeCamera()
     {
-        if (Goggles != null) Goggles.SetActive(false);
-
-        if (dolly != null)
-            originalSplinePosition = dolly.CameraPosition;
-
-        if (defaultLookAt != null)
-            originalLookAt = defaultLookAt;
-
-        if (virtualCam != null)
-            originalRotation = virtualCam.transform.rotation;
+        Goggles?.SetActive(false);
+        if (dolly != null) originalSplinePosition = Mathf.Clamp01(dolly.CameraPosition);
+        if (defaultLookAt != null) originalLookAt = defaultLookAt;
+        if (virtualCam != null) originalRotation = virtualCam.transform.rotation;
     }
 
-    public void Focus(float destination, Transform lookTarget)
+    public void FocusTo(float splinePos, Transform lookTarget)
     {
         if (isMoving) return;
+        lastTarget = lookTarget;
 
         if (virtualCam != null)
-            virtualCam.LookAt = defaultLookAt;
+            virtualCam.LookAt = lookTarget != null ? lookTarget : defaultLookAt;
 
-        if (mover != null)
-            StopCoroutine(mover);
+        lastTargetWasDeactivated = lookTarget != null && !lookTarget.gameObject.activeSelf;
+        if (lastTargetWasDeactivated)
+            lookTarget.gameObject.SetActive(true);
 
-        lastTarget = lookTarget;
-        mover = StartCoroutine(Move(dolly.CameraPosition, destination));
-        if (Goggles != null) Goggles.SetActive(true);
+        StartMove(splinePos);
+        Goggles?.SetActive(true);
     }
 
-    public void FocusGoggles()
+    public void FocusToGogglesView()
     {
         if (isMoving) return;
 
         if (virtualCam != null)
             virtualCam.LookAt = gogglesFocusTarget != null ? gogglesFocusTarget : defaultLookAt;
 
-        if (mover != null)
-            StopCoroutine(mover);
-
-        mover = StartCoroutine(Move(dolly.CameraPosition, gogglesSplinePosition));
-        if (Goggles != null) Goggles.SetActive(true);
+        StartMove(gogglesSplinePosition);
+        Goggles?.SetActive(true);
     }
 
     public void ReturnToStart()
@@ -99,22 +100,19 @@ public class CameraMovement : MonoBehaviour
         if (virtualCam != null)
             virtualCam.LookAt = originalLookAt;
 
-        if (mover != null)
-            StopCoroutine(mover);
+        if (lastTarget != null && lastTargetWasDeactivated)
+            lastTarget.gameObject.SetActive(false);
 
-        if (lastTarget != null && !lastTarget.gameObject.activeSelf)
-        {
-            lastTarget.gameObject.SetActive(true);
-        }
-
-        mover = StartCoroutine(Move(dolly.CameraPosition, originalSplinePosition, true));
-        if (Goggles != null) Goggles.SetActive(false);
+        
         lastTarget = null;
 
-        if (UIGoggles != null && UIGoggles.activeSelf)
-        {
-            UIGoggles.SetActive(false);
-        }
+        StartMove(originalSplinePosition, true);
+    }
+
+    private void StartMove(float targetSplinePos, bool returningToStart = false)
+    {
+        if (mover != null) StopCoroutine(mover);
+        mover = StartCoroutine(Move(dolly.CameraPosition, Mathf.Clamp01(targetSplinePos), returningToStart));
     }
 
     private IEnumerator Move(float from, float to, bool returningToStart = false)
@@ -128,19 +126,17 @@ public class CameraMovement : MonoBehaviour
         {
             float eased = 0.5f - 0.5f * Mathf.Cos(t * Mathf.PI);
             dolly.CameraPosition = Mathf.Lerp(from, to, eased);
-
             if (returningToStart)
                 virtualCam.transform.rotation = Quaternion.Slerp(startRotation, endRotation, eased);
-
             yield return null;
         }
 
         dolly.CameraPosition = to;
-
         if (returningToStart)
         {
             virtualCam.transform.rotation = endRotation;
             SelectableObject.ClearSelection();
+            SelectableObjectRoom2.ClearSelection();
         }
 
         isMoving = false;

@@ -38,8 +38,7 @@ public class SceneLoadHandler : MonoBehaviour
         var cam = FindFirstObjectByType<CameraMovement>();
         if (cam != null)
         {
-            CameraMovement.Instance = cam;
-            cam.InitializeCamera(); // optional, but useful
+            CameraMovement.Register(cam);
         }
     }
 }
