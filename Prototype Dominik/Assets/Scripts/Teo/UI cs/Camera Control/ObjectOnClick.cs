@@ -6,12 +6,13 @@ public class SelectableObject : MonoBehaviour
 {
     [SerializeField] private float splinePosition = 0.5f;
 
-    private Outline outline;
+    public Outline outline;
 
     // Track currently hovered and selected object
     private static SelectableObject currentHighlight;
     private static SelectableObject currentSelection;
     public static Transform CurrentSelectionTransform;
+
     void Awake()
     {
         outline = GetComponent<Outline>();
@@ -62,7 +63,7 @@ public class SelectableObject : MonoBehaviour
         CameraMovement cam = FindFirstObjectByType<CameraMovement>();
         if (cam != null)
         {
-            cam.Focus(splinePosition, transform);
+            cam.FocusTo(splinePosition, transform);
         }
     }
 

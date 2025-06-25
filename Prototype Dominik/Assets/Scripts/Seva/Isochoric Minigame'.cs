@@ -11,7 +11,7 @@ public class IsochoricMinigame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI temperatureDisplay;
     [SerializeField] private TextMeshProUGUI pressureDisplay;
     [SerializeField] private TextMeshProUGUI winText;
-
+    [SerializeField] private Collider objectToLock;
     [Header("Gas Constants")]
     private float R = 8.314f;
     [SerializeField] private float containerVolume = 0.015f;
@@ -34,17 +34,17 @@ public class IsochoricMinigame : MonoBehaviour
 
     [Header("References")]
     public Spawner moleculeSpawner;
-
+    public event System.Action OnPuzzleComplete;
     [SerializeField] private float phase1HoldTime = 2f;
 
     private float phase1Timer = 0f;
     void Start()
     {
-       if (!MachineProgressManager.Instance.isobaricCompleted)
-       {
-            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");  
-            return;
-       }
+       //if (!MachineProgressManager.Instance.isobaricCompleted)
+       //{
+       //     Debug.LogWarning("Isobaric puzzle not completed. Access denied.");  
+       //     return;
+       //}
         currentTemperature = initialTemperature;
 
         targetTemperature = (targetPressure * currentTemperature) / initialPressure;
@@ -124,7 +124,13 @@ public class IsochoricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         tSlider.interactable = false;
-
-        MachineProgressManager.Instance.isochoricCompleted = true;
+        if (objectToLock != null)
+        {
+            objectToLock.enabled = false;
+        }
+        GogglesManagerRoom2.Instance?.ForceClose();
+        CameraMovement.Instance?.ReturnToStart();
+        OnPuzzleComplete?.Invoke();
+        //MachineProgressManager.Instance.isochoricCompleted = true;
     }
 }

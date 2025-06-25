@@ -24,7 +24,7 @@ public class FadeToBlack : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+       
     }
     void Start()
     {

@@ -46,6 +46,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [Header("Spawner")]
     [SerializeField] private Spawner moleculeSpawner;
 
+   
+
     public Collider objectToLock;
     private float currentN;
     private float currentV;
@@ -57,14 +59,14 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
     [SerializeField] private float phase1HoldTime = 2f;
     private float phase1Timer = 0f;
-
+    public event System.Action OnPuzzleComplete;
     void Start()
     {
-        if (!MachineProgressManager.Instance.isochoricCompleted)
-        {
-            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
-            return;
-        }
+        //if (!MachineProgressManager.Instance.isochoricCompleted)
+        //{
+        //    Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
+        //    return;
+        //}
 
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
@@ -180,14 +182,14 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 if (decal == null) continue;
 
                 Color c = originalColors[i];
-                c.a = Mathf.Lerp(c.a, 0f, t);
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
                 decal.material.SetColor("_BaseColor", c);
             }
 
             yield return null;
         }
 
-        // Ensure it's fully faded at the end
+        // Ensure it's fully faded and deactivate
         foreach (var decal in decalProjectors)
         {
             if (decal == null) continue;
@@ -195,6 +197,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
             Color faded = decal.material.GetColor("_BaseColor");
             faded.a = 0f;
             decal.material.SetColor("_BaseColor", faded);
+            decal.gameObject.SetActive(false); // <--- Disabling here
         }
     }
 
@@ -255,7 +258,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
-
+        OnPuzzleComplete?.Invoke();
+        GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
 
     }

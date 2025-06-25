@@ -1,12 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.EventSystems;
+using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+public enum DoorUnlockType { Manual, AutoOpen }
+
 public class SceneManagerDoor1 : MonoBehaviour
 {
     [SerializeField] private int targetSceneIndex = 0;
-    
+    [SerializeField] private DoorUnlockType unlockType = DoorUnlockType.Manual;
+
+    [Header("Cursor")]
+    [SerializeField] private Texture2D lockedCursor;
     [SerializeField] private Texture2D unlockedCursor;
     [SerializeField] private Vector2 hotspot = Vector2.zero;
 
@@ -17,18 +20,15 @@ public class SceneManagerDoor1 : MonoBehaviour
 
     void Awake()
     {
+        outline = GetComponent<Outline>() ?? gameObject.AddComponent<Outline>();
+        outline.OutlineColor = Color.cyan;
+        outline.OutlineWidth = 6f;
+        outline.enabled = false;
 
-        outline = GetComponent<Outline>();
-        if (outline == null)
+        if (unlockType == DoorUnlockType.AutoOpen)
         {
-            outline = gameObject.AddComponent<Outline>();
-            outline.OutlineColor = Color.cyan;
-            outline.OutlineWidth = 6f;
+            isUnlocked = true;
         }
-
-        if (outline != null)
-            outline.enabled = false;
-
     }
 
     void Update()
@@ -42,16 +42,16 @@ public class SceneManagerDoor1 : MonoBehaviour
             {
                 hoveredThisFrame = true;
 
-                
+                if (unlockType == DoorUnlockType.Manual)
+                    Cursor.SetCursor(isUnlocked ? unlockedCursor : lockedCursor, hotspot, CursorMode.Auto);
 
                 if (currentHighlight != transform)
                 {
                     if (currentHighlight != null)
                     {
-                        Outline prevOutline = currentHighlight.GetComponent<Outline>();
-                        if (prevOutline != null) prevOutline.enabled = false;
+                        Outline prev = currentHighlight.GetComponent<Outline>();
+                        if (prev != null) prev.enabled = false;
                     }
-
                     currentHighlight = transform;
                 }
 
@@ -61,7 +61,7 @@ public class SceneManagerDoor1 : MonoBehaviour
 
         if (!hoveredThisFrame && currentHighlight == transform)
         {
-            if (outline != null) outline.enabled = false;
+            outline.enabled = false;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             currentHighlight = null;
         }
@@ -70,11 +70,13 @@ public class SceneManagerDoor1 : MonoBehaviour
     private void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
-     
+        if (unlockType == DoorUnlockType.Manual && !isUnlocked) return;
 
         FadeToBlack.Instance.FadeToScene(targetSceneIndex);
-
     }
 
-  
+    public void UnlockDoor()
+    {
+        isUnlocked = true;
+    }
 }

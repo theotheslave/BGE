@@ -2,37 +2,46 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
+    public static UIManager Instance { get; set; }
 
     [Header("General UI")]
-   // public GameObject learnedFormulasPanel;
     public TextMeshProUGUI feedbackText;
     [SerializeField] private GameObject puzzleMachine;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private GameObject UiForMachine;
+
     public bool IsPuzzleCompleted { get; private set; } = false;
+
     void Awake()
     {
-
-        UiForMachine.SetActive(false);
-        string sceneName = SceneManager.GetActiveScene().name;
-        levelNameText.text = $"Lvl#: {sceneName}";
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // Optional: persist if you want UIManager to live across scenes
+        // DontDestroyOnLoad(gameObject); // <- ONLY if you want that
+
+        RebindIfNeeded();
     }
 
-    void Start()
+    public void RebindIfNeeded()
     {
-      //  learnedFormulasPanel?.SetActive(false);
+        if (UiForMachine != null) UiForMachine.SetActive(false);
+
+        if (levelNameText != null)
+        {
+            string sceneName = SceneManager.GetActiveScene().name;
+            levelNameText.text = $"Lvl#: {sceneName}";
+        }
+
+        // Optionally: add null checks and fallbacks for dynamic assignment
+        // if (feedbackText == null) feedbackText = GameObject.Find("FeedbackText")?.GetComponent<TextMeshProUGUI>();
     }
 
     public void TogglePanel(GameObject panel, bool? forceState = null)
@@ -43,10 +52,12 @@ public class UIManager : MonoBehaviour
             panel.SetActive(newState);
         }
     }
+
     public void MarkPuzzleComplete()
     {
         IsPuzzleCompleted = true;
     }
+
     public void ShowPuzzleFeedback(string message)
     {
         if (feedbackText != null)
@@ -56,24 +67,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //public void HandlePuzzleSolved(string formulaID)
-    //{
-    //    FormulaUnlockManager.Instance.UnlockFormula(formulaID);
-    //    ShowPuzzleFeedback($"Unlocked: {formulaID}");
-
-    //    var ui = learnedFormulasPanel?.GetComponent<LearnedFormulasUI>();
-    //    ui?.RefreshList();
-    //}
-
     public void EnableMachine()
     {
         if (puzzleMachine != null)
         {
             puzzleMachine.SetActive(!puzzleMachine.activeSelf);
         }
-        if (UiForMachine != null) { 
-        UiForMachine.SetActive(!UiForMachine.activeSelf);
-        
+        if (UiForMachine != null)
+        {
+            UiForMachine.SetActive(!UiForMachine.activeSelf);
         }
     }
 }
