@@ -138,9 +138,9 @@ public class FormulaManager : MonoBehaviour
         float res = missing switch
         {
             "VT_V1" => v2 * t1 / t2,
-            "VT_T1" => v2 * t2 / v1,
+            "VT_T1" => v1 * t2 / v2,
             "VT_V2" => v1 * t2 / t1,
-            _ => v1 * t1 / v2
+            "VT_T2" => v2 * t1 / v1
         };
         CreateResultLine(missing.Substring(3), res, resultAreaVT, _unitVT);
         _solvedVT = true;
