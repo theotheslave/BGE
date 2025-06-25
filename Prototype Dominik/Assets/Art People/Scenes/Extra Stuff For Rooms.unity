@@ -214,6 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 372492525}
   - component: {fileID: 372492524}
+  - component: {fileID: 372492526}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -301,6 +302,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &372492526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 372492523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &609045440
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +480,7 @@ PrefabInstance:
     - target: {fileID: -6345218096006791920, guid: 0677b28ab37db6d4c8a26e13cd283183, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: d1b001e87e30b3c449fdf9e6f5dbf266, type: 2}
+      objectReference: {fileID: 2100000, guid: efe02f78e5f5baa479539663e7d9d91b, type: 2}
     - target: {fileID: -2720221069562527839, guid: 0677b28ab37db6d4c8a26e13cd283183, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -481,7 +505,7 @@ PrefabInstance:
     - target: {fileID: -8992092029922301467, guid: f5361170f169d4e4b99eea0672992668, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 854a832585715e14b8be54b466662799, type: 2}
+      objectReference: {fileID: 2100000, guid: efe02f78e5f5baa479539663e7d9d91b, type: 2}
     - target: {fileID: -8970908491333467273, guid: f5361170f169d4e4b99eea0672992668, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
