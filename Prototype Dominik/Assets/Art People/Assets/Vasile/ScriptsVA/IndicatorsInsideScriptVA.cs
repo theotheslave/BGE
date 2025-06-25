@@ -1,15 +1,13 @@
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class IndicatorsInsideScriptVA : MonoBehaviour
 {
     [Header("Trigger Value")] 
-    [SerializeField] private bool IndicatorTrigger1 = false;
-    [SerializeField] private bool IndicatorTrigger2 = false;
-    [SerializeField] private bool IndicatorTrigger3 = false;
+    [SerializeField] public bool IndicatorTrigger1 = false;
+    [SerializeField] public bool IndicatorTrigger2 = false;
+    [SerializeField] public bool IndicatorTrigger3 = false;
     [Header("GameObjects Material List")]
     [SerializeField] private GameObject IndicatorGameObject1;
     [SerializeField] private GameObject IndicatorGameObject2;
