@@ -11,7 +11,7 @@ public class IsochoricMinigame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI temperatureDisplay;
     [SerializeField] private TextMeshProUGUI pressureDisplay;
     [SerializeField] private TextMeshProUGUI winText;
-
+    [SerializeField] private Collider objectToLock;
     [Header("Gas Constants")]
     private float R = 8.314f;
     [SerializeField] private float containerVolume = 0.015f;
@@ -124,7 +124,10 @@ public class IsochoricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         tSlider.interactable = false;
-        
+        if (objectToLock != null)
+        {
+            objectToLock.enabled = false;
+        }
         GogglesManagerRoom2.Instance?.ForceClose();
         CameraMovement.Instance?.ReturnToStart();
         OnPuzzleComplete?.Invoke();

@@ -62,11 +62,11 @@ public class IsothermalMinigameFinal : MonoBehaviour
     public event System.Action OnPuzzleComplete;
     void Start()
     {
-        if (!MachineProgressManager.Instance.isochoricCompleted)
-        {
-            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
-            return;
-        }
+        //if (!MachineProgressManager.Instance.isochoricCompleted)
+        //{
+        //    Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
+        //    return;
+        //}
 
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
@@ -259,6 +259,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
             objectToLock.enabled = false;
         }
         OnPuzzleComplete?.Invoke();
+        GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
 
     }

@@ -3523,7 +3523,7 @@ MonoBehaviour:
   globalVolume: {fileID: 0}
   volumeFadeDuration: 1
   moleculeSpawner: {fileID: 2048060382}
-  objectToLock: {fileID: 0}
+  objectToLock: {fileID: 287708710}
   phase1HoldTime: 2
 --- !u!1 &682387707
 GameObject:
@@ -7531,7 +7531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isochoricPuzzle: {fileID: 9071865637117371582}
   isothermalPuzzle: {fileID: 652631503}
-  finalDoor: {fileID: 0}
+  finalDoor: {fileID: 1406455131}
   isothermalPuzzleGroup: {fileID: 287708708}
   isochoricPanel: {fileID: 2010614674}
   isothermalPanel: {fileID: 396623594}
@@ -43149,6 +43149,7 @@ MonoBehaviour:
   temperatureDisplay: {fileID: 3103698227298217169}
   pressureDisplay: {fileID: 8976430933354154771}
   winText: {fileID: 2567233540152209937}
+  objectToLock: {fileID: 1585175948}
   containerVolume: 0.015
   initialPressure: 125000
   targetPressure: 250000

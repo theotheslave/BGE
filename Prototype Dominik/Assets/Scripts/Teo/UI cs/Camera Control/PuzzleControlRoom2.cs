@@ -5,7 +5,7 @@ public class PuzzleControlRoom2 : MonoBehaviour
     [Header("Puzzle Logic")]
     public IsochoricMinigame isochoricPuzzle;
     public IsothermalMinigameFinal isothermalPuzzle;
-    public SceneManagerDoor finalDoor;
+    public SceneManagerDoor1 finalDoor;
     [SerializeField] private GameObject isothermalPuzzleGroup;
     [Header("Puzzle Panels")]
     [SerializeField] private GameObject isochoricPanel;
