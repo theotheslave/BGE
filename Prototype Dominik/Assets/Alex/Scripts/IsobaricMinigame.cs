@@ -58,6 +58,7 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;
     public float volumeFadeDuration = 1f;
@@ -115,6 +116,10 @@ public class IsobaricMinigame : MonoBehaviour
         {
             float delta = Mathf.Abs(volume - targetVolume);
 
+            if (indicatorController != null)
+            {
+                indicatorController.IndicatorTrigger1 = delta <= volumeTolerance;
+            }
             if (delta <= volumeTolerance)
             {
                 correctHoldTimer += Time.deltaTime;

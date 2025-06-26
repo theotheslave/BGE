@@ -45,8 +45,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
     
     [Header("Spawner")]
     [SerializeField] private Spawner moleculeSpawner;
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
 
-   
 
     public Collider objectToLock;
     private float currentN;
@@ -92,6 +92,12 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 float calculatedN = (initialPressure * targetVolumeForN) / (R * temperature);
                 float deltaN = Mathf.Abs(currentN - calculatedN);
 
+                if (indicatorController != null)
+                {
+
+                    indicatorController.IndicatorTrigger1 = deltaN <= calculatedN * 0.1f;
+                }
+
                 if (deltaN <= calculatedN * 0.1f)
                 {
                     phase1Timer += Time.deltaTime;
@@ -105,7 +111,10 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+
                     phase1Timer = 0f;
+                    if (indicatorController != null)
+                        indicatorController.IndicatorTrigger1 = false;
                 }
             }
             else if (!hasWon)
@@ -116,6 +125,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
                 float deltaP = Mathf.Abs(currentP - targetPressure);
                 Debug.Log($"Current P: {currentP}, Target P: {targetPressure}, delta: {deltaP}");
+                if (indicatorController != null)
+                    indicatorController.IndicatorTrigger3 = deltaP <= pressureTolerance;
 
                 if (deltaP <= pressureTolerance)
                 {
@@ -128,6 +139,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 else
                 {
                     winTimer = 0f;
+                    if (indicatorController != null)
+                        indicatorController.IndicatorTrigger3=false;
                 }
 
                 float normV = Mathf.InverseLerp(minVol, maxVol, currentV);

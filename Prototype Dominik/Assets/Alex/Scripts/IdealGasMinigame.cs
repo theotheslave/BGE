@@ -31,6 +31,13 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private float minMol = 0.01f;
     [SerializeField] private float maxMol = 1.0f;
 
+    [Header("Individual Slider Targets")]
+    [SerializeField] private float targetTemp = 300f;
+    [SerializeField] private float targetVol = 0.005f;
+    [SerializeField] private float targetMol = 0.5f;
+    [SerializeField] private float tempTolerance = 0.5f;     // For temperature
+    [SerializeField] private float volumeTolerance = 0.0001f; // Volume 
+    [SerializeField] private float molTolerance = 0.01f;      // Mol
     [Header("Target Conditions")]
     [SerializeField] private float targetPressure = 300000f;
     [SerializeField] private float pressureTolerance = 5000f;
@@ -46,6 +53,7 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private SceneManagerDoor doorToUnlock;
     public Collider objectToLock;
     public Spawner moleculeSpawner;
@@ -121,9 +129,23 @@ public class IdealGasMinigame : MonoBehaviour
             leftWall.localPosition = new Vector3(leftX, leftWall.localPosition.y, leftWall.localPosition.z);
             rightWall.localPosition = new Vector3(rightX, rightWall.localPosition.y, rightWall.localPosition.z);
         }
+
+
+        if (indicatorController != null)
+        {
+            indicatorController.IndicatorTrigger1 = Mathf.Abs(currentTemp - targetTemp) <= tempTolerance;
+            indicatorController.IndicatorTrigger2 = Mathf.Abs(currentVol - targetVol) <= volumeTolerance;
+            indicatorController.IndicatorTrigger3 = Mathf.Abs(currentMol - targetMol) <= molTolerance;
+        }
+
+
+        Debug.Log($"Temp: {currentTemp} | Vol: {currentVol} | Mol: {currentMol}");
+        Debug.Log($"T Delta: {Mathf.Abs(currentTemp - targetTemp)}, V Delta: {Mathf.Abs(currentVol - targetVol)}, n Delta: {Mathf.Abs(currentMol - targetMol)}");
+
     }
-    
-    
+
+
+
 
     private IEnumerator FadeOutVolume()
     {

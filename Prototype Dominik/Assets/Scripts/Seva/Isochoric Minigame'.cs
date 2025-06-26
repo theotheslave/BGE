@@ -33,6 +33,8 @@ public class IsochoricMinigame : MonoBehaviour
     private bool hasWon = false;
 
     [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
+
     public Spawner moleculeSpawner;
     public event System.Action OnPuzzleComplete;
     [SerializeField] private float phase1HoldTime = 2f;
@@ -76,6 +78,11 @@ public class IsochoricMinigame : MonoBehaviour
             float targetN = (initialPressure * containerVolume) / (R * currentTemperature);
             float deltaN = Mathf.Abs(currentMoles - targetN);
 
+            if (indicatorController != null)
+            {
+                indicatorController.IndicatorTrigger1 = deltaN <= currentMoles * 0.1f;
+            }
+
             if (deltaN <= currentMoles * 0.1f)
             {
                 phase1Timer += Time.deltaTime;
@@ -89,6 +96,10 @@ public class IsochoricMinigame : MonoBehaviour
             else
             {
                 phase1Timer = 0f;
+                if (indicatorController != null)
+                {
+                    indicatorController.IndicatorTrigger1 = false;
+                }
             }
         }
         else if (!hasWon)
@@ -97,6 +108,10 @@ public class IsochoricMinigame : MonoBehaviour
             currentPressure = (currentMoles * R * currentTemperature) / containerVolume;
 
             float deltaT = Mathf.Abs(currentTemperature - targetTemperature);
+            if (indicatorController != null)
+            {
+                indicatorController.IndicatorTrigger3 = deltaT <= temperatureTolerance;
+            }
             if (deltaT <= temperatureTolerance)
             {
                 winTimer += Time.deltaTime;
@@ -108,6 +123,8 @@ public class IsochoricMinigame : MonoBehaviour
             else
             {
                 winTimer = 0f;
+                if (indicatorController != null)
+                    indicatorController.IndicatorTrigger3 = false;
             }
         }
 
