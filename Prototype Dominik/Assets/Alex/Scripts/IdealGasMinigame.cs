@@ -42,7 +42,10 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private float targetPressure = 300000f;
     [SerializeField] private float pressureTolerance = 5000f;
     [SerializeField] private float winHoldTime = 2f;
-
+    [SerializeField] private float indicatorHoldTime = 1.5f;
+    private float tempHoldTimer = 0f;
+    private float volHoldTimer = 0f;
+    private float molHoldTimer = 0f;
     [Header("Wall Animation")]
     public float wallMoveAmplitude = 0.05f;
     public float wallMoveSpeed = 2f;
@@ -79,6 +82,19 @@ public class IdealGasMinigame : MonoBehaviour
 
         baseLeftX = leftWall.localPosition.x;
         baseRightX = rightWall.localPosition.x;
+    }
+    private bool UpdateIndicator(ref float holdTimer, float delta, float tolerance, float holdTime)
+    {
+        if (delta <= tolerance)
+        {
+            holdTimer += Time.deltaTime;
+            return holdTimer >= holdTime;
+        }
+        else
+        {
+            holdTimer = 0f;
+            return false;
+        }
     }
 
     void Update()
@@ -133,9 +149,13 @@ public class IdealGasMinigame : MonoBehaviour
 
         if (indicatorController != null)
         {
-            indicatorController.IndicatorTrigger1 = Mathf.Abs(currentTemp - targetTemp) <= tempTolerance;
-            indicatorController.IndicatorTrigger2 = Mathf.Abs(currentVol - targetVol) <= volumeTolerance;
-            indicatorController.IndicatorTrigger3 = Mathf.Abs(currentMol - targetMol) <= molTolerance;
+            float deltaT = Mathf.Abs(currentTemp - targetTemp);
+            float deltaV = Mathf.Abs(currentVol - targetVol);
+            float deltaN = Mathf.Abs(currentMol - targetMol);
+
+            indicatorController.IndicatorTrigger1 = UpdateIndicator(ref tempHoldTimer, deltaT, tempTolerance, indicatorHoldTime);
+            indicatorController.IndicatorTrigger2 = UpdateIndicator(ref volHoldTimer, deltaV, volumeTolerance, indicatorHoldTime);
+            indicatorController.IndicatorTrigger3 = UpdateIndicator(ref molHoldTimer, deltaN, molTolerance, indicatorHoldTime);
         }
 
 

@@ -6448,6 +6448,7 @@ MonoBehaviour:
   targetPressure: 300000
   pressureTolerance: 5000
   winHoldTime: 2
+  indicatorHoldTime: 1.5
   wallMoveAmplitude: 0.05
   wallMoveSpeed: 2
   decalProjectors:

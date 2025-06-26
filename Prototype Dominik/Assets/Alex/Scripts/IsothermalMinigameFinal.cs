@@ -27,7 +27,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private float targetPressure = 111205f;
     [SerializeField] private float pressureTolerance = 1000f;
     [SerializeField] private float winHoldTime = 2f;
-
+    private float indicator1Timer = 0f;
+    private float indicator2Timer = 0f;
+    [SerializeField] private float indicatorHoldTime = 1.5f;
     [Header("Piston Visual")]
     [SerializeField] private Transform piston;
     [SerializeField] private float pistonMinY = -1.3f;
@@ -92,14 +94,17 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 float calculatedN = (initialPressure * targetVolumeForN) / (R * temperature);
                 float deltaN = Mathf.Abs(currentN - calculatedN);
 
-                if (indicatorController != null)
-                {
+                //if (indicatorController != null)
+                //{
 
-                    indicatorController.IndicatorTrigger1 = deltaN <= calculatedN * 0.1f;
-                }
+                //    indicatorController.IndicatorTrigger1 = deltaN <= calculatedN * 0.1f;
+                //}
 
                 if (deltaN <= calculatedN * 0.1f)
                 {
+                    indicator1Timer += Time.deltaTime;
+                    if (indicator1Timer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
                     phase1Timer += Time.deltaTime;
                     if (phase1Timer >= phase1HoldTime)
                     {
@@ -111,6 +116,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+                    indicator1Timer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
 
                     phase1Timer = 0f;
                     if (indicatorController != null)
@@ -130,6 +137,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
                 if (deltaP <= pressureTolerance)
                 {
+                    indicator2Timer += Time.deltaTime;
+                    if (indicator2Timer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger2 = true;
                     winTimer += Time.deltaTime;
                     if (winTimer >= winHoldTime)
                     {
@@ -138,6 +148,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+                    indicator2Timer = 0f;
+                    indicatorController.IndicatorTrigger2 = false;
                     winTimer = 0f;
                     if (indicatorController != null)
                         indicatorController.IndicatorTrigger3=false;

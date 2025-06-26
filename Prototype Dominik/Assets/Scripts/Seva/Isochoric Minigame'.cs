@@ -28,6 +28,9 @@ public class IsochoricMinigame : MonoBehaviour
     [Header("Win Condition")]
     [SerializeField] private float temperatureTolerance = 5f;
     [SerializeField] private float winHoldTime = 2f;
+    private float indicator1Timer = 0f;
+    private float indicator2Timer = 0f;
+    [SerializeField] private float indicatorHoldTime = 1.5f;
     private float winTimer;
     private bool phase1Complete = false;
     private bool hasWon = false;
@@ -78,16 +81,20 @@ public class IsochoricMinigame : MonoBehaviour
             float targetN = (initialPressure * containerVolume) / (R * currentTemperature);
             float deltaN = Mathf.Abs(currentMoles - targetN);
 
-            if (indicatorController != null)
-            {
-                indicatorController.IndicatorTrigger1 = deltaN <= currentMoles * 0.1f;
-            }
+            //if (indicatorController != null)
+            //{
+            //    indicatorController.IndicatorTrigger1 = deltaN <= currentMoles * 0.1f;
+            //}
 
             if (deltaN <= currentMoles * 0.1f)
             {
+                indicator1Timer += Time.deltaTime;
+                if (indicator1Timer >= indicatorHoldTime)
+                    indicatorController.IndicatorTrigger1 = true;
                 phase1Timer += Time.deltaTime;
                 if (phase1Timer >= phase1HoldTime)
                 {
+                   
                     phase1Complete = true;
                     nSlider.interactable = false;
                     tSlider.interactable = true;
@@ -95,6 +102,8 @@ public class IsochoricMinigame : MonoBehaviour
             }
             else
             {
+                indicator1Timer = 0f;
+                indicatorController.IndicatorTrigger1 = false;
                 phase1Timer = 0f;
                 if (indicatorController != null)
                 {
@@ -108,12 +117,15 @@ public class IsochoricMinigame : MonoBehaviour
             currentPressure = (currentMoles * R * currentTemperature) / containerVolume;
 
             float deltaT = Mathf.Abs(currentTemperature - targetTemperature);
-            if (indicatorController != null)
-            {
-                indicatorController.IndicatorTrigger3 = deltaT <= temperatureTolerance;
-            }
+            //if (indicatorController != null)
+            //{
+            //    indicatorController.IndicatorTrigger3 = deltaT <= temperatureTolerance;
+            //}
             if (deltaT <= temperatureTolerance)
             {
+                indicator2Timer += Time.deltaTime;
+                if (indicator2Timer >= indicatorHoldTime)
+                    indicatorController.IndicatorTrigger2 = true;
                 winTimer += Time.deltaTime;
                 if (winTimer >= winHoldTime)
                 {
@@ -122,6 +134,8 @@ public class IsochoricMinigame : MonoBehaviour
             }
             else
             {
+                indicator2Timer = 0f;
+                indicatorController.IndicatorTrigger2 = false;
                 winTimer = 0f;
                 if (indicatorController != null)
                     indicatorController.IndicatorTrigger3 = false;

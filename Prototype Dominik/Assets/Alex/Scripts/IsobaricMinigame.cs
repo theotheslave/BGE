@@ -46,7 +46,8 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private float requiredHoldTime = 2f;
     private float correctHoldTimer = 0f;
     private bool puzzleCompleted = false;
-
+    [SerializeField] private float indicatorHoldTime = 1.5f;
+    private float indicatorHoldTimer = 0f;
     [Header("Piston Animation After Win")]
     public float pistonMoveAmplitude = 0.2f;
     public float pistonMoveSpeed = 2f;
@@ -79,6 +80,8 @@ public class IsobaricMinigame : MonoBehaviour
             graphPanel.SetActive(!graphPanel.activeSelf);
         });
     }
+
+
 
     void Update()
     {
@@ -118,7 +121,17 @@ public class IsobaricMinigame : MonoBehaviour
 
             if (indicatorController != null)
             {
-                indicatorController.IndicatorTrigger1 = delta <= volumeTolerance;
+                if (delta <= volumeTolerance)
+                {
+                    indicatorHoldTimer += Time.deltaTime;
+                    if (indicatorHoldTimer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
+                }
+                else
+                {
+                    indicatorHoldTimer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
+                }
             }
             if (delta <= volumeTolerance)
             {

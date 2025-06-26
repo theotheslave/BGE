@@ -3599,6 +3599,7 @@ MonoBehaviour:
   targetPressure: 111205
   pressureTolerance: 1000
   winHoldTime: 2
+  indicatorHoldTime: 1.5
   piston: {fileID: 195690522}
   pistonMinY: 3.5
   pistonMaxY: 2.3
@@ -43330,6 +43331,7 @@ MonoBehaviour:
   targetTemperature: 0
   temperatureTolerance: 5
   winHoldTime: 2
+  indicatorHoldTime: 1.5
   indicatorController: {fileID: 1433810388}
   moleculeSpawner: {fileID: 1113888539949389097}
   phase1HoldTime: 2
