@@ -27,7 +27,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private float targetPressure = 111205f;
     [SerializeField] private float pressureTolerance = 1000f;
     [SerializeField] private float winHoldTime = 2f;
-
+    private float indicator1Timer = 0f;
+    private float indicator2Timer = 0f;
+    [SerializeField] private float indicatorHoldTime = 1.5f;
     [Header("Piston Visual")]
     [SerializeField] private Transform piston;
     [SerializeField] private float pistonMinY = -1.3f;
@@ -45,8 +47,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
     
     [Header("Spawner")]
     [SerializeField] private Spawner moleculeSpawner;
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
 
-   
 
     public Collider objectToLock;
     private float currentN;
@@ -62,11 +64,11 @@ public class IsothermalMinigameFinal : MonoBehaviour
     public event System.Action OnPuzzleComplete;
     void Start()
     {
-        if (!MachineProgressManager.Instance.isochoricCompleted)
-        {
-            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
-            return;
-        }
+        //if (!MachineProgressManager.Instance.isochoricCompleted)
+        //{
+        //    Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
+        //    return;
+        //}
 
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
@@ -92,8 +94,17 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 float calculatedN = (initialPressure * targetVolumeForN) / (R * temperature);
                 float deltaN = Mathf.Abs(currentN - calculatedN);
 
+                //if (indicatorController != null)
+                //{
+
+                //    indicatorController.IndicatorTrigger1 = deltaN <= calculatedN * 0.1f;
+                //}
+
                 if (deltaN <= calculatedN * 0.1f)
                 {
+                    indicator1Timer += Time.deltaTime;
+                    if (indicator1Timer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
                     phase1Timer += Time.deltaTime;
                     if (phase1Timer >= phase1HoldTime)
                     {
@@ -105,7 +116,12 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+                    indicator1Timer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
+
                     phase1Timer = 0f;
+                    if (indicatorController != null)
+                        indicatorController.IndicatorTrigger1 = false;
                 }
             }
             else if (!hasWon)
@@ -116,9 +132,14 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
                 float deltaP = Mathf.Abs(currentP - targetPressure);
                 Debug.Log($"Current P: {currentP}, Target P: {targetPressure}, delta: {deltaP}");
+                if (indicatorController != null)
+                    indicatorController.IndicatorTrigger3 = deltaP <= pressureTolerance;
 
                 if (deltaP <= pressureTolerance)
                 {
+                    indicator2Timer += Time.deltaTime;
+                    if (indicator2Timer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger2 = true;
                     winTimer += Time.deltaTime;
                     if (winTimer >= winHoldTime)
                     {
@@ -127,7 +148,11 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+                    indicator2Timer = 0f;
+                    indicatorController.IndicatorTrigger2 = false;
                     winTimer = 0f;
+                    if (indicatorController != null)
+                        indicatorController.IndicatorTrigger3=false;
                 }
 
                 float normV = Mathf.InverseLerp(minVol, maxVol, currentV);
@@ -259,6 +284,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
             objectToLock.enabled = false;
         }
         OnPuzzleComplete?.Invoke();
+        GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
 
     }
