@@ -50,6 +50,8 @@ public class SceneLogic : MonoBehaviour
     [SerializeField] private string missionGoggles = "Take the goggles on the table beside of Dillan";
     [SerializeField] private string gogglesAcquiredText = "Inspect the machine and use goggles on it.";
 
+    public CameraMovement CameraMovement;
+
     void Awake()
     {
         // Cache colliders
@@ -60,6 +62,7 @@ public class SceneLogic : MonoBehaviour
 
     void Start()
     {
+        CameraMovement.Tutorial = true;
         // Initial state
         pvtMachineHitbox.enabled = false;
         goggles.SetActive(false);
@@ -109,7 +112,7 @@ public class SceneLogic : MonoBehaviour
         if (clicked == gogglesHitbox)
         {
             goggles.SetActive(false);
-            gogglesButton.SetActive(true);
+            CameraMovement.Tutorial = false;
             UIBlueFrame1.SetActive(true);
             UIBlueFrame2.SetActive(true);
             UIBlueFrame3.SetActive(true);

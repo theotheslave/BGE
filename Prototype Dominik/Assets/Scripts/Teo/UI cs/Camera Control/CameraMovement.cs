@@ -35,6 +35,8 @@ public class CameraMovement : MonoBehaviour
     private bool isMoving = false;
     private bool lastTargetWasDeactivated;
 
+    public bool Tutorial = false;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -79,7 +81,10 @@ public class CameraMovement : MonoBehaviour
             lookTarget.gameObject.SetActive(true);
 
         StartMove(splinePos);
-        Goggles?.SetActive(true);
+        if (Tutorial == false)
+            {
+            Goggles?.SetActive(true);
+            }
     }
 
     public void FocusToGogglesView()
