@@ -28,7 +28,7 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private float maxTemp = 900f;
     [SerializeField] private float minVol = 0.001f;
     [SerializeField] private float maxVol = 0.01f;
-    [SerializeField] private float minMol = 0.01f;
+    [SerializeField] private float minMol = 0.1f;
     [SerializeField] private float maxMol = 1.0f;
 
     [Header("Individual Slider Targets")]
@@ -82,6 +82,9 @@ public class IdealGasMinigame : MonoBehaviour
 
         baseLeftX = leftWall.localPosition.x;
         baseRightX = rightWall.localPosition.x;
+        nSlider.value = 0.005f;
+
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.maxMoleculeCount, currentTemp);
     }
     private bool UpdateIndicator(ref float holdTimer, float delta, float tolerance, float holdTime)
     {
@@ -157,6 +160,11 @@ public class IdealGasMinigame : MonoBehaviour
             indicatorController.IndicatorTrigger2 = UpdateIndicator(ref volHoldTimer, deltaV, volumeTolerance, indicatorHoldTime);
             indicatorController.IndicatorTrigger3 = UpdateIndicator(ref molHoldTimer, deltaN, molTolerance, indicatorHoldTime);
         }
+
+        normVol = Mathf.InverseLerp(minVol, maxVol, currentVol);
+        float nMultiplier = Mathf.InverseLerp(minMol, maxMol, currentMol);
+
+        moleculeSpawner.UpdateConditions(currentTemp, normVol, nMultiplier);
 
 
         Debug.Log($"Temp: {currentTemp} | Vol: {currentVol} | Mol: {currentMol}");

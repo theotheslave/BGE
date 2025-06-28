@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(BoxCollider))]
-public class Spawner : MonoBehaviour
+
+public class Spawner_Isothermal : MonoBehaviour
 {
     [Header("Prefabs & Counts")]
     public GameObject moleculePrefab;
@@ -11,15 +12,15 @@ public class Spawner : MonoBehaviour
     [Header("Chamber limits")]
     public float pistonMinY = -1.3f;
     public float pistonMaxY = 2.3f;
-    public float wallMargin = 0.2f;           
+    public float wallMargin = 0.2f;
 
     [Header("Runtime")]
     [HideInInspector] public float currentTemperature = 273f;
 
     private readonly List<MoleculeParticle> molecules = new();
-    private BoxCollider volume;              
+    private BoxCollider volume;
 
-   
+
 
     void Awake() => volume = GetComponent<BoxCollider>();
     void Start() => SpawnMolecules(maxMoleculeCount, currentTemperature);
@@ -45,7 +46,7 @@ public class Spawner : MonoBehaviour
         currentTemperature = temperatureK;
 
         float volumeFactor = Mathf.Clamp01(1.0f - normalizedVolume);
-        float moleFactor = Mathf.Clamp01(normalizedMoles);      
+        float moleFactor = Mathf.Clamp01(normalizedMoles);
 
         int targetCount = Mathf.RoundToInt(maxMoleculeCount * moleFactor * (0.5f + volumeFactor));
 
