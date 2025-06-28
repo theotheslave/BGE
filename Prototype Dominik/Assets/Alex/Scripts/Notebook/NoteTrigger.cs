@@ -1,19 +1,20 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class NoteTrigger : MonoBehaviour
 {
-    [TextArea] public string noteContent;
     public string noteTitle;
-    public string category = "General";
+    [TextArea]
+    public string noteContent;
+    private bool noteGiven = false;
 
-    private bool triggered = false;
-
-    public void TriggerNote()
+    private void OnMouseDown()
     {
-        if (!triggered)
+        if (!noteGiven)
         {
-            NotebookManager.Instance.UnlockNote(category, noteTitle, noteContent);
-            triggered = true;
+            Note newNote = new Note { title = noteTitle, content = noteContent };
+            NotebookManager.Instance.AddNote(newNote);
+            noteGiven = true;
         }
     }
 }
