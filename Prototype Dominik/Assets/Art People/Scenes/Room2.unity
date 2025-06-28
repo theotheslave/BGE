@@ -3611,7 +3611,7 @@ MonoBehaviour:
   fogFadeDuration: 1
   globalVolume: {fileID: 0}
   volumeFadeDuration: 1
-  moleculeSpawner: {fileID: 2048060382}
+  moleculeSpawner: {fileID: 2048060386}
   indicatorController: {fileID: 587564974}
   objectToLock: {fileID: 287708710}
   phase1HoldTime: 2
@@ -7343,7 +7343,7 @@ PrefabInstance:
       addedObject: {fileID: 2048060378}
     - targetCorrespondingSourceObject: {fileID: 6654616502288683743, guid: aff4dc8c9074edc4f9c2b86f0e4d631f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2048060382}
+      addedObject: {fileID: 2048060386}
     - targetCorrespondingSourceObject: {fileID: 4532521398492806818, guid: aff4dc8c9074edc4f9c2b86f0e4d631f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 195690525}
@@ -8961,7 +8961,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.06, y: 0.02, z: 0.08}
   m_Center: {x: 0.000000029802326, y: -0.06381702, z: 0.05}
---- !u!114 &2048060382
+--- !u!114 &2048060386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8970,11 +8970,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2048060376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 515c7fd2243ce4f43863315a47ff06b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 98b74431c903b9b4c989b5c3c2773a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moleculePrefab: {fileID: 2655998017707874708, guid: 410652585301b464ba5a584b536344b1, type: 3}
-  startCount: 300
+  maxMoleculeCount: 300
   pistonMinY: -1.3
   pistonMaxY: 2.3
   wallMargin: 0.2
@@ -10432,7 +10432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moleculePrefab: {fileID: 2655998017707874708, guid: 410652585301b464ba5a584b536344b1, type: 3}
-  startCount: 300
+  maxMoleculeCount: 300
   pistonMinY: -1.3
   pistonMaxY: 2.3
   wallMargin: 0.2
