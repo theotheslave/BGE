@@ -125,7 +125,7 @@ public class IsochoricMinigame : MonoBehaviour
             {
                 indicator2Timer += Time.deltaTime;
                 if (indicator2Timer >= indicatorHoldTime)
-                    indicatorController.IndicatorTrigger2 = true;
+                    indicatorController.IndicatorTrigger3 = true;
                 winTimer += Time.deltaTime;
                 if (winTimer >= winHoldTime)
                 {
@@ -135,7 +135,7 @@ public class IsochoricMinigame : MonoBehaviour
             else
             {
                 indicator2Timer = 0f;
-                indicatorController.IndicatorTrigger2 = false;
+                indicatorController.IndicatorTrigger3 = false;
                 winTimer = 0f;
                 if (indicatorController != null)
                     indicatorController.IndicatorTrigger3 = false;
