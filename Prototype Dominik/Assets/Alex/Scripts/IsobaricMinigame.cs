@@ -46,7 +46,8 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private float requiredHoldTime = 2f;
     private float correctHoldTimer = 0f;
     private bool puzzleCompleted = false;
-
+    [SerializeField] private float indicatorHoldTime = 1.5f;
+    private float indicatorHoldTimer = 0f;
     [Header("Piston Animation After Win")]
     public float pistonMoveAmplitude = 0.2f;
     public float pistonMoveSpeed = 2f;
@@ -58,6 +59,7 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;
     public float volumeFadeDuration = 1f;
@@ -78,6 +80,8 @@ public class IsobaricMinigame : MonoBehaviour
             graphPanel.SetActive(!graphPanel.activeSelf);
         });
     }
+
+
 
     void Update()
     {
@@ -115,6 +119,20 @@ public class IsobaricMinigame : MonoBehaviour
         {
             float delta = Mathf.Abs(volume - targetVolume);
 
+            if (indicatorController != null)
+            {
+                if (delta <= volumeTolerance)
+                {
+                    indicatorHoldTimer += Time.deltaTime;
+                    if (indicatorHoldTimer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
+                }
+                else
+                {
+                    indicatorHoldTimer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
+                }
+            }
             if (delta <= volumeTolerance)
             {
                 correctHoldTimer += Time.deltaTime;
