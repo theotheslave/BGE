@@ -12352,6 +12352,7 @@ MonoBehaviour:
   targetVolume: 0.055
   volumeTolerance: 0.001
   requiredHoldTime: 2
+  indicatorHoldTime: 1.5
   pistonMoveAmplitude: 0.8
   pistonMoveSpeed: 2
   decalProjectors:

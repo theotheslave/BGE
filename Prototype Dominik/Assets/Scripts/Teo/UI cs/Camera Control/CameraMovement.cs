@@ -79,7 +79,7 @@ public class CameraMovement : MonoBehaviour
             lookTarget.gameObject.SetActive(true);
 
         StartMove(splinePos);
-//        Goggles?.SetActive(true);
+        Goggles?.SetActive(true);
     }
 
     public void FocusToGogglesView()
