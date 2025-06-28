@@ -2824,6 +2824,10 @@ PrefabInstance:
       value: 11
       objectReference: {fileID: 0}
     - target: {fileID: -3111565609762313623, guid: 6f05f13ffc0929e49bb4e7a858a61a9a, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: -3111565609762313623, guid: 6f05f13ffc0929e49bb4e7a858a61a9a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -3388,7 +3392,7 @@ PrefabInstance:
       addedObject: {fileID: 1740301261}
     - targetCorrespondingSourceObject: {fileID: -3111565609762313623, guid: 6f05f13ffc0929e49bb4e7a858a61a9a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1740301260}
+      addedObject: {fileID: 1740301265}
   m_SourcePrefab: {fileID: 100100000, guid: 6f05f13ffc0929e49bb4e7a858a61a9a, type: 3}
 --- !u!1 &1169361056
 GameObject:
@@ -4520,6 +4524,7 @@ MonoBehaviour:
   machineInteractionText: Inspect the machine behind Dillan.
   missionGoggles: Take the goggles on the table beside of Dillan
   gogglesAcquiredText: Inspect the machine and use goggles on it.
+  CameraMovement: {fileID: 102068398739489632}
 --- !u!4 &1535118944
 Transform:
   m_ObjectHideFlags: 0
@@ -4624,22 +4629,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -3111565609762313623, guid: 6f05f13ffc0929e49bb4e7a858a61a9a, type: 3}
   m_PrefabInstance: {fileID: 1160790749}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1740301260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1740301256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93e8ea56113873448ba2e2e587f12fe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSceneIndex: 1
-  lockedCursor: {fileID: 2800000, guid: 998b6f2f48b1c014da642a2384d7ad99, type: 3}
-  unlockedCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
-  hotspot: {x: 0, y: 0}
 --- !u!65 &1740301261
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4661,6 +4650,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0128323585, y: 0.048844405, z: 0.0772076}
   m_Center: {x: -0.085636355, y: -0.0007555251, z: 0.040077936}
+--- !u!114 &1740301265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740301256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f876350749d804aa33a706520b2726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSceneIndex: 1
+  unlockType: 0
+  lockedCursor: {fileID: 2800000, guid: 998b6f2f48b1c014da642a2384d7ad99, type: 3}
+  unlockedCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
+  hotspot: {x: 0, y: 0}
 --- !u!1 &1748365701
 GameObject:
   m_ObjectHideFlags: 0
@@ -5398,7 +5404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moleculePrefab: {fileID: 2655998017707874708, guid: 410652585301b464ba5a584b536344b1, type: 3}
-  startCount: 50
+  maxMoleculeCount: 300
   pistonMinY: 0
   pistonMaxY: 0
   wallMargin: 0.2
@@ -5472,6 +5478,7 @@ MonoBehaviour:
   gogglesFocusTarget: {fileID: 0}
   defaultLookAt: {fileID: 2016547779773415343}
   lastTarget: {fileID: 396080825}
+  Tutorial: 1
 --- !u!224 &159182469817223543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6517,7 +6524,7 @@ MonoBehaviour:
   - {fileID: 4212524799514364793}
   fogFadeDuration: 1
   indicatorController: {fileID: 117192777}
-  doorToUnlock: {fileID: 1740301260}
+  doorToUnlock: {fileID: 0}
   objectToLock: {fileID: 396080824}
   moleculeSpawner: {fileID: 64401326340415528}
   globalVolume: {fileID: 6635089025206927982}
@@ -29004,7 +29011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5532768823688475960, guid: cdd34cd862f06364a964a79b3b7d120e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
