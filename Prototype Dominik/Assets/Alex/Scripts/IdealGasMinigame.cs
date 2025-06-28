@@ -296,12 +296,6 @@ public class IdealGasMinigame : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
-        if (doorToUnlock != null)
-        {
-            doorToUnlock.UnlockDoor();
-        }
-
-
-
+        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor1>()?.UnlockDoor();
     }
 }
