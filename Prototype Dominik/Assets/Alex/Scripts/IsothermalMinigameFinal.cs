@@ -92,7 +92,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 currentN = Mathf.Lerp(0.5f, 2.0f, nSlider.value);
                 moleDisplay.text = $"n = {currentN:F3} mol";
 
-                float targetVolumeForN = 0.05f;
+                float targetVolumeForN = 0.1f;
                 float calculatedN = (initialPressure * targetVolumeForN) / (R * temperature);
                 float deltaN = Mathf.Abs(currentN - calculatedN);
 
