@@ -10,13 +10,17 @@ public class Interactable : MonoBehaviour
 
     private Outline outline;
 
-    void Start()
+    void Awake()
     {
-        if (!isCharacter)
+        outline = GetComponent<Outline>();
+        if (outline == null)
         {
-            outline = GetComponent<Outline>();
-            if (outline != null) outline.enabled = false;
+            outline = gameObject.AddComponent<Outline>();
+            outline.OutlineColor = Color.magenta;
+            outline.OutlineWidth = 7f;
         }
+
+        outline.enabled = false;
     }
 
     void OnMouseEnter()

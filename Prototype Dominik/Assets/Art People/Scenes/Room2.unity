@@ -17653,6 +17653,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: === IndicatorsInside === (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5841307402346951288, guid: 04b96506efab6674c830030ce78674ab, type: 3}
+      propertyPath: IndicatorTrigger3
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
