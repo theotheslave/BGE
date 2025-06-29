@@ -68,11 +68,10 @@ public class IsobaricMinigame : MonoBehaviour
     {
         winText.gameObject.SetActive(false);
         pistonBaseY = piston.position.y;
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.maxMoleculeCount, currentTemp);
 
         currentMoles = initialMoles;
         currentTemp = 273f;
-
-        moleculeSpawner.SpawnMolecules(moleculeSpawner.startCount, currentTemp);
 
         graphPanel.SetActive(false);
         toggleGraphButton.onClick.AddListener(() =>
@@ -87,10 +86,6 @@ public class IsobaricMinigame : MonoBehaviour
     {
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
-
-        int activeMolecules = moleculeSpawner.ActiveCount();
-        float fraction = moleculeSpawner.startCount > 0 ? (float)activeMolecules / moleculeSpawner.startCount : 0f;
-        currentMoles = initialMoles * Mathf.Max(fraction, 0.01f);
 
         volume = (currentMoles * R * currentTemp) / pressure;
 
@@ -113,8 +108,8 @@ public class IsobaricMinigame : MonoBehaviour
             }
         }
 
-        moleculeSpawner.ApplyTemperature(currentTemp);
-        moleculeSpawner.currentTemperature = currentTemp;
+        moleculeSpawner.UpdateConditions(currentTemp, normVolume, 1f);
+
         if (!puzzleCompleted)
         {
             float delta = Mathf.Abs(volume - targetVolume);

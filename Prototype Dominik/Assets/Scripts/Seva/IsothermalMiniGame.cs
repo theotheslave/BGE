@@ -75,8 +75,8 @@ public class IsothermalMinigame : MonoBehaviour
         volume = (currentMoles * R * currentTemp) / pressure;
 
         string log = "";
-        moleculeSpawner.ApplyTemperature(currentTemp);
-        moleculeSpawner.currentTemperature = currentTemp;
+       // moleculeSpawner.ApplyTemperature(currentTemp);
+      //  moleculeSpawner.currentTemperature = currentTemp;
 
         if (!isCycling && volume >= containerVolume - 0.0001f)
         {

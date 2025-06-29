@@ -46,7 +46,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
     public float volumeFadeDuration = 1f;
     
     [Header("Spawner")]
-    [SerializeField] private Spawner moleculeSpawner;
+    [SerializeField] private Spawner_Isothermal moleculeSpawner;
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
 
 
@@ -73,6 +73,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
         pistonBaseY = piston.position.y;
+
+        moleculeSpawner.SpawnMolecules(10, temperature);
     }
 
     void Update()
@@ -139,7 +141,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 {
                     indicator2Timer += Time.deltaTime;
                     if (indicator2Timer >= indicatorHoldTime)
-                        indicatorController.IndicatorTrigger2 = true;
+                        indicatorController.IndicatorTrigger3 = true;
                     winTimer += Time.deltaTime;
                     if (winTimer >= winHoldTime)
                     {
@@ -149,7 +151,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 else
                 {
                     indicator2Timer = 0f;
-                    indicatorController.IndicatorTrigger2 = false;
+                    indicatorController.IndicatorTrigger3 = false;
                     winTimer = 0f;
                     if (indicatorController != null)
                         indicatorController.IndicatorTrigger3=false;
@@ -164,6 +166,10 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 AnimatePiston();
             }
         }
+        float normVolume = Mathf.InverseLerp(minVol, maxVol, currentV);
+        float normMoles = Mathf.InverseLerp(0.5f, 2.0f, currentN);
+
+        moleculeSpawner.UpdateConditions(temperature, normVolume, normMoles);
     }
 
         private IEnumerator FadeOutVolume()

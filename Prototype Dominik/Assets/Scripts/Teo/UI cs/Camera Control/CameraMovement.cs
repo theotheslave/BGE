@@ -35,6 +35,8 @@ public class CameraMovement : MonoBehaviour
     private bool isMoving = false;
     private bool lastTargetWasDeactivated;
 
+    public bool Tutorial = false;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -79,7 +81,10 @@ public class CameraMovement : MonoBehaviour
             lookTarget.gameObject.SetActive(true);
 
         StartMove(splinePos);
-        Goggles?.SetActive(true);
+        if (Tutorial == false)
+            {
+            Goggles?.SetActive(true);
+            }
     }
 
     public void FocusToGogglesView()
@@ -100,11 +105,18 @@ public class CameraMovement : MonoBehaviour
         if (virtualCam != null)
             virtualCam.LookAt = originalLookAt;
 
-        if (lastTarget != null && lastTargetWasDeactivated)
-            lastTarget.gameObject.SetActive(false);
+        if (lastTarget != null && !lastTarget.gameObject.activeSelf)
+        {
+            lastTarget.gameObject.SetActive(true);
+        }
 
-        
+
         lastTarget = null;
+
+        if (UIGoggles != null && UIGoggles.activeSelf)
+        {
+            UIGoggles.SetActive(false);
+        }
 
         StartMove(originalSplinePosition, true);
     }

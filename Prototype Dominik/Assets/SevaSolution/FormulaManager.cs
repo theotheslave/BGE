@@ -119,9 +119,9 @@ public class FormulaManager : MonoBehaviour
         float res = missing switch
         {
             "PT_P1" => p2 * t1 / t2,
-            "PT_T1" => p2 * t2 / p1,
+            "PT_T1" => p1 * t2 / p2,
             "PT_P2" => p1 * t2 / t1,
-            _ => p1 * t1 / p2
+            _ => p2 * t1 / p1
         };
         CreateResultLine(missing.Substring(3), res, resultAreaPT, _unitPT);
         _solvedPT = true;

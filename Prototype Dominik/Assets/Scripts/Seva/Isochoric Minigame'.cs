@@ -65,7 +65,7 @@ public class IsochoricMinigame : MonoBehaviour
         tSlider.interactable = false;
         winText.gameObject.SetActive(false);
 
-        moleculeSpawner.SpawnMolecules(moleculeSpawner.startCount, currentTemperature);
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.maxMoleculeCount, currentTemperature);
     }
 
     void Update()
@@ -125,7 +125,7 @@ public class IsochoricMinigame : MonoBehaviour
             {
                 indicator2Timer += Time.deltaTime;
                 if (indicator2Timer >= indicatorHoldTime)
-                    indicatorController.IndicatorTrigger2 = true;
+                    indicatorController.IndicatorTrigger3 = true;
                 winTimer += Time.deltaTime;
                 if (winTimer >= winHoldTime)
                 {
@@ -135,7 +135,7 @@ public class IsochoricMinigame : MonoBehaviour
             else
             {
                 indicator2Timer = 0f;
-                indicatorController.IndicatorTrigger2 = false;
+                indicatorController.IndicatorTrigger3 = false;
                 winTimer = 0f;
                 if (indicatorController != null)
                     indicatorController.IndicatorTrigger3 = false;
@@ -145,8 +145,8 @@ public class IsochoricMinigame : MonoBehaviour
         temperatureDisplay.text = $"T = {currentTemperature:F1} K";
         pressureDisplay.text = $"n = {(currentMoles):F2} kPa";
 
-        moleculeSpawner.ApplyTemperature(currentTemperature);
-        moleculeSpawner.currentTemperature = currentTemperature;
+        float nMultiplier = Mathf.InverseLerp(0.01f, 1.0f, currentMoles);
+        moleculeSpawner.UpdateConditions(currentTemperature, containerVolume, nMultiplier);
     }
 
     void Win()

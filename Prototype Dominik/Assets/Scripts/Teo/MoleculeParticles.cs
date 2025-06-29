@@ -14,7 +14,7 @@ public class MoleculeParticle : MonoBehaviour
         rend = GetComponent<Renderer>();
     }
 
-   
+
 
     public void InitializeVelocity(float temperatureK)
     {
@@ -23,19 +23,22 @@ public class MoleculeParticle : MonoBehaviour
         UpdateColor(temperatureK);
     }
 
-   
-
     public void AdjustSpeed(float temperatureK)
     {
-        float targetSpeed = baseSpeed * Mathf.Sqrt(temperatureK / 273f);
+        float speed = baseSpeed * Mathf.Sqrt(temperatureK / 273f);
         Vector3 dir = rb.linearVelocity.sqrMagnitude < 0.0001f
                       ? Random.onUnitSphere
                       : rb.linearVelocity.normalized;
-
-        rb.linearVelocity = dir * targetSpeed;
+        rb.linearVelocity = dir * speed;
         UpdateColor(temperatureK);
     }
 
+    void UpdateColor(float temperatureK)
+    {
+        if (!rend) return;
+        float t = Mathf.InverseLerp(273f, 800f, temperatureK);
+        rend.material.color = Color.Lerp(Color.blue, Color.red, t);
+    }
 
     void OnCollisionEnter(Collision c)
     {
@@ -45,17 +48,6 @@ public class MoleculeParticle : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        // Tiny random nudge to avoid perfect reflections
         rb.linearVelocity += Random.onUnitSphere * 0.3f;
-    }
-
-    
-
-    void UpdateColor(float temperatureK)
-    {
-        if (!rend) return;
-        float t = Mathf.InverseLerp(273f, 800f, temperatureK);
-        rend.material.color = Color.Lerp(Color.blue, Color.red, t);
     }
 }

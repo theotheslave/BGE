@@ -1371,6 +1371,7 @@ MonoBehaviour:
   gogglesFocusTarget: {fileID: 85182694}
   defaultLookAt: {fileID: 1350324821}
   lastTarget: {fileID: 1350324821}
+  Tutorial: 0
 --- !u!114 &662835170 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1181836220846260962, guid: 4deb4ee7c76da0943a2ac584283a5624, type: 3}
@@ -1481,8 +1482,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSceneIndex: 2
   unlockType: 0
-  lockedCursor: {fileID: 0}
-  unlockedCursor: {fileID: 0}
+  lockedCursor: {fileID: 2800000, guid: 998b6f2f48b1c014da642a2384d7ad99, type: 3}
+  unlockedCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
   hotspot: {x: 0, y: 0}
 --- !u!114 &961825308 stripped
 MonoBehaviour:
@@ -2149,7 +2150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5532768823688475960, guid: cdd34cd862f06364a964a79b3b7d120e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12352,6 +12353,7 @@ MonoBehaviour:
   targetVolume: 0.055
   volumeTolerance: 0.001
   requiredHoldTime: 2
+  indicatorHoldTime: 1.5
   pistonMoveAmplitude: 0.8
   pistonMoveSpeed: 2
   decalProjectors:
@@ -38081,7 +38083,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moleculePrefab: {fileID: 2655998017707874708, guid: 410652585301b464ba5a584b536344b1, type: 3}
-  startCount: 100
+  maxMoleculeCount: 300
   pistonMinY: 0
   pistonMaxY: 2
   wallMargin: 0.2
