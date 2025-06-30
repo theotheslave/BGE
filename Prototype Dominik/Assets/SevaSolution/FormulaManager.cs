@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class FormulaManager : MonoBehaviour
 {
-    public static FormulaManager Instance { get; private set; }
+ //   public static FormulaManager Instance { get; private set; }
 
     [Header("PV slots (P₁·V₁ = P₂·V₂)")]
     public DroppableTextTarget PV_P1, PV_V1, PV_P2, PV_V2;
@@ -59,10 +59,11 @@ public class FormulaManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-        else
-            Instance = this;
+        //if (Instance != null && Instance != this)
+        //// Destroy(gameObject);
+        //{ }
+        //else
+        //    Instance = this;
     }
 
     /// <summary>
