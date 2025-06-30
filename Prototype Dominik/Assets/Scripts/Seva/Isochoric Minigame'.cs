@@ -37,7 +37,7 @@ public class IsochoricMinigame : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
-
+    [SerializeField] private MachineWorkTransition machineToActivate;
     public Spawner moleculeSpawner;
     public event System.Action OnPuzzleComplete;
     [SerializeField] private float phase1HoldTime = 2f;
@@ -158,6 +158,10 @@ public class IsochoricMinigame : MonoBehaviour
         if (objectToLock != null)
         {
             objectToLock.enabled = false;
+        }
+        if (machineToActivate != null)
+        {
+            machineToActivate.SetWorkTrigger(true);
         }
         GogglesManagerRoom2.Instance?.ForceClose();
         CameraMovement.Instance?.ReturnToStart();

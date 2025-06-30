@@ -50,6 +50,11 @@ public class MachineWorkTransition : MonoBehaviour
         
     }
 
+    public void SetWorkTrigger(bool state)
+    {
+        WorkTrigger = state;
+    }
+
     // Update is called once per frame
     void Update()
     {

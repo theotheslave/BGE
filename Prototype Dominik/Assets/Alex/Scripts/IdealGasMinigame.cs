@@ -58,6 +58,8 @@ public class IdealGasMinigame : MonoBehaviour
     [Header("References")]
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private SceneManagerDoor doorToUnlock;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
     public Collider objectToLock;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
@@ -297,5 +299,15 @@ public class IdealGasMinigame : MonoBehaviour
             objectToLock.enabled = false;
         }
         GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor1>()?.UnlockDoor();
+        if (machineToActivate != null)
+        {
+            machineToActivate.SetWorkTrigger(true);
+        }
+        if(heatingFeedback != null)
+        {
+
+            heatingFeedback.HeatingUp(true);
+
+        }
     }
 }

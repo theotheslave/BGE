@@ -17,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Art People/Scenes/Room3.unity
     guid: 44be2b671be3dbe43b9c89edb82a4fac
+  - enabled: 1
+    path: Assets/Art People/Scenes/Room1 Finished.unity
+    guid: 2a882ba5e54764341b8e69393291ab48
+  - enabled: 1
+    path: Assets/Art People/Scenes/Dillans Room Finished.unity
+    guid: ac5a2da1ad215b644b86fa43196551b7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
