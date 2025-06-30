@@ -37,7 +37,8 @@ public class DroppableTextTarget : MonoBehaviour, IDropHandler
         if (tmpText != null) tmpText.text = dropped;
 
         // notify the manager of the raw dropped value
-        FormulaManager.Instance.OnSlotUpdated(variableName, dropped);
+        var manager = FindObjectOfType<FormulaManager>();
+        manager.OnSlotUpdated(variableName, dropped);
 
         UnityEngine.Debug.Log($"Dropped '{dropped}' into {variableName}");
     }
