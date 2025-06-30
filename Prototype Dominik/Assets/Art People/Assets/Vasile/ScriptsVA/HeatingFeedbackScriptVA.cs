@@ -39,4 +39,15 @@ public class HeatingFeedbackScriptVA : MonoBehaviour
             }
         }
     }
+
+
+    public void HeatingUp(bool state)
+    {
+
+
+        WorkTrigger= state;
+
+    }
+
+
 }

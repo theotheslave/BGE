@@ -1,43 +1,26 @@
-﻿//using System.Diagnostics;
-//using UnityEngine;
-//using UnityEngine.UI;
-//using static System.Net.Mime.MediaTypeNames;
+﻿using UnityEngine;
 
-//public class ManualTextAssigner : MonoBehaviour
-//{
-//    [Header("Exactly 25 GameObjects with Text Components")]
-//    public GameObject[] textObjects = new GameObject[25];
+public class RefreshButton : MonoBehaviour
+{
+    public GameObject prefabToSpawn;     // Префаб, который нужно создать
+    public Transform parentTransform;    // Родитель, под которым будет экземпляр
 
-//    [Header("Exactly 25 Strings to Assign")]
-//    public string[] targetTexts = new string[25];
+    private GameObject currentInstance;  // Храним текущий экземпляр
 
-//    [ContextMenu("Apply Texts")]
-//    public void ApplyTexts()
-//    {
-//        if (textObjects.Length != 25 || targetTexts.Length != 25)
-//        {
-//            Debug.LogError("❌ You must have exactly 25 GameObjects and 25 strings.");
-//            return;
-//        }
+    void Start()
+    {
+        currentInstance = Instantiate(prefabToSpawn, parentTransform);
+    }
 
-//        for (int i = 0; i < 25; i++)
-//        {
-//            if (textObjects[i] == null)
-//            {
-//                Debug.LogWarning($"Text object at index {i} is missing.");
-//                continue;
-//            }
+    public void SpawnPrefab()
+    {
+        // Удаляем предыдущий экземпляр, если он существует
+        if (currentInstance != null)
+        {
+            Destroy(currentInstance);
+        }
 
-//            Text textComponent = textObjects[i].GetComponent<Text>();
-//            if (textComponent == null)
-//            {
-//                Debug.LogWarning($"No Text component on GameObject at index {i}: {textObjects[i].name}");
-//                continue;
-//            }
-
-//            textComponent.text = targetTexts[i];
-//        }
-
-//        Debug.Log("✅ Texts assigned successfully.");
-//    }
-//}
+        // Создаём новый экземпляр
+        currentInstance = Instantiate(prefabToSpawn, parentTransform);
+    }
+}

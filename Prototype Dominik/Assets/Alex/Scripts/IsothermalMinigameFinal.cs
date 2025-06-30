@@ -48,6 +48,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [Header("Spawner")]
     [SerializeField] private Spawner_Isothermal moleculeSpawner;
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
 
 
     public Collider objectToLock;
@@ -289,6 +291,17 @@ public class IsothermalMinigameFinal : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
+        if (machineToActivate != null)
+        {
+            machineToActivate.SetWorkTrigger(true);
+        }
+        if (heatingFeedback != null)
+        {
+
+            heatingFeedback.HeatingUp(true);
+
+        }
+        //MachineProgressManager.Instance.isothermalCompleted = true;
         OnPuzzleComplete?.Invoke();
         GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();

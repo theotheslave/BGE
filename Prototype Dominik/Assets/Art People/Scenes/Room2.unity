@@ -4779,7 +4779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f876350749d804aa33a706520b2726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneIndex: 2
+  targetSceneIndex: 4
   unlockType: 1
   lockedCursor: {fileID: 2800000, guid: 998b6f2f48b1c014da642a2384d7ad99, type: 3}
   unlockedCursor: {fileID: 2800000, guid: e6ccd2115404c8d4490087ddf1a43356, type: 3}
@@ -6543,14 +6543,37 @@ MonoBehaviour:
   pistonMaxY: 2.3
   pistonMoveAmplitude: 0.2
   pistonMoveSpeed: 2
-  decalProjectors: []
+  decalProjectors:
+  - {fileID: 7398981034111142273}
+  - {fileID: 5761750654224129826}
+  - {fileID: 1580337507446796881}
+  - {fileID: 5788915889810995436}
+  - {fileID: 8722896236508032591}
+  - {fileID: 2528303688617280316}
+  - {fileID: 2089457976128520206}
+  - {fileID: 3865374121086162605}
+  - {fileID: 8052212310017899486}
+  - {fileID: 5789403181198992061}
+  - {fileID: 8720015858061718558}
+  - {fileID: 2528803207845140845}
+  - {fileID: 6115938684208060101}
+  - {fileID: 9059978465270415462}
+  - {fileID: 2855325387881262357}
+  - {fileID: 1608256457488636159}
   decalFadeDuration: 1
-  fogParticles: []
+  fogParticles:
+  - {fileID: 8866032700083756354}
+  - {fileID: 2476271932317761363}
+  - {fileID: 4929761846936739308}
+  - {fileID: 1842579376453672961}
+  - {fileID: 1607801708090406992}
   fogFadeDuration: 1
-  globalVolume: {fileID: 0}
+  globalVolume: {fileID: 1129025163375267557}
   volumeFadeDuration: 1
   moleculeSpawner: {fileID: 2048060386}
   indicatorController: {fileID: 587564974}
+  machineToActivate: {fileID: 74597177183428633}
+  heatingFeedback: {fileID: 0}
   objectToLock: {fileID: 287708710}
   phase1HoldTime: 2
 --- !u!1 &657317168
@@ -12232,7 +12255,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406455129}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51f876350749d804aa33a706520b2726, type: 3}
   m_Name: 
@@ -15525,6 +15548,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1505735765}
     m_Modifications:
+    - target: {fileID: 1361312870331522911, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361312870331522911, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361312870331522911, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361312870331522911, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2420344087968737050, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2998597615591109142, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
       propertyPath: m_text
       value: Isochoric Machine
@@ -15620,6 +15663,18 @@ PrefabInstance:
     - target: {fileID: 6621100594732531381, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8000499334479365865, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8000499334479365865, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8000499334479365865, guid: 71b48cdf7f3ecc14585d61e43af6f91e, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -109440,7 +109495,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5630751174382544507
 Transform:
   m_ObjectHideFlags: 0
@@ -151939,6 +151994,7 @@ MonoBehaviour:
   winHoldTime: 2
   indicatorHoldTime: 1.5
   indicatorController: {fileID: 1433810388}
+  machineToActivate: {fileID: 5975358822014384783}
   moleculeSpawner: {fileID: 1113888539949389097}
   phase1HoldTime: 2
 --- !u!33 &9088243908348166640

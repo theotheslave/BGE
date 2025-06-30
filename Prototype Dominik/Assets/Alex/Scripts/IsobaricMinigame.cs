@@ -60,6 +60,8 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;
     public float volumeFadeDuration = 1f;
@@ -269,7 +271,18 @@ public class IsobaricMinigame : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
-        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor>()?.UnlockDoor();
+        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor1>()?.UnlockDoor();
+        if (machineToActivate != null)
+        {
+            machineToActivate.SetWorkTrigger(true);
+        }
+        if (heatingFeedback != null)
+        {
+
+            heatingFeedback.HeatingUp(true);
+
+        }
+        MachineProgressManager.Instance.isobaricCompleted = true;
     }
 
     private void AnimatePiston()
