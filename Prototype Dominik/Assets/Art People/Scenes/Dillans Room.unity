@@ -80243,7 +80243,6 @@ MonoBehaviour:
   - {fileID: 7456777964149061975}
   - {fileID: 8123588260384562406}
   - {fileID: 6781785705707013507}
-  - {fileID: 0}
 --- !u!23 &6146570647167916035
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -111547,6 +111546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   feedbackText: {fileID: 0}
   puzzleMachine: {fileID: 396080821}
+  machineFeedbackObject: {fileID: 6732221827574069025}
   levelNameText: {fileID: 6829071133355496635}
   UiForMachine: {fileID: 975686502}
   ProblemText: {fileID: 7303411845478777544}
