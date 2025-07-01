@@ -80243,7 +80243,6 @@ MonoBehaviour:
   - {fileID: 7456777964149061975}
   - {fileID: 8123588260384562406}
   - {fileID: 6781785705707013507}
-  - {fileID: 0}
 --- !u!23 &6146570647167916035
 MeshRenderer:
   m_ObjectHideFlags: 0
