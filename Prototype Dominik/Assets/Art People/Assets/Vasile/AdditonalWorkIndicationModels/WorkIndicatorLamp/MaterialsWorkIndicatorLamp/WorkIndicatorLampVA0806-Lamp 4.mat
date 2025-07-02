@@ -26,6 +26,7 @@ Material:
   m_ModifiedSerializedProperties: 2
   m_ValidKeywords:
   - _DETAIL_MULX2
+  - _EMISSION
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
