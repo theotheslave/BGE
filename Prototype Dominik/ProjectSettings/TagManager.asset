@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Wall
   - Molecule
+  - Outline
+  - Door
+  - UIManager
   layers:
   - Default
   - TransparentFX
@@ -17,9 +20,9 @@ TagManager:
   - 
   - 
   - Machines
-  - 
-  - 
-  - 
+  - fadeblack
+  - Outline
+  - Vig
   - 
   - 
   - 

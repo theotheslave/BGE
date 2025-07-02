@@ -1,20 +1,24 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
-
-    [Header("Formula Detail View")]
-    public Image formulaImage;
-    public TextMeshProUGUI formulaNameText;
-    public TextMeshProUGUI formulaDescriptionText;
+    public static UIManager Instance { get; set; }
 
     [Header("General UI")]
-    public GameObject formulaWindowPanel;
-    public GameObject learnedFormulasPanel;
     public TextMeshProUGUI feedbackText;
+    [SerializeField] private GameObject puzzleMachine;
+    [SerializeField] private GameObject machineFeedbackObject;
+    [SerializeField] private TextMeshProUGUI levelNameText;
+    [SerializeField] private GameObject UiForMachine;
+    [SerializeField] private GameObject ProblemText;
+
+
+    public bool IsPuzzleCompleted { get; private set; } = false;
 
     void Awake()
     {
@@ -23,28 +27,45 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // Optional: persist if you want UIManager to live across scenes
+        // DontDestroyOnLoad(gameObject); // <- ONLY if you want that
+
+        RebindIfNeeded();
     }
 
-    void Start()
+    public void RebindIfNeeded()
     {
-        formulaWindowPanel?.SetActive(false);
-        learnedFormulasPanel?.SetActive(false);
+        if (UiForMachine != null) UiForMachine.SetActive(false);
+
+        if (levelNameText != null)
+        {
+            string sceneName = SceneManager.GetActiveScene().name;
+            levelNameText.text = $"Lvl#: {sceneName}";
+        }
+
+        // Optionally: add null checks and fallbacks for dynamic assignment
+        // if (feedbackText == null) feedbackText = GameObject.Find("FeedbackText")?.GetComponent<TextMeshProUGUI>();
     }
 
-    public void TogglePanel(GameObject panel)
+    public void TogglePanel(GameObject panel, bool? forceState = null)
     {
         if (panel != null)
         {
-            bool isActive = panel.activeSelf;
-            panel.SetActive(!isActive);
+            bool newState = forceState.HasValue ? forceState.Value : !panel.activeSelf;
+            panel.SetActive(newState);
+            Debug.Log("TogglePanel called by " + this.name + " at " + Time.time);
         }
+    }
+
+    public void MarkPuzzleComplete()
+    {
+        IsPuzzleCompleted = true;
     }
 
     public void ShowPuzzleFeedback(string message)
     {
-        Debug.Log("UI Feedback: " + message);
         if (feedbackText != null)
         {
             feedbackText.text = message;
@@ -52,36 +73,23 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void HandlePuzzleSolved(string formulaID)
+    public void EnableMachine()
     {
-        FormulaUnlockManager.Instance.UnlockFormula(formulaID);
-        ShowPuzzleFeedback($"Unlocked: {formulaID}");
-
-        var ui = learnedFormulasPanel?.GetComponent<LearnedFormulasUI>();
-        if (ui != null)
+        if (machineFeedbackObject != null)
         {
-            Debug.Log("Refreshing learned list after unlock...");
-            ui.RefreshList();
+            machineFeedbackObject.SetActive(!machineFeedbackObject.activeSelf);
         }
-        else
+        if (puzzleMachine != null)
         {
-            Debug.LogWarning("LearnedFormulasUI not found on panel!");
+            puzzleMachine.SetActive(!puzzleMachine.activeSelf);
         }
-    }
-
-    public void ShowFormulaDetails(string formulaID)
-    {
-        FormulaCard card = Resources.Load<FormulaCard>($"FormulaCards/{formulaID}");
-        if (card != null)
+        if (UiForMachine != null)
         {
-            if (formulaWindowPanel != null) formulaWindowPanel.SetActive(true);
-            if (formulaImage != null) formulaImage.sprite = card.formulaSprite;
-            if (formulaNameText != null) formulaNameText.text = card.formulaID;
-            if (formulaDescriptionText != null) formulaDescriptionText.text = card.description;
+            UiForMachine.SetActive(!UiForMachine.activeSelf);
         }
-        else
+        if (ProblemText != null)
         {
-            Debug.LogWarning($"FormulaCard with ID '{formulaID}' not found in Resources/FormulaCards/");
+            ProblemText.SetActive(!ProblemText.activeSelf);
         }
     }
 }

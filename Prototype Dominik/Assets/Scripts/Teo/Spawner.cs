@@ -1,125 +1,110 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(BoxCollider))]
 public class Spawner : MonoBehaviour
 {
+    [Header("Prefabs & Counts")]
     public GameObject moleculePrefab;
-    public int count = 300;
+    public int maxMoleculeCount = 300;
+
+    [Header("Chamber limits")]
     public float pistonMinY = -1.3f;
     public float pistonMaxY = 2.3f;
-    public Transform containerArea;
+    public float wallMargin = 0.2f;           
 
+    [Header("Runtime")]
     [HideInInspector] public float currentTemperature = 273f;
-    [HideInInspector] public int startMoleculeCount = 0;
 
-    private List<MoleculeParticle> molecules = new List<MoleculeParticle>();
+    private readonly List<MoleculeParticle> molecules = new();
+    private BoxCollider volume;              
 
-    void Update()
+   
+
+    void Awake() => volume = GetComponent<BoxCollider>();
+    void Start() => SpawnMolecules(maxMoleculeCount, currentTemperature);
+
+    public void SpawnMolecules(int count, float temperatureK)
     {
-        if (Time.frameCount % 60 == 0)
-        {
-            DebugAverageSpeed();
-        }
-    }
-
-    public void SpawnMolecules(float initialTemp)
-    {
-        molecules.Clear();
-
+        ClearAll();
         for (int i = 0; i < count; i++)
-        {
-
-            Vector2 spawnPos = new Vector2(
-                Random.Range(containerArea.position.x - containerArea.localScale.x / 4f + 0.2f,
-                             containerArea.position.x + containerArea.localScale.x / 4f - 0.2f),
-                pistonMinY - 0.3f // inside chamber
-            );
-
-            GameObject mol = Instantiate(moleculePrefab, spawnPos, Quaternion.identity, containerArea);
-            var particle = mol.GetComponent<MoleculeParticle>();
-            particle.InitializeVelocity(initialTemp);
-            molecules.Add(particle);
-        }
-
-        startMoleculeCount = molecules.Count;
+            molecules.Add(InstantiateOne(temperatureK));
+        Debug.Log($"Spawning {count} molecules at T = {currentTemperature}");
+    }
+    MoleculeParticle InstantiateOne(float temperatureK)
+    {
+        Vector3 pos = RandomPointInside(volume, wallMargin);
+        GameObject go = Instantiate(moleculePrefab, pos, Random.rotation, transform);
+        var mol = go.GetComponent<MoleculeParticle>();
+        mol.InitializeVelocity(temperatureK);
+        return mol;
     }
 
-    public void ApplyTemperature(float temp)
+    public void UpdateConditions(float temperatureK, float normalizedVolume, float normalizedMoles)
     {
-        foreach (var mol in molecules)
+        currentTemperature = temperatureK;
+
+        float volumeFactor = Mathf.Clamp01(1.0f - normalizedVolume);
+        float moleFactor = Mathf.Clamp01(normalizedMoles);      
+
+        int targetCount = Mathf.RoundToInt(maxMoleculeCount * moleFactor * (0.5f + volumeFactor));
+
+        AdjustMoleculeCount(targetCount);
+        foreach (var m in molecules)
+            if (m != null) m.AdjustSpeed(temperatureK);
+    }
+    void AdjustMoleculeCount(int targetCount)
+    {
+        molecules.RemoveAll(m => m == null);
+
+        int current = molecules.Count;
+
+        if (current < targetCount)
         {
-            if (mol != null)
-                mol.AdjustSpeed(temp);
+            for (int i = 0; i < targetCount - current; i++)
+                molecules.Add(InstantiateOne(currentTemperature));
+        }
+        else if (current > targetCount)
+        {
+            int excess = current - targetCount;
+            for (int i = 0; i < molecules.Count && excess > 0; i++)
+            {
+                if (molecules[i] != null)
+                {
+                    Destroy(molecules[i].gameObject);
+                    excess--;
+                }
+            }
+            molecules.RemoveAll(m => m == null);
         }
     }
 
-    public void ResetMolecules(float temp)
+    void ClearAll()
     {
-        foreach (var mol in molecules)
-        {
-            if (mol != null)
-                Destroy(mol.gameObject);
-        }
-
+        foreach (var m in molecules)
+            if (m) Destroy(m.gameObject);
         molecules.Clear();
-        SpawnMolecules(temp);
     }
 
-    public int GetActiveMoleculeCount()
+    public void RemoveMolecule(MoleculeParticle m)
     {
-        // Exclude nulls for destroyed molecules
+        molecules.Remove(m);
+    }
+
+    public int ActiveCount()
+    {
         molecules.RemoveAll(m => m == null);
         return molecules.Count;
     }
 
-    public int TotalSpawnedCount()
+    private static Vector3 RandomPointInside(BoxCollider box, float margin)
     {
-        // Count includes active and removed
-        return molecules.Count;
-    }
-
-    public void AddNewMolecules(int numberToAdd, float temp)
-    {
-        for (int i = 0; i < numberToAdd; i++)
-        {
-            Vector2 spawnPos = new Vector2(
-                Random.Range(containerArea.position.x - containerArea.localScale.x / 2f + 0.2f,
-                             containerArea.position.x + containerArea.localScale.x / 2f - 0.2f),
-                pistonMinY - 0.5f
-            );
-
-            GameObject mol = Instantiate(moleculePrefab, spawnPos, Quaternion.identity, containerArea);
-            var particle = mol.GetComponent<MoleculeParticle>();
-            particle.InitializeVelocity(temp);
-            molecules.Add(particle);
-        }
-    }
-
-    public void RemoveMolecule(MoleculeParticle mol)
-    {
-        if (mol != null)
-            molecules.Remove(mol);
-    }
-
-    private void DebugAverageSpeed()
-    {
-        if (molecules == null || molecules.Count == 0) return;
-
-        float totalSpeed = 0f;
-        int count = 0;
-
-        foreach (var mol in molecules)
-        {
-            if (mol == null) continue;
-            Rigidbody2D rb = mol.GetComponent<Rigidbody2D>();
-            totalSpeed += rb.linearVelocity.magnitude;
-            count++;
-        }
-
-        if (count > 0)
-        {
-            float avgSpeed = totalSpeed / count;
-           // Debug.Log($"[Molecule Debug] Average Speed: {avgSpeed:F2}");
-        }
+        Vector3 localPos = new Vector3(
+            Random.Range(-0.5f + margin, 0.5f - margin),
+            Random.Range(-0.5f + margin, 0.5f - margin),
+            Random.Range(-0.5f + margin, 0.5f - margin)
+        );
+        Vector3 scaledPos = Vector3.Scale(localPos, box.size);
+        return box.transform.TransformPoint(box.center + scaledPos);
     }
 }

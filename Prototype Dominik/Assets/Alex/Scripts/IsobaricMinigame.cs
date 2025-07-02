@@ -1,20 +1,23 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using UnityEngine.Rendering.Universal;
 
 public class IsobaricMinigame : MonoBehaviour
 {
     [Header("Graph")]
     public GraphVisualize graphVisualizer;
     public float graphSampleInterval = 0.2f;
-    private float graphSampleTimer = 0f;
+    private float graphSampleTimer;
 
     [Header("UI")]
     public Slider heatSlider;
     public Button toggleGraphButton;
     public GameObject graphPanel;
-    public TextMeshProUGUI debugText;
+    public TextMeshProUGUI temperatureDisplay;
+    public TextMeshProUGUI volumeDisplay;
     [SerializeField] private TextMeshProUGUI winText;
 
     [Header("Piston Visual")]
@@ -23,46 +26,54 @@ public class IsobaricMinigame : MonoBehaviour
     public float pistonMaxY = 2.3f;
 
     [Header("Gas Constants")]
-    public float pressure = 101325f;
+    public float pressure = 101_325f;
     public float R = 8.314f;
     public float containerVolume = 0.065f;
 
-    [Header("References")]
-    public Spawner moleculeSpawner;
-
     [Header("Gas State")]
     public float initialMoles = 1f;
-    private float Vmin;
-    private float Vmax;
     private float currentMoles;
     private float currentTemp;
     private float targetTemp;
     private float volume;
 
-    [Header("Escape & Refill")]
-    public float refillThresholdFraction = 0.7f;
-    private bool isCycling = false;
-    private Coroutine cycleCoroutine;
-
     [Header("Heat Transfer")]
     public float heatTransferRate = 1f;
 
     [Header("Win Condition")]
-    [SerializeField] private int cyclesToWin = 3;
-    private int completedCycles = 0;
-    private bool hasCompleted = false;
+    [SerializeField] private float targetVolume = 0.003f; 
+    [SerializeField] private float volumeTolerance = 0.0001f;
+    [SerializeField] private float requiredHoldTime = 2f;
+    private float correctHoldTimer = 0f;
+    private bool puzzleCompleted = false;
+    [SerializeField] private float indicatorHoldTime = 1.5f;
+    private float indicatorHoldTimer = 0f;
+    [Header("Piston Animation After Win")]
+    public float pistonMoveAmplitude = 0.2f;
+    public float pistonMoveSpeed = 2f;
+    private float pistonBaseY;
 
-    private void Start()
+    [Header("Fade Settings")]
+    [SerializeField] private List<DecalProjector> decalProjectors = new List<DecalProjector>();
+    [SerializeField] private float decalFadeDuration = 1f;
+    [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
+    [SerializeField] private float fogFadeDuration = 1f;
+    [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    public Spawner moleculeSpawner;
+    public UnityEngine.Rendering.Volume globalVolume;
+    public float volumeFadeDuration = 1f;
+    public Collider objectToLock;
+    void Start()
     {
         winText.gameObject.SetActive(false);
+        pistonBaseY = piston.position.y;
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.maxMoleculeCount, currentTemp);
 
         currentMoles = initialMoles;
         currentTemp = 273f;
-
-        Vmin = (initialMoles * R * 273f) / pressure;
-        Vmax = (initialMoles * R * 800f) / pressure;
-
-        moleculeSpawner.SpawnMolecules(currentTemp);
 
         graphPanel.SetActive(false);
         toggleGraphButton.onClick.AddListener(() =>
@@ -71,59 +82,24 @@ public class IsobaricMinigame : MonoBehaviour
         });
     }
 
+
+
     void Update()
     {
-       
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
 
-        
-        int activeMolecules = moleculeSpawner.GetActiveMoleculeCount();
-        float fraction = moleculeSpawner.startMoleculeCount > 0 ?
-                         (float)activeMolecules / moleculeSpawner.startMoleculeCount : 0f;
-        currentMoles = initialMoles * fraction;
-
-        if (currentMoles < 0.0001f)
-            currentMoles = 0.01f; 
-
-       
         volume = (currentMoles * R * currentTemp) / pressure;
 
-        
-        bool pistonDown = volume < containerVolume * 0.95f;
-        int totalSpawned = moleculeSpawner.TotalSpawnedCount();
-        int maxAllowed = moleculeSpawner.startMoleculeCount;
-
-        if (pistonDown && !isCycling && currentMoles < initialMoles && totalSpawned < maxAllowed)
-        {
-            int missing = Mathf.Clamp(maxAllowed - activeMolecules, 0, maxAllowed - totalSpawned);
-            if (missing > 0)
-            {
-                moleculeSpawner.AddNewMolecules(missing, currentTemp);
-            }
-        }
-
-       
-        if (!isCycling && volume >= containerVolume - 0.0001f)
-        {
-            cycleCoroutine = StartCoroutine(RunCycle());
-        }
-
-       
+        float Vmin = (initialMoles * R * 273f) / pressure;
+        float Vmax = (initialMoles * R * 800f) / pressure;
         float normVolume = Mathf.InverseLerp(Vmin, Vmax, volume);
         float pistonY = Mathf.Lerp(pistonMinY, pistonMaxY, normVolume);
         piston.position = new Vector3(piston.position.x, pistonY, piston.position.z);
 
-       
-        string log = $"T: {currentTemp:F1} K\n" +
-                     $"Target T: {targetTemp:F1} K\n" +
-                     $"V: {(volume * 1000f):F2} L\n" +
-                     $"n (moles): {currentMoles:F2}\n" +
-                     $"Molecule Count: {activeMolecules}\n" +
-                     $"Slider: {heatSlider.value:F2}";
-        debugText.text = log;
+        temperatureDisplay.text = $"T = {currentTemp:F1} K";
+        volumeDisplay.text = $"V = {(volume * 1000f):F2} L";
 
-       
         if (graphPanel.activeSelf)
         {
             graphSampleTimer += Time.deltaTime;
@@ -134,84 +110,184 @@ public class IsobaricMinigame : MonoBehaviour
             }
         }
 
-      
-        moleculeSpawner.ApplyTemperature(currentTemp);
-        moleculeSpawner.currentTemperature = currentTemp;
+        moleculeSpawner.UpdateConditions(currentTemp, normVolume, 1f);
+
+        if (!puzzleCompleted)
+        {
+            float delta = Mathf.Abs(volume - targetVolume);
+
+            if (indicatorController != null)
+            {
+                if (delta <= volumeTolerance)
+                {
+                    indicatorHoldTimer += Time.deltaTime;
+                    if (indicatorHoldTimer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
+                }
+                else
+                {
+                    indicatorHoldTimer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
+                }
+            }
+            if (delta <= volumeTolerance)
+            {
+                correctHoldTimer += Time.deltaTime;
+                if (correctHoldTimer >= requiredHoldTime)
+                {
+                    puzzleCompleted = true;
+                    Win();
+                }
+            }
+            else
+            {
+                correctHoldTimer = 0f;
+            }
+        }
+        else
+        {
+            AnimatePiston();
+        }
     }
 
-    IEnumerator RunCycle()
+    private IEnumerator FadeOutVolume()
     {
-        isCycling = true;
+        float startWeight = globalVolume.weight;
+        float time = 0f;
+
+        while (time < volumeFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / volumeFadeDuration;
+            globalVolume.weight = Mathf.Lerp(startWeight, 0f, t);
+            yield return null;
+        }
+
+        globalVolume.weight = 0f;
+    }
+
+    private IEnumerator FadeOutIce()
+    {
+        float time = 0f;
+
+        // Store initial colors
+        List<Color> originalColors = new List<Color>();
+        foreach (var decal in decalProjectors)
+        {
+            if (decal != null && decal.material.HasProperty("_BaseColor"))
+                originalColors.Add(decal.material.GetColor("_BaseColor"));
+            else
+                originalColors.Add(Color.white);
+        }
+
+        while (time < decalFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / decalFadeDuration;
+
+            for (int i = 0; i < decalProjectors.Count; i++)
+            {
+                var decal = decalProjectors[i];
+                if (decal == null) continue;
+
+                Color c = originalColors[i];
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
+                decal.material.SetColor("_BaseColor", c);
+            }
+
+            yield return null;
+        }
+
+        // Ensure it's fully faded and deactivate
+        foreach (var decal in decalProjectors)
+        {
+            if (decal == null) continue;
+
+            Color faded = decal.material.GetColor("_BaseColor");
+            faded.a = 0f;
+            decal.material.SetColor("_BaseColor", faded);
+            decal.gameObject.SetActive(false); // <--- Disabling here
+        }
+    }
+
+    private IEnumerator FadeOutFog()
+    {
+        float time = 0f;
+
+        // Cache original start colors
+        List<Color> originalColors = new List<Color>();
+        foreach (var ps in fogParticles)
+        {
+            var main = ps.main;
+            originalColors.Add(main.startColor.color);
+        }
+
+        while (time < fogFadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / fogFadeDuration;
+
+            for (int i = 0; i < fogParticles.Count; i++)
+            {
+                var ps = fogParticles[i];
+                var main = ps.main;
+                Color c = originalColors[i];
+                c.a = Mathf.Lerp(originalColors[i].a, 0f, t);
+                main.startColor = c;
+            }
+
+            yield return null;
+        }
+
+
+        foreach (var ps in fogParticles)
+        {
+            ps.Stop();
+        }
+    }
+
+    private void Win()
+    {
+        //UIManager.Instance?.HandlePuzzleSolved("Puzzle_A");
+
+        MachineProgressManager.Instance.isobaricCompleted = true;
+
+        winText.gameObject.SetActive(true);
+        winText.text = "Correct!";
         heatSlider.interactable = false;
-        UIManager.Instance?.HandlePuzzleSolved("Puzzle_A");
-        debugText.text = "Gas escaping...\n";
+        toggleGraphButton.interactable = false;
+        StartCoroutine(FadeOutFog());
+        if (globalVolume != null)
+            StartCoroutine(FadeOutVolume());
 
-        float escapeDuration = 1.5f;
-        float elapsed = 0f;
-        float startMoles = currentMoles;
-        float targetMoles = initialMoles * refillThresholdFraction;
+        if (decalProjectors.Count > 0)
+            StartCoroutine(FadeOutIce());
 
-        while (elapsed < escapeDuration)
+        if (CameraMovement.Instance != null)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / escapeDuration;
-            currentMoles = Mathf.Lerp(startMoles, targetMoles, t);
-            yield return null;
+            CameraMovement.Instance.ReturnToStart();
         }
-
-        currentMoles = targetMoles;
-        debugText.text += "Cooling down...\n";
-
-        float coolingDuration = 2f;
-        float coolingElapsed = 0f;
-        float startTemp = currentTemp;
-        float endTemp = 273f;
-
-        while (coolingElapsed < coolingDuration)
+        if (objectToLock != null)
         {
-            coolingElapsed += Time.deltaTime;
-            float t = coolingElapsed / coolingDuration;
-            currentTemp = Mathf.Lerp(startTemp, endTemp, t);
-            yield return null;
+            objectToLock.enabled = false;
         }
-
-        currentTemp = endTemp;
-
-        debugText.text += "Refilling gas...\n";
-        currentMoles = initialMoles;
-        targetTemp = 273f;
-        heatSlider.value = 0;
-
-        yield return new WaitForSeconds(0.5f);
-
-        heatSlider.interactable = true;
-        isCycling = false;
-        graphVisualizer.Clear();
-
-        if (!hasCompleted && completedCycles + 1 >= cyclesToWin)
+        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor1>()?.UnlockDoor();
+        if (machineToActivate != null)
         {
-            hasCompleted = true;
-            winText.gameObject.SetActive(true);
-            winText.text = "Completed!";
-
-            heatSlider.interactable = false;
-            toggleGraphButton.interactable = false;
-
-
-            StartCoroutine(AutoCycleLoop());
+            machineToActivate.SetWorkTrigger(true);
         }
-        completedCycles++;
+        if (heatingFeedback != null)
+        {
+
+            heatingFeedback.HeatingUp(true);
+
+        }
+        MachineProgressManager.Instance.isobaricCompleted = true;
     }
 
-    IEnumerator AutoCycleLoop()
+    private void AnimatePiston()
     {
-        while (true)
-        {
-            float targetHeat = Random.Range(0.5f, 1.0f);
-            heatSlider.value = targetHeat;
-
-            yield return StartCoroutine(RunCycle());
-            yield return new WaitForSeconds(1f);
-        }
+        float offsetY = Mathf.Sin(Time.time * pistonMoveSpeed) * pistonMoveAmplitude;
+        piston.position = new Vector3(piston.position.x, pistonBaseY + offsetY, piston.position.z);
     }
 }
