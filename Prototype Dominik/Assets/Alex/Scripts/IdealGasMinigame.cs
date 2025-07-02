@@ -60,6 +60,7 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private SceneManagerDoor doorToUnlock;
     [SerializeField] private MachineWorkTransition machineToActivate;
     [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    [SerializeField] private UIdefrostingVA uiDefrosting;
     public Collider objectToLock;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
@@ -308,6 +309,11 @@ public class IdealGasMinigame : MonoBehaviour
 
             heatingFeedback.HeatingUp(true);
 
+        }
+
+        if (uiDefrosting != null)
+        {
+            uiDefrosting.DisableUIdefrosting(true);
         }
     }
 }
