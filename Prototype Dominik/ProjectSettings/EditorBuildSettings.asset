@@ -17,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Art People/Scenes/Room3.unity
     guid: 44be2b671be3dbe43b9c89edb82a4fac
+  - enabled: 1
+    path: Assets/Alex/Scenes/prototype dialogue.unity
+    guid: a82a267ae965c4a4aa84e4c8ba06dee4
+  - enabled: 1
+    path: Assets/Alex/Scenes/Notebook For Test.unity
+    guid: e184f6bb8fa13d34a92298cf61f18228
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
