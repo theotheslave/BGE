@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [Header("General UI")]
     public TextMeshProUGUI feedbackText;
     [SerializeField] private GameObject puzzleMachine;
+    [SerializeField] private GameObject machineFeedbackObject;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private GameObject UiForMachine;
     [SerializeField] private GameObject ProblemText;
@@ -74,6 +75,10 @@ public class UIManager : MonoBehaviour
 
     public void EnableMachine()
     {
+        if (machineFeedbackObject != null)
+        {
+            machineFeedbackObject.SetActive(!machineFeedbackObject.activeSelf);
+        }
         if (puzzleMachine != null)
         {
             puzzleMachine.SetActive(!puzzleMachine.activeSelf);
