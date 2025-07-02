@@ -26,6 +26,8 @@ public class CameraMovement : MonoBehaviour
     [Header("Optional")]
     [SerializeField] private Transform defaultLookAt;
 
+    [SerializeField] private GameObject machineWorkingPrefab;
+
     private Quaternion originalRotation;
     private float originalSplinePosition;
     private Transform originalLookAt;
@@ -119,6 +121,12 @@ public class CameraMovement : MonoBehaviour
         }
 
         StartMove(originalSplinePosition, true);
+
+        if (machineWorkingPrefab != null)
+        {
+            machineWorkingPrefab.SetActive(true);
+        }
+        
     }
 
     private void StartMove(float targetSplinePos, bool returningToStart = false)
