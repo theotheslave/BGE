@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class FormulaManager : MonoBehaviour
 {
-    public static FormulaManager Instance { get; private set; }
+ //   public static FormulaManager Instance { get; private set; }
 
     [Header("PV slots (P₁·V₁ = P₂·V₂)")]
     public DroppableTextTarget PV_P1, PV_V1, PV_P2, PV_V2;
@@ -59,10 +59,11 @@ public class FormulaManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-        else
-            Instance = this;
+        //if (Instance != null && Instance != this)
+        //// Destroy(gameObject);
+        //{ }
+        //else
+        //    Instance = this;
     }
 
     /// <summary>
@@ -119,9 +120,9 @@ public class FormulaManager : MonoBehaviour
         float res = missing switch
         {
             "PT_P1" => p2 * t1 / t2,
-            "PT_T1" => p2 * t2 / p1,
+            "PT_T1" => p1 * t2 / p2,
             "PT_P2" => p1 * t2 / t1,
-            _ => p1 * t1 / p2
+            _ => p2 * t1 / p1
         };
         CreateResultLine(missing.Substring(3), res, resultAreaPT, _unitPT);
         _solvedPT = true;
@@ -138,9 +139,9 @@ public class FormulaManager : MonoBehaviour
         float res = missing switch
         {
             "VT_V1" => v2 * t1 / t2,
-            "VT_T1" => v2 * t2 / v1,
+            "VT_T1" => v1 * t2 / v2,
             "VT_V2" => v1 * t2 / t1,
-            _ => v1 * t1 / v2
+            "VT_T2" => v2 * t1 / v1
         };
         CreateResultLine(missing.Substring(3), res, resultAreaVT, _unitVT);
         _solvedVT = true;

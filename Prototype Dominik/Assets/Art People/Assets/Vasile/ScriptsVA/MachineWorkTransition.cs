@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -49,6 +48,11 @@ public class MachineWorkTransition : MonoBehaviour
             particle.Pause(true);
         }
         
+    }
+
+    public void SetWorkTrigger(bool state)
+    {
+        WorkTrigger = state;
     }
 
     // Update is called once per frame

@@ -28,14 +28,24 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private float maxTemp = 900f;
     [SerializeField] private float minVol = 0.001f;
     [SerializeField] private float maxVol = 0.01f;
-    [SerializeField] private float minMol = 0.01f;
+    [SerializeField] private float minMol = 0.1f;
     [SerializeField] private float maxMol = 1.0f;
 
+    [Header("Individual Slider Targets")]
+    [SerializeField] private float targetTemp = 300f;
+    [SerializeField] private float targetVol = 0.005f;
+    [SerializeField] private float targetMol = 0.5f;
+    [SerializeField] private float tempTolerance = 0.5f;     // For temperature
+    [SerializeField] private float volumeTolerance = 0.0001f; // Volume 
+    [SerializeField] private float molTolerance = 0.01f;      // Mol
     [Header("Target Conditions")]
     [SerializeField] private float targetPressure = 300000f;
     [SerializeField] private float pressureTolerance = 5000f;
     [SerializeField] private float winHoldTime = 2f;
-
+    [SerializeField] private float indicatorHoldTime = 1.5f;
+    private float tempHoldTimer = 0f;
+    private float volHoldTimer = 0f;
+    private float molHoldTimer = 0f;
     [Header("Wall Animation")]
     public float wallMoveAmplitude = 0.05f;
     public float wallMoveSpeed = 2f;
@@ -46,7 +56,11 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private SceneManagerDoor doorToUnlock;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    [SerializeField] private UIdefrostingVA uiDefrosting;
     public Collider objectToLock;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
@@ -63,7 +77,7 @@ public class IdealGasMinigame : MonoBehaviour
     private float currentPressure;
 
     private float winTimer;
-    private bool hasWon = false;
+    public bool hasWon = false;
 
     void Start()
     {
@@ -71,6 +85,22 @@ public class IdealGasMinigame : MonoBehaviour
 
         baseLeftX = leftWall.localPosition.x;
         baseRightX = rightWall.localPosition.x;
+        nSlider.value = 0.005f;
+
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.maxMoleculeCount, currentTemp);
+    }
+    private bool UpdateIndicator(ref float holdTimer, float delta, float tolerance, float holdTime)
+    {
+        if (delta <= tolerance)
+        {
+            holdTimer += Time.deltaTime;
+            return holdTimer >= holdTime;
+        }
+        else
+        {
+            holdTimer = 0f;
+            return false;
+        }
     }
 
     void Update()
@@ -121,9 +151,32 @@ public class IdealGasMinigame : MonoBehaviour
             leftWall.localPosition = new Vector3(leftX, leftWall.localPosition.y, leftWall.localPosition.z);
             rightWall.localPosition = new Vector3(rightX, rightWall.localPosition.y, rightWall.localPosition.z);
         }
+
+
+        if (indicatorController != null)
+        {
+            float deltaT = Mathf.Abs(currentTemp - targetTemp);
+            float deltaV = Mathf.Abs(currentVol - targetVol);
+            float deltaN = Mathf.Abs(currentMol - targetMol);
+
+            indicatorController.IndicatorTrigger1 = UpdateIndicator(ref tempHoldTimer, deltaT, tempTolerance, indicatorHoldTime);
+            indicatorController.IndicatorTrigger2 = UpdateIndicator(ref volHoldTimer, deltaV, volumeTolerance, indicatorHoldTime);
+            indicatorController.IndicatorTrigger3 = UpdateIndicator(ref molHoldTimer, deltaN, molTolerance, indicatorHoldTime);
+        }
+
+        normVol = Mathf.InverseLerp(minVol, maxVol, currentVol);
+        float nMultiplier = Mathf.InverseLerp(minMol, maxMol, currentMol);
+
+        moleculeSpawner.UpdateConditions(currentTemp, normVol, nMultiplier);
+
+
+        Debug.Log($"Temp: {currentTemp} | Vol: {currentVol} | Mol: {currentMol}");
+        Debug.Log($"T Delta: {Mathf.Abs(currentTemp - targetTemp)}, V Delta: {Mathf.Abs(currentVol - targetVol)}, n Delta: {Mathf.Abs(currentMol - targetMol)}");
+
     }
-    
-    
+
+
+
 
     private IEnumerator FadeOutVolume()
     {
@@ -246,12 +299,21 @@ public class IdealGasMinigame : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
-        if (doorToUnlock != null)
+        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor1>()?.UnlockDoor();
+        if (machineToActivate != null)
         {
-            doorToUnlock.UnlockDoor();
+            machineToActivate.SetWorkTrigger(true);
+        }
+        if(heatingFeedback != null)
+        {
+
+            heatingFeedback.HeatingUp(true);
+
         }
 
-
-
+        if (uiDefrosting != null)
+        {
+            uiDefrosting.DisableUIdefrosting(true);
+        }
     }
 }

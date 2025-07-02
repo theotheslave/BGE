@@ -20,13 +20,17 @@ public class DialogueManager : MonoBehaviour
 
     private bool isTyping = false;
     private bool lineFinished = false;
-    private bool inputEnabled = false;
+    public bool inputEnabled = false;
     private bool justOpened = false;
 
     private Interactable currentSpeaker;
 
+    public AudioClip soundClip; // assign via Inspector
+    private AudioSource audioSource;
+
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         Instance = this;
         dialoguePanel.SetActive(false);
     }
@@ -34,7 +38,6 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         if (!inputEnabled || justOpened) return;
-
         if (Input.GetMouseButtonDown(0))
         {
             if (isTyping)
@@ -79,6 +82,10 @@ public class DialogueManager : MonoBehaviour
 
     private void ShowLine(string line)
     {
+        if (!audioSource.isPlaying)
+        {
+            PlayMySound();
+        }
         lineFinished = false;
         typingCoroutine = StartCoroutine(TypeLine(line));
     }
@@ -150,5 +157,13 @@ public class DialogueManager : MonoBehaviour
     public bool CurrentSpeakerIs(Interactable speaker)
     {
         return currentSpeaker == speaker;
+    }
+
+    public void PlayMySound()
+    {
+        if (soundClip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(soundClip);
+        }
     }
 }

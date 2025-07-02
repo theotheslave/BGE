@@ -7,15 +7,9 @@ using UnityEngine.Rendering.Universal;
 
 public class IsobaricMinigame : MonoBehaviour
 {
-    [Header("Graph")]
-    public GraphVisualize graphVisualizer;
-    public float graphSampleInterval = 0.2f;
-    private float graphSampleTimer;
 
     [Header("UI")]
     public Slider heatSlider;
-    public Button toggleGraphButton;
-    public GameObject graphPanel;
     public TextMeshProUGUI temperatureDisplay;
     public TextMeshProUGUI volumeDisplay;
     [SerializeField] private TextMeshProUGUI winText;
@@ -46,7 +40,8 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private float requiredHoldTime = 2f;
     private float correctHoldTimer = 0f;
     private bool puzzleCompleted = false;
-
+    [SerializeField] private float indicatorHoldTime = 1.5f;
+    private float indicatorHoldTimer = 0f;
     [Header("Piston Animation After Win")]
     public float pistonMoveAmplitude = 0.2f;
     public float pistonMoveSpeed = 2f;
@@ -58,6 +53,9 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private List<ParticleSystem> fogParticles = new List<ParticleSystem>();
     [SerializeField] private float fogFadeDuration = 1f;
     [Header("References")]
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;
     public float volumeFadeDuration = 1f;
@@ -66,27 +64,18 @@ public class IsobaricMinigame : MonoBehaviour
     {
         winText.gameObject.SetActive(false);
         pistonBaseY = piston.position.y;
+        moleculeSpawner.SpawnMolecules(moleculeSpawner.maxMoleculeCount, currentTemp);
 
         currentMoles = initialMoles;
         currentTemp = 273f;
-
-        moleculeSpawner.SpawnMolecules(moleculeSpawner.startCount, currentTemp);
-
-        graphPanel.SetActive(false);
-        toggleGraphButton.onClick.AddListener(() =>
-        {
-            graphPanel.SetActive(!graphPanel.activeSelf);
-        });
     }
+
+
 
     void Update()
     {
         targetTemp = Mathf.Lerp(273f, 800f, heatSlider.value);
         currentTemp = Mathf.Lerp(currentTemp, targetTemp, heatTransferRate * Time.deltaTime);
-
-        int activeMolecules = moleculeSpawner.ActiveCount();
-        float fraction = moleculeSpawner.startCount > 0 ? (float)activeMolecules / moleculeSpawner.startCount : 0f;
-        currentMoles = initialMoles * Mathf.Max(fraction, 0.01f);
 
         volume = (currentMoles * R * currentTemp) / pressure;
 
@@ -99,22 +88,26 @@ public class IsobaricMinigame : MonoBehaviour
         temperatureDisplay.text = $"T = {currentTemp:F1} K";
         volumeDisplay.text = $"V = {(volume * 1000f):F2} L";
 
-        if (graphPanel.activeSelf)
-        {
-            graphSampleTimer += Time.deltaTime;
-            if (graphSampleTimer >= graphSampleInterval)
-            {
-                graphVisualizer.AddPoint(currentTemp, volume);
-                graphSampleTimer = 0f;
-            }
-        }
+        moleculeSpawner.UpdateConditions(currentTemp, normVolume, 1f);
 
-        moleculeSpawner.ApplyTemperature(currentTemp);
-        moleculeSpawner.currentTemperature = currentTemp;
         if (!puzzleCompleted)
         {
             float delta = Mathf.Abs(volume - targetVolume);
 
+            if (indicatorController != null)
+            {
+                if (delta <= volumeTolerance)
+                {
+                    indicatorHoldTimer += Time.deltaTime;
+                    if (indicatorHoldTimer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
+                }
+                else
+                {
+                    indicatorHoldTimer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
+                }
+            }
             if (delta <= volumeTolerance)
             {
                 correctHoldTimer += Time.deltaTime;
@@ -240,7 +233,6 @@ public class IsobaricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         heatSlider.interactable = false;
-        toggleGraphButton.interactable = false;
         StartCoroutine(FadeOutFog());
         if (globalVolume != null)
             StartCoroutine(FadeOutVolume());
@@ -256,7 +248,18 @@ public class IsobaricMinigame : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
-        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor>()?.UnlockDoor();
+        GameObject.FindWithTag("Door")?.GetComponent<SceneManagerDoor1>()?.UnlockDoor();
+        if (machineToActivate != null)
+        {
+            machineToActivate.SetWorkTrigger(true);
+        }
+        if (heatingFeedback != null)
+        {
+
+            heatingFeedback.HeatingUp(true);
+
+        }
+        MachineProgressManager.Instance.isobaricCompleted = true;
     }
 
     private void AnimatePiston()

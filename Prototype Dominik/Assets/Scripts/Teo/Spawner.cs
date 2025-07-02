@@ -6,7 +6,7 @@ public class Spawner : MonoBehaviour
 {
     [Header("Prefabs & Counts")]
     public GameObject moleculePrefab;
-    public int startCount = 300;
+    public int maxMoleculeCount = 300;
 
     [Header("Chamber limits")]
     public float pistonMinY = -1.3f;
@@ -22,41 +22,15 @@ public class Spawner : MonoBehaviour
    
 
     void Awake() => volume = GetComponent<BoxCollider>();
-    void Start() => SpawnMolecules(startCount, currentTemperature);
-
-   
+    void Start() => SpawnMolecules(maxMoleculeCount, currentTemperature);
 
     public void SpawnMolecules(int count, float temperatureK)
     {
         ClearAll();
-
         for (int i = 0; i < count; i++)
             molecules.Add(InstantiateOne(temperatureK));
+        Debug.Log($"Spawning {count} molecules at T = {currentTemperature}");
     }
-
-    public void AddNewMolecules(int count, float temperatureK)
-    {
-        for (int i = 0; i < count; i++)
-            molecules.Add(InstantiateOne(temperatureK));
-    }
-
-    public void ApplyTemperature(float temperatureK)
-    {
-        currentTemperature = temperatureK;
-        foreach (var m in molecules)
-            if (m) m.AdjustSpeed(temperatureK);
-    }
-
-    public int ActiveCount()
-    {
-        molecules.RemoveAll(m => m == null);
-        return molecules.Count;
-    }
-
-    public void RemoveMolecule(MoleculeParticle m) => molecules.Remove(m);
-
-  
-
     MoleculeParticle InstantiateOne(float temperatureK)
     {
         Vector3 pos = RandomPointInside(volume, wallMargin);
@@ -65,11 +39,44 @@ public class Spawner : MonoBehaviour
         mol.InitializeVelocity(temperatureK);
         return mol;
     }
-    void OnDrawGizmosSelected()
+
+    public void UpdateConditions(float temperatureK, float normalizedVolume, float normalizedMoles)
     {
-        if (volume == null) volume = GetComponent<BoxCollider>();
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(volume.bounds.center, volume.bounds.size);
+        currentTemperature = temperatureK;
+
+        float volumeFactor = Mathf.Clamp01(1.0f - normalizedVolume);
+        float moleFactor = Mathf.Clamp01(normalizedMoles);      
+
+        int targetCount = Mathf.RoundToInt(maxMoleculeCount * moleFactor * (0.5f + volumeFactor));
+
+        AdjustMoleculeCount(targetCount);
+        foreach (var m in molecules)
+            if (m != null) m.AdjustSpeed(temperatureK);
+    }
+    void AdjustMoleculeCount(int targetCount)
+    {
+        molecules.RemoveAll(m => m == null);
+
+        int current = molecules.Count;
+
+        if (current < targetCount)
+        {
+            for (int i = 0; i < targetCount - current; i++)
+                molecules.Add(InstantiateOne(currentTemperature));
+        }
+        else if (current > targetCount)
+        {
+            int excess = current - targetCount;
+            for (int i = 0; i < molecules.Count && excess > 0; i++)
+            {
+                if (molecules[i] != null)
+                {
+                    Destroy(molecules[i].gameObject);
+                    excess--;
+                }
+            }
+            molecules.RemoveAll(m => m == null);
+        }
     }
 
     void ClearAll()
@@ -79,16 +86,25 @@ public class Spawner : MonoBehaviour
         molecules.Clear();
     }
 
-    static Vector3 RandomPointInside(BoxCollider box, float margin)
+    public void RemoveMolecule(MoleculeParticle m)
     {
-        Bounds bounds = box.bounds;
-        Vector3 min = bounds.min + Vector3.one * margin;
-        Vector3 max = bounds.max - Vector3.one * margin;
+        molecules.Remove(m);
+    }
 
-        return new Vector3(
-            Random.Range(min.x, max.x),
-            Random.Range(min.y, max.y),
-            Random.Range(min.z, max.z)
+    public int ActiveCount()
+    {
+        molecules.RemoveAll(m => m == null);
+        return molecules.Count;
+    }
+
+    private static Vector3 RandomPointInside(BoxCollider box, float margin)
+    {
+        Vector3 localPos = new Vector3(
+            Random.Range(-0.5f + margin, 0.5f - margin),
+            Random.Range(-0.5f + margin, 0.5f - margin),
+            Random.Range(-0.5f + margin, 0.5f - margin)
         );
+        Vector3 scaledPos = Vector3.Scale(localPos, box.size);
+        return box.transform.TransformPoint(box.center + scaledPos);
     }
 }

@@ -27,7 +27,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private float targetPressure = 111205f;
     [SerializeField] private float pressureTolerance = 1000f;
     [SerializeField] private float winHoldTime = 2f;
-
+    private float indicator1Timer = 0f;
+    private float indicator2Timer = 0f;
+    [SerializeField] private float indicatorHoldTime = 1.5f;
     [Header("Piston Visual")]
     [SerializeField] private Transform piston;
     [SerializeField] private float pistonMinY = -1.3f;
@@ -44,7 +46,11 @@ public class IsothermalMinigameFinal : MonoBehaviour
     public float volumeFadeDuration = 1f;
     
     [Header("Spawner")]
-    [SerializeField] private Spawner moleculeSpawner;
+    [SerializeField] private Spawner_Isothermal moleculeSpawner;
+    [SerializeField] private IndicatorsInsideScriptVA indicatorController;
+    [SerializeField] private MachineWorkTransition machineToActivate;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+
 
     public Collider objectToLock;
     private float currentN;
@@ -57,18 +63,20 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
     [SerializeField] private float phase1HoldTime = 2f;
     private float phase1Timer = 0f;
-
+    public event System.Action OnPuzzleComplete;
     void Start()
     {
-        if (!MachineProgressManager.Instance.isochoricCompleted)
-        {
-            Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
-            return;
-        }
+        //if (!MachineProgressManager.Instance.isochoricCompleted)
+        //{
+        //    Debug.LogWarning("Isobaric puzzle not completed. Access denied.");
+        //    return;
+        //}
 
         winText.gameObject.SetActive(false);
         vSlider.interactable = false;
         pistonBaseY = piston.position.y;
+
+        moleculeSpawner.SpawnMolecules(10, temperature);
     }
 
     void Update()
@@ -86,12 +94,21 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 currentN = Mathf.Lerp(0.5f, 2.0f, nSlider.value);
                 moleDisplay.text = $"n = {currentN:F3} mol";
 
-                float targetVolumeForN = 0.05f;
+                float targetVolumeForN = 0.1f;
                 float calculatedN = (initialPressure * targetVolumeForN) / (R * temperature);
                 float deltaN = Mathf.Abs(currentN - calculatedN);
 
+                //if (indicatorController != null)
+                //{
+
+                //    indicatorController.IndicatorTrigger1 = deltaN <= calculatedN * 0.1f;
+                //}
+
                 if (deltaN <= calculatedN * 0.1f)
                 {
+                    indicator1Timer += Time.deltaTime;
+                    if (indicator1Timer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger1 = true;
                     phase1Timer += Time.deltaTime;
                     if (phase1Timer >= phase1HoldTime)
                     {
@@ -103,7 +120,12 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+                    indicator1Timer = 0f;
+                    indicatorController.IndicatorTrigger1 = false;
+
                     phase1Timer = 0f;
+                    if (indicatorController != null)
+                        indicatorController.IndicatorTrigger1 = false;
                 }
             }
             else if (!hasWon)
@@ -114,9 +136,14 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
                 float deltaP = Mathf.Abs(currentP - targetPressure);
                 Debug.Log($"Current P: {currentP}, Target P: {targetPressure}, delta: {deltaP}");
+                if (indicatorController != null)
+                    indicatorController.IndicatorTrigger3 = deltaP <= pressureTolerance;
 
                 if (deltaP <= pressureTolerance)
                 {
+                    indicator2Timer += Time.deltaTime;
+                    if (indicator2Timer >= indicatorHoldTime)
+                        indicatorController.IndicatorTrigger3 = true;
                     winTimer += Time.deltaTime;
                     if (winTimer >= winHoldTime)
                     {
@@ -125,7 +152,11 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 }
                 else
                 {
+                    indicator2Timer = 0f;
+                    indicatorController.IndicatorTrigger3 = false;
                     winTimer = 0f;
+                    if (indicatorController != null)
+                        indicatorController.IndicatorTrigger3=false;
                 }
 
                 float normV = Mathf.InverseLerp(minVol, maxVol, currentV);
@@ -137,6 +168,10 @@ public class IsothermalMinigameFinal : MonoBehaviour
                 AnimatePiston();
             }
         }
+        float normVolume = Mathf.InverseLerp(minVol, maxVol, currentV);
+        float normMoles = Mathf.InverseLerp(0.5f, 2.0f, currentN);
+
+        moleculeSpawner.UpdateConditions(temperature, normVolume, normMoles);
     }
 
         private IEnumerator FadeOutVolume()
@@ -256,7 +291,19 @@ public class IsothermalMinigameFinal : MonoBehaviour
         {
             objectToLock.enabled = false;
         }
+        if (machineToActivate != null)
+        {
+            machineToActivate.SetWorkTrigger(true);
+        }
+        if (heatingFeedback != null)
+        {
 
+            heatingFeedback.HeatingUp(true);
+
+        }
+        //MachineProgressManager.Instance.isothermalCompleted = true;
+        OnPuzzleComplete?.Invoke();
+        GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
 
     }
