@@ -11271,6 +11271,7 @@ GameObject:
   - component: {fileID: 7516951198073334495}
   - component: {fileID: 3968484303972982881}
   - component: {fileID: 9049340142843580528}
+  - component: {fileID: 9049340142843580529}
   m_Layer: 5
   m_Name: CanvasVAv1
   m_TagString: Untagged
@@ -14738,6 +14739,7 @@ MonoBehaviour:
   doorToUnlock: {fileID: 0}
   machineToActivate: {fileID: 1152349507767151311}
   heatingFeedback: {fileID: 6132246482819731032}
+  uiDefrosting: {fileID: 9049340142843580529}
   objectToLock: {fileID: 396080824}
   moleculeSpawner: {fileID: 64401326340415528}
   globalVolume: {fileID: 2048905237}
@@ -123229,6 +123231,27 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &9049340142843580529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417277796646455545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8cbebfc0554b85479c390c378d51a4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Trigger: 0
+  Images:
+  - {fileID: 4759479259303102058}
+  - {fileID: 4367897288410175831}
+  - {fileID: 5469138741321711531}
+  - {fileID: 8878163554870160750}
+  - {fileID: 1583812803274965638}
+  DefaultMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  FrostedMaterial: {fileID: 2100000, guid: 37f560c0a6c5ab6429a4f57103dee5ae, type: 2}
 --- !u!224 &9053860418286437968
 RectTransform:
   m_ObjectHideFlags: 0
