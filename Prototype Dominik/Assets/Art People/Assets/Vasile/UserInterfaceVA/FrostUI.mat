@@ -86,7 +86,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpriteTexture:
-        m_Texture: {fileID: 2800000, guid: a5d41cee9b62bb04498106996d1a17e4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0d56cd0fafadc6745982193e86af5340, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -120,7 +120,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FrostAmount: 0.38
+    - _FrostAmount: 0.21
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -155,7 +155,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ControlColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FrostTint: {r: 0.7201257, g: 0.9013797, b: 1, a: 1}
+    - _FrostTint: {r: 0.88993704, g: 0.96343994, b: 1, a: 1}
     - _OutlineColor: {r: 0.15045387, g: 0.57871664, b: 0.6509434, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
