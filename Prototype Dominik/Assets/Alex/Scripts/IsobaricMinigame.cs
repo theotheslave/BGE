@@ -7,9 +7,15 @@ using UnityEngine.Rendering.Universal;
 
 public class IsobaricMinigame : MonoBehaviour
 {
+    [Header("Graph")]
+    public GraphVisualize graphVisualizer;
+    public float graphSampleInterval = 0.2f;
+    private float graphSampleTimer;
 
     [Header("UI")]
     public Slider heatSlider;
+    public Button toggleGraphButton;
+    public GameObject graphPanel;
     public TextMeshProUGUI temperatureDisplay;
     public TextMeshProUGUI volumeDisplay;
     [SerializeField] private TextMeshProUGUI winText;
@@ -68,6 +74,12 @@ public class IsobaricMinigame : MonoBehaviour
 
         currentMoles = initialMoles;
         currentTemp = 273f;
+
+        graphPanel.SetActive(false);
+        toggleGraphButton.onClick.AddListener(() =>
+        {
+            graphPanel.SetActive(!graphPanel.activeSelf);
+        });
     }
 
 
@@ -87,6 +99,16 @@ public class IsobaricMinigame : MonoBehaviour
 
         temperatureDisplay.text = $"T = {currentTemp:F1} K";
         volumeDisplay.text = $"V = {(volume * 1000f):F2} L";
+
+        if (graphPanel.activeSelf)
+        {
+            graphSampleTimer += Time.deltaTime;
+            if (graphSampleTimer >= graphSampleInterval)
+            {
+                graphVisualizer.AddPoint(currentTemp, volume);
+                graphSampleTimer = 0f;
+            }
+        }
 
         moleculeSpawner.UpdateConditions(currentTemp, normVolume, 1f);
 
@@ -233,6 +255,7 @@ public class IsobaricMinigame : MonoBehaviour
         winText.gameObject.SetActive(true);
         winText.text = "Correct!";
         heatSlider.interactable = false;
+        toggleGraphButton.interactable = false;
         StartCoroutine(FadeOutFog());
         if (globalVolume != null)
             StartCoroutine(FadeOutVolume());
