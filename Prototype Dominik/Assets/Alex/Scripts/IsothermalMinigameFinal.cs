@@ -49,7 +49,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private Spawner_Isothermal moleculeSpawner;
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private MachineWorkTransition machineToActivate;
-    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    //[SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
     
     
 
@@ -277,8 +277,12 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
     void Win()
     {
-            hasWon = true;
-            winText.gameObject.SetActive(true);
+
+        if (uiDefrosting != null)
+        {
+            uiDefrosting.DisableUIdefrosting(true);
+        }
+        winText.gameObject.SetActive(true);
             winText.text = "Correct!";
             vSlider.interactable = false;
         StartCoroutine(FadeOutFog());
@@ -311,11 +315,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
         GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
     
-        if (uiDefrosting != null)
-        {
-            uiDefrosting.DisableUIdefrosting(true);
-        }
-        
+        hasWon = true;
+
     }
 
         void AnimatePiston()
