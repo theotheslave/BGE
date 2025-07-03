@@ -13370,7 +13370,7 @@ MonoBehaviour:
   maxMol: 1
   targetTemp: 300
   targetVol: 0.005
-  targetMol: 0.6
+  targetMol: 0.5
   tempTolerance: 1
   volumeTolerance: 0.0001
   molTolerance: 0.01

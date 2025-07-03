@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class IsothermalMinigameFinal : MonoBehaviour
 {
+    public GameObject WonScreen;
+
     [Header("UI")]
     [SerializeField] private Slider nSlider;
     [SerializeField] private Slider vSlider;
@@ -277,7 +279,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
     void Win()
     {
-
+        WonScreen.SetActive(true);
         if (uiDefrosting != null)
         {
             uiDefrosting.DisableUIdefrosting(true);
