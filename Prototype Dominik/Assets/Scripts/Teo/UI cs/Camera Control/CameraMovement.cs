@@ -73,14 +73,21 @@ public class CameraMovement : MonoBehaviour
     public void FocusTo(float splinePos, Transform lookTarget)
     {
         if (isMoving) return;
+        lastTarget = lookTarget;
 
-        // Keep the original lookAt – don't change it
+        if (virtualCam != null)
+            virtualCam.LookAt = lookTarget != null ? lookTarget : defaultLookAt;
+
+        lastTargetWasDeactivated = lookTarget != null && !lookTarget.gameObject.activeSelf;
+        if (lastTargetWasDeactivated)
+            lookTarget.gameObject.SetActive(true);
+
         StartMove(splinePos);
-
-        if (!Tutorial)
+        if (Tutorial == false)
+            {
             Goggles?.SetActive(true);
+            }
     }
-
 
     public void FocusToGogglesView()
     {

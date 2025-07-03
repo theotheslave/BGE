@@ -51,7 +51,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private Spawner_Isothermal moleculeSpawner;
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private MachineWorkTransition machineToActivate;
-    //[SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
     
     
 
@@ -279,12 +279,17 @@ public class IsothermalMinigameFinal : MonoBehaviour
 
     void Win()
     {
+<<<<<<< HEAD
         WonScreen.SetActive(true);
         if (uiDefrosting != null)
         {
             uiDefrosting.DisableUIdefrosting(true);
         }
         winText.gameObject.SetActive(true);
+=======
+            hasWon = true;
+            winText.gameObject.SetActive(true);
+>>>>>>> parent of 7258e88 (Final Demo Set up Notebook not implemented.)
             winText.text = "Correct!";
             vSlider.interactable = false;
         StartCoroutine(FadeOutFog());
@@ -317,8 +322,11 @@ public class IsothermalMinigameFinal : MonoBehaviour
         GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
     
-        hasWon = true;
-
+        if (uiDefrosting != null)
+        {
+            uiDefrosting.DisableUIdefrosting(true);
+        }
+        
     }
 
         void AnimatePiston()

@@ -61,7 +61,6 @@ public class IdealGasMinigame : MonoBehaviour
     [SerializeField] private MachineWorkTransition machineToActivate;
     [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
     [SerializeField] private UIdefrostingVA uiDefrosting;
-    [SerializeField] private GameObject machineOut;
     public Collider objectToLock;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;  
@@ -283,7 +282,7 @@ public class IdealGasMinigame : MonoBehaviour
         tSlider.interactable = false;
         vSlider.interactable = false;
         nSlider.interactable = false;
-      machineOut.SetActive(true);
+      
         isAnimating = true;
 
         StartCoroutine(FadeOutFog());
