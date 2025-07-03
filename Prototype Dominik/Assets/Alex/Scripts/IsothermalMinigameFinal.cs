@@ -50,6 +50,8 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private MachineWorkTransition machineToActivate;
     [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    
+    
 
 
     public Collider objectToLock;
@@ -64,6 +66,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private float phase1HoldTime = 2f;
     private float phase1Timer = 0f;
     public event System.Action OnPuzzleComplete;
+    
+    [Header("References")]
+    [SerializeField] private UIdefrostingVA uiDefrosting;
     void Start()
     {
         //if (!MachineProgressManager.Instance.isochoricCompleted)
@@ -271,7 +276,7 @@ public class IsothermalMinigameFinal : MonoBehaviour
     }
 
     void Win()
-        {
+    {
             hasWon = true;
             winText.gameObject.SetActive(true);
             winText.text = "Correct!";
@@ -295,20 +300,25 @@ public class IsothermalMinigameFinal : MonoBehaviour
         {
             machineToActivate.SetWorkTrigger(true);
         }
-        if (heatingFeedback != null)
-        {
+        //if (heatingFeedback != null)
+       // {
 
-            heatingFeedback.HeatingUp(true);
+           // heatingFeedback.HeatingUp(true);
 
-        }
+       // }
         //MachineProgressManager.Instance.isothermalCompleted = true;
         OnPuzzleComplete?.Invoke();
         GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
-
+    
+        if (uiDefrosting != null)
+        {
+            uiDefrosting.DisableUIdefrosting(true);
+        }
+        
     }
 
-    void AnimatePiston()
+        void AnimatePiston()
         {
             float offsetY = Mathf.Sin(Time.time * pistonMoveSpeed) * pistonMoveAmplitude;
             piston.position = new Vector3(piston.position.x, pistonBaseY + offsetY, piston.position.z);
