@@ -56,6 +56,7 @@ public class IsobaricMinigame : MonoBehaviour
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private MachineWorkTransition machineToActivate;
     [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    [SerializeField] private UIdefrostingVA uiDefrosting;
     public Spawner moleculeSpawner;
     public UnityEngine.Rendering.Volume globalVolume;
     public float volumeFadeDuration = 1f;
@@ -260,6 +261,10 @@ public class IsobaricMinigame : MonoBehaviour
 
         }
         MachineProgressManager.Instance.isobaricCompleted = true;
+        if (uiDefrosting != null)
+        {
+            uiDefrosting.DisableUIdefrosting(true);
+        }
     }
 
     private void AnimatePiston()

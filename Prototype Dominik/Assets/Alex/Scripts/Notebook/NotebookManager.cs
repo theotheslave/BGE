@@ -1,87 +1,72 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class NotebookManager : MonoBehaviour
 {
-    public static NotebookManager Instance { get; private set; }
+    public static List<Note> GlobalNotes = new List<Note>();
 
-    public List<Note> allNotes = new List<Note>();
-    public GameObject noteTitlePrefab;
-    public Transform titleContainer;
-    public TMPro.TextMeshProUGUI contentDisplay;
-
+    [Header("UI References")]
     public GameObject notebookUI;
-    public Button toggleButton; 
+    public Button toggleButton;
+    public Transform titleContainer;
+    public TextMeshProUGUI contentDisplay;
+    public GameObject noteTitlePrefab;
 
     private bool isOpen = false;
 
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null && Instance != this)
+        TryConnectUI();
+    }
+
+    public void TryConnectUI()
+    {
+        if (notebookUI == null || toggleButton == null || titleContainer == null || contentDisplay == null || noteTitlePrefab == null)
         {
-            Destroy(gameObject);
+            Debug.LogWarning("Notebook UI references not assigned.");
             return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
-        if (toggleButton != null)
-        {
-            toggleButton.onClick.AddListener(ToggleNotebook);
-        }
-        else
-        {
-            Debug.LogWarning("Toggle Button is not assigned in NotebookManager.");
-        }
-    }
-    public void ReconnectUI(GameObject newNotebookUI)
-    {
-        this.notebookUI = newNotebookUI;
-
-        titleContainer = notebookUI.transform.Find("LeftPanel/TitleContainer").transform;
-        contentDisplay = notebookUI.transform.Find("RightPanel/NoteContentText").GetComponent<TMPro.TextMeshProUGUI>();
-        toggleButton = notebookUI.transform.Find("ToggleButton").GetComponent<UnityEngine.UI.Button>();
 
         toggleButton.onClick.RemoveAllListeners();
         toggleButton.onClick.AddListener(ToggleNotebook);
 
-        foreach (Transform child in titleContainer)
-        {
-            Destroy(child.gameObject);
-        }
-
-        foreach (Note note in allNotes)
-        {
-            CreateNoteButton(note);
-        }
-
         notebookUI.SetActive(false);
+        contentDisplay.text = "";
+
+        RefreshNoteButtons();
     }
 
     public void ToggleNotebook()
     {
         isOpen = !isOpen;
         notebookUI.SetActive(isOpen);
+        if (!isOpen) contentDisplay.text = "";
     }
 
     public void AddNote(Note note)
     {
-        if (allNotes.Exists(n => n.title == note.title))
+        if (GlobalNotes.Exists(n => n.title == note.title))
             return;
 
-        allNotes.Add(note);
+        GlobalNotes.Add(note);
         CreateNoteButton(note);
+    }
+
+    private void RefreshNoteButtons()
+    {
+        foreach (Transform child in titleContainer)
+            Destroy(child.gameObject);
+
+        foreach (Note note in GlobalNotes)
+            CreateNoteButton(note);
     }
 
     private void CreateNoteButton(Note note)
     {
         GameObject btn = Instantiate(noteTitlePrefab, titleContainer);
-        btn.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = note.title;
+        btn.GetComponentInChildren<TextMeshProUGUI>().text = note.title;
         btn.GetComponent<Button>().onClick.AddListener(() =>
         {
             contentDisplay.text = note.content;

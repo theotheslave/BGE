@@ -49,7 +49,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private Spawner_Isothermal moleculeSpawner;
     [SerializeField] private IndicatorsInsideScriptVA indicatorController;
     [SerializeField] private MachineWorkTransition machineToActivate;
-    [SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    //[SerializeField] private HeatingFeedbackScriptVA heatingFeedback;
+    
+    
 
 
     public Collider objectToLock;
@@ -64,6 +66,9 @@ public class IsothermalMinigameFinal : MonoBehaviour
     [SerializeField] private float phase1HoldTime = 2f;
     private float phase1Timer = 0f;
     public event System.Action OnPuzzleComplete;
+    
+    [Header("References")]
+    [SerializeField] private UIdefrostingVA uiDefrosting;
     void Start()
     {
         //if (!MachineProgressManager.Instance.isochoricCompleted)
@@ -271,9 +276,13 @@ public class IsothermalMinigameFinal : MonoBehaviour
     }
 
     void Win()
+    {
+
+        if (uiDefrosting != null)
         {
-            hasWon = true;
-            winText.gameObject.SetActive(true);
+            uiDefrosting.DisableUIdefrosting(true);
+        }
+        winText.gameObject.SetActive(true);
             winText.text = "Correct!";
             vSlider.interactable = false;
         StartCoroutine(FadeOutFog());
@@ -295,20 +304,22 @@ public class IsothermalMinigameFinal : MonoBehaviour
         {
             machineToActivate.SetWorkTrigger(true);
         }
-        if (heatingFeedback != null)
-        {
+        //if (heatingFeedback != null)
+       // {
 
-            heatingFeedback.HeatingUp(true);
+           // heatingFeedback.HeatingUp(true);
 
-        }
+       // }
         //MachineProgressManager.Instance.isothermalCompleted = true;
         OnPuzzleComplete?.Invoke();
         GogglesManagerRoom2.Instance?.ForceClose();
         UIManager.Instance?.MarkPuzzleComplete();
+    
+        hasWon = true;
 
     }
 
-    void AnimatePiston()
+        void AnimatePiston()
         {
             float offsetY = Mathf.Sin(Time.time * pistonMoveSpeed) * pistonMoveAmplitude;
             piston.position = new Vector3(piston.position.x, pistonBaseY + offsetY, piston.position.z);

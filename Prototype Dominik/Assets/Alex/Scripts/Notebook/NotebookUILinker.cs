@@ -1,14 +1,27 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class NotebookUILinker : MonoBehaviour
 {
-    public GameObject notebookUIPrefab;
+    public NotebookManager notebookManager;
+    public GameObject notebookUI;
+    public Button toggleButton;
+    public Transform titleContainer;
+    public TextMeshProUGUI contentDisplay;
+    public GameObject noteTitlePrefab;
 
-    void Start()
+    private void Start()
     {
-        if (NotebookManager.Instance != null)
+        if (notebookManager != null)
         {
-            NotebookManager.Instance.ReconnectUI(notebookUIPrefab);
+            notebookManager.notebookUI = notebookUI;
+            notebookManager.toggleButton = toggleButton;
+            notebookManager.titleContainer = titleContainer;
+            notebookManager.contentDisplay = contentDisplay;
+            notebookManager.noteTitlePrefab = noteTitlePrefab;
+
+            notebookManager.TryConnectUI();
         }
     }
 }
